@@ -6,5 +6,11 @@ const routes = [
     title: '首页',
     component: () => import('@/views/HomePage.vue'), 
   },
+  {
+    path: '/hello',
+    name: 'hello',
+    title: '你好',
+    component: () => import('@/views/HelloPage.vue'), 
+  },
 ]
 export default routes
