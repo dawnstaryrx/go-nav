@@ -51,36 +51,31 @@
       AI工具
     </span>
     <span class="capsule">
-      邮箱
-    </span>
-    <span class="capsule">
-      全部工具
-    </span>
-    <span class="capsule">
-      常用网站
+      常用网站常用网站常用网站
     </span>
     <span class="capsule">
       AI工具
-    </span>
-    <span class="capsule">
-      邮箱
-    </span>
-    <span class="capsule">
-      全部工具
-    </span>
-    <span class="capsule">
-      常用网站
-    </span>
-    <span class="capsule">
-      AI工具
-    </span>
-    <span class="capsule">
-      邮箱
     </span>
   </div>
-  
-  <!-- 页面主体内容 -->
-  <div class="content-section-card-container">
+  <!-- 多级分类选择 -->
+  <div class="content-section-category-container" style="margin-top: 10px;" >
+    <span class="capsule">
+      全部工具
+    </span>
+    <span class="capsule">
+      常用网站
+    </span>
+    <span class="capsule">
+      AI工具
+    </span>
+    <span class="capsule">
+      邮箱
+    </span>
+    <span class="capsule">
+      全部工具
+    </span>
+  </div>
+  <div v-for="item in [1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]" class="content-section-card-container">
   333
   </div>
 

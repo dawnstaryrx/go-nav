@@ -17,7 +17,7 @@
 
 <script setup>
 let year = new Date().getFullYear();        // 一般都是最新的一年
-let author = 'gooodh';						// 作者名
+let author = '智浪星辰';						// 作者名
 let record = '鲁ICP备2024107617号-1';		// 备案号
 </script>
 
@@ -30,7 +30,7 @@ let record = '鲁ICP备2024107617号-1';		// 备案号
 }
 /* 页面根容器 */
 .page-container {
-  display: absolute;
+  /* display: absolute; */
   bottom: 0;
 }
 

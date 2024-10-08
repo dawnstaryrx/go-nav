@@ -2,7 +2,7 @@
   <TopBar></TopBar>
   <div class="home-container">
     <ContentSection></ContentSection>
-    <HelloWorld></HelloWorld> 
+    <!-- <HelloWorld></HelloWorld>  -->
   </div>
 </template>
 <script>
@@ -22,5 +22,6 @@ export default {
   margin: 0 auto;
   padding: 0;
   width: 100vw;
+  margin-right: 0px;
 }
 </style>
