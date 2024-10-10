@@ -4,29 +4,64 @@
     <div class="card login-container-card noto-serif-sc-text">
       <div class="card-body">
         <div class="row login-container-card-type">
-          <div style="text-align: center;font-size: 20px;font-weight: 900;">
+          <div style="text-align: center;font-size: 20px;font-weight: 900; color: #de7622;">
             重置密码
           </div>
         </div>
-        <form class="row g-3">
+        <form @submit.prevent="handleResetPwd" class="row g-3">
           <div class="col-md-12">
-              <label for="validationDefaultUsername" required class="form-label">邮箱</label>
-              <input type="text" class="form-control" placeholder="请输入邮箱" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
+            <label for="validationEmail" class="form-label">邮箱</label>
+            <input 
+              v-model="resetPwdData.email" 
+              type="email" 
+              class="form-control" 
+              placeholder="请输入邮箱" 
+              id="validationEmail" 
+              required
+            >
+          </div>
+          <label for="validationCode" class="form-label">验证码</label>
+          <div class="input-group" style="margin: 0px;">
+            <input 
+              v-model="resetPwdData.code" 
+              type="text" 
+              class="form-control" 
+              placeholder="请输入验证码" 
+              id="validationCode" 
+              required
+            >
+            <span 
+              :class="['input-group-text', { disabled: isSending }]" 
+              @click="sendCode" 
+              style="cursor: pointer;"
+            >
+              {{ sendButtonText }}
+            </span>
           </div>
           <div class="col-md-12">
-            <label for="validationDefault03" required class="form-label">验证码</label>
-            <input type="password" class="form-control" placeholder="请输入验证码" id="validationDefault03" required>
+            <label for="validationPwd" class="form-label">密码</label>
+            <input 
+              v-model="resetPwdData.password" 
+              type="password" 
+              class="form-control" 
+              placeholder="请输入密码" 
+              id="validationPwd" 
+              required
+            >
           </div>
           <div class="col-md-12">
-            <label for="validationDefault03" required class="form-label">新密码</label>
-            <input type="password" class="form-control" placeholder="请输入新密码" id="validationDefault03" required>
-          </div>
-          <div class="col-md-12">
-            <label for="validationDefault03" required class="form-label">确认密码</label>
-            <input type="password" class="form-control" placeholder="请再次输入密码" id="validationDefault03" required>
+            <label for="validationRePwd" class="form-label">确认密码</label>
+            <input 
+              v-model="resetPwdData.rePassword" 
+              type="password" 
+              class="form-control" 
+              placeholder="请再次输入密码" 
+              id="validationRePwd" 
+              required
+            >
           </div>
           <div class="col-12">
-            <button class="btn btn-primary col-12" type="submit">重置</button>
+            <button class="btn btn-primary col-12" type="submit">提交</button>
           </div>
         </form>
         
@@ -45,13 +80,91 @@
 
 <script>
 import TopBar from "@/components/front/TopBar.vue";
-import { ref } from "vue";
+import alertUtil from "@/utils/alert";
+import userApi from "@/api/user";
+import { ref, computed } from "vue";
+
 export default {
   components: {
     TopBar,
   },
   setup() {
+    const resetPwdData = ref({
+      email: '',
+      code: '',
+      password: '',
+      rePassword: ''
+    });
 
+    const isSending = ref(false);
+    const countdown = ref(60);
+    const timer = ref(null);
+
+    const sendButtonText = computed(() => {
+      return isSending.value ? `${countdown.value}s 后重试` : '发送';
+    });
+
+    const validateEmail = (email) => {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    };
+
+    const sendCode = async () => {
+      if (isSending.value) return;
+      if (!validateEmail(resetPwdData.value.email)) {
+        alertUtil.message('请输入有效的邮箱地址', 'danger');
+        return;
+      }
+
+      isSending.value = true;
+
+      try {
+        // const res = await sendCodeService(registerData.value.email, 1);
+        const res = await userApi.sendCode(resetPwdData.value.email, 3);
+        console.log(res);
+        alertUtil.message('验证码已发送', 'success');
+        // 开始倒计时
+        timer.value = setInterval(() => {
+          if (countdown.value > 0) {
+            countdown.value--;
+          } else {
+            clearInterval(timer.value);
+            isSending.value = false;
+            countdown.value = 60;
+          }
+        }, 1000);
+      } catch (error) {
+        alertUtil.message('发送验证码失败，请稍后再试', 'danger');
+        isSending.value = false;
+      }
+    };
+
+    const handleResetPwd = async () => {
+      // 处理注册逻辑
+      if (!validateEmail(resetPwdData.value.email)) {
+        alertUtil.message('请输入有效的邮箱地址', 'danger');
+        return;
+      }
+
+      if (resetPwdData.value.password !== resetPwdData.value.rePassword) {
+        alertUtil.message('两次密码输入不一致', 'danger');
+        return;
+      }
+
+      // 发送注册请求
+      const res = await userApi.resetPwd(resetPwdData.value);
+      if(res.code === 0){
+        alertUtil.message('重置密码成功！');
+      }
+    };
+
+    return {
+      resetPwdData,
+      sendCode,
+      isSending,
+      sendButtonText,
+      handleResetPwd
+    };
   },
 };
 </script>
@@ -143,5 +256,11 @@ export default {
   background: -webkit-linear-gradient(#eee, #eee) repeat-x left center;
   background: linear-gradient(#eee, #eee) repeat-x left center;
   background-size: 0.1rem 0.1rem;
+}
+
+/* 禁用状态样式 */
+.input-group-text.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

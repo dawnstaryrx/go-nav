@@ -3,31 +3,62 @@
   <div class="login-container">
     <div class="card login-container-card noto-serif-sc-text">
       <div class="card-body">
-        <!-- <div style="text-align: center;">
-          登录
-        </div> -->
         <div class="row login-container-card-type">
           <div style="text-align: center;font-size: 20px;font-weight: 900; color: #de7622;">
             注册
           </div>
         </div>
-        <form class="row g-3">
+        <form @submit.prevent="handleRegister" class="row g-3">
           <div class="col-md-12">
-              <label for="validationEmail" required class="form-label">邮箱</label>
-              <input type="text" class="form-control" placeholder="请输入邮箱" id="validationEmail" aria-describedby="inputGroupPrepend2" required>
+            <label for="validationEmail" class="form-label">邮箱</label>
+            <input 
+              v-model="registerData.email" 
+              type="email" 
+              class="form-control" 
+              placeholder="请输入邮箱" 
+              id="validationEmail" 
+              required
+            >
           </div>
-          <label for="validationCode" required class="form-label" >验证码</label>
+          <label for="validationCode" class="form-label">验证码</label>
           <div class="input-group" style="margin: 0px;">
-            <input type="text" class="form-control" placeholder="请输入验证码" id="validationCode" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <span class="input-group-text" id="basic-send-code">发送</span>
+            <input 
+              v-model="registerData.code" 
+              type="text" 
+              class="form-control" 
+              placeholder="请输入验证码" 
+              id="validationCode" 
+              required
+            >
+            <span 
+              :class="['input-group-text', { disabled: isSending }]" 
+              @click="sendCode" 
+              style="cursor: pointer;"
+            >
+              {{ sendButtonText }}
+            </span>
           </div>
           <div class="col-md-12">
-            <label for="validationPwd" required class="form-label">密码</label>
-            <input type="password" class="form-control" placeholder="请输入密码" id="validationPwd" required>
+            <label for="validationPwd" class="form-label">密码</label>
+            <input 
+              v-model="registerData.password" 
+              type="password" 
+              class="form-control" 
+              placeholder="请输入密码" 
+              id="validationPwd" 
+              required
+            >
           </div>
           <div class="col-md-12">
-            <label for="validationRePwd" required class="form-label">确认密码</label>
-            <input type="password" class="form-control" placeholder="请再次输入密码" id="validationRePwd" required>
+            <label for="validationRePwd" class="form-label">确认密码</label>
+            <input 
+              v-model="registerData.rePassword" 
+              type="password" 
+              class="form-control" 
+              placeholder="请再次输入密码" 
+              id="validationRePwd" 
+              required
+            >
           </div>
           <div class="col-12">
             <button class="btn btn-primary col-12" type="submit">注册</button>
@@ -49,13 +80,91 @@
 
 <script>
 import TopBar from "@/components/front/TopBar.vue";
-import { ref } from "vue";
+import alertUtil from "@/utils/alert";
+import userApi from "@/api/user";
+import { ref, computed } from "vue";
+
 export default {
   components: {
     TopBar,
   },
   setup() {
+    const registerData = ref({
+      email: '',
+      code: '',
+      password: '',
+      rePassword: ''
+    });
 
+    const isSending = ref(false);
+    const countdown = ref(60);
+    const timer = ref(null);
+
+    const sendButtonText = computed(() => {
+      return isSending.value ? `${countdown.value}s 后重试` : '发送';
+    });
+
+    const validateEmail = (email) => {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    };
+
+    const sendCode = async () => {
+      if (isSending.value) return;
+      if (!validateEmail(registerData.value.email)) {
+        alertUtil.message('请输入有效的邮箱地址', 'danger');
+        return;
+      }
+
+      isSending.value = true;
+
+      try {
+        // const res = await sendCodeService(registerData.value.email, 1);
+        const res = await userApi.sendCode(registerData.value.email, 1);
+        console.log(res);
+        alertUtil.message('验证码已发送', 'success');
+        // 开始倒计时
+        timer.value = setInterval(() => {
+          if (countdown.value > 0) {
+            countdown.value--;
+          } else {
+            clearInterval(timer.value);
+            isSending.value = false;
+            countdown.value = 60;
+          }
+        }, 1000);
+      } catch (error) {
+        alertUtil.message('发送验证码失败，请稍后再试', 'danger');
+        isSending.value = false;
+      }
+    };
+
+    const handleRegister = async () => {
+      // 处理注册逻辑
+      if (!validateEmail(registerData.value.email)) {
+        alertUtil.message('请输入有效的邮箱地址', 'danger');
+        return;
+      }
+
+      if (registerData.value.password !== registerData.value.rePassword) {
+        alertUtil.message('两次密码输入不一致', 'danger');
+        return;
+      }
+
+      // 发送注册请求
+      const res = await userApi.register(registerData.value);
+      if(res.code === 0){
+        alertUtil.message('注册成功！');
+      }
+    };
+
+    return {
+      registerData,
+      sendCode,
+      isSending,
+      sendButtonText,
+      handleRegister
+    };
   },
 };
 </script>
@@ -147,5 +256,11 @@ export default {
   background: -webkit-linear-gradient(#eee, #eee) repeat-x left center;
   background: linear-gradient(#eee, #eee) repeat-x left center;
   background-size: 0.1rem 0.1rem;
+}
+
+/* 禁用状态样式 */
+.input-group-text.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

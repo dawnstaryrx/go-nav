@@ -24,4 +24,31 @@
     <select id="findUserByEmail" resultType="com.dawn.gonav.model.po.User">
         select * from user where email = #{email}
     </select>
+    <update id="update">
+        update user
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname},
+            </if>
+            <if test="role != null">
+                role = #{role},
+            </if>
+            <if test="wechatOpenid != null">
+                wechat_openid = #{wechatOpenid},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

@@ -3,6 +3,7 @@
 //导入axios  npm install axios
 import axios from 'axios';
 import router from "@/router";
+import alertUtil from "./alert";
 // import {ElMessage} from 'element-plus'
 // import {useTokenStore} from "@/stores/token.js";
 //定义一个变量,记录公共的前缀  ,  baseURL
@@ -28,16 +29,16 @@ instance.interceptors.response.use(
         if (result.data.code === 0) {
             return result.data;
         }
-        // ElMessage.error(result.data.message ? result.data.message : "服务异常")
+        alertUtil.message(result.data.message ? result.data.message : "服务异常", "danger")
         return Promise.reject(result.data)
 
     },
     err => {
         if (err.response.status === 401) {
-            // ElMessage.error("请先登陆");
+            alertUtil.message("请先登陆", "danger")
             router.push("/login")
         } else {
-            // ElMessage.error("服务异常")
+            alertUtil.message("服务异常", "danger")
         }
 
         return Promise.reject(err);//异步的状态转化成失败的状态
