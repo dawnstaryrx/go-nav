@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dawn.gonav.common.mapper.UserMapper">
+    <insert id="add" parameterType="com.dawn.gonav.model.po.User">
+        insert into
+            user(
+                 username,
+                 email,
+                 password,
+                 role,
+                 create_time,
+                 update_time
+        ) values(
+                 #{username},
+                 #{email},
+                 #{password},
+                 #{role},
+                 #{createTime},
+                 #{updateTime}
+                 )
+    </insert>
+    <select id="findUserByEmail" resultType="com.dawn.gonav.model.po.User">
+        select * from user where email = #{email}
+    </select>
+</mapper>

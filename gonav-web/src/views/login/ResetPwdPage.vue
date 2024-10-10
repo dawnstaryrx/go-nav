@@ -3,41 +3,37 @@
   <div class="login-container">
     <div class="card login-container-card noto-serif-sc-text">
       <div class="card-body">
-        <!-- <div style="text-align: center;">
-          登录
-        </div> -->
         <div class="row login-container-card-type">
-          <div style="text-align: center;font-size: 20px;font-weight: 900; color: #de7622;">
-            注册
+          <div style="text-align: center;font-size: 20px;font-weight: 900;">
+            重置密码
           </div>
         </div>
         <form class="row g-3">
           <div class="col-md-12">
-              <label for="validationEmail" required class="form-label">邮箱</label>
-              <input type="text" class="form-control" placeholder="请输入邮箱" id="validationEmail" aria-describedby="inputGroupPrepend2" required>
-          </div>
-          <label for="validationCode" required class="form-label" >验证码</label>
-          <div class="input-group" style="margin: 0px;">
-            <input type="text" class="form-control" placeholder="请输入验证码" id="validationCode" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <span class="input-group-text" id="basic-send-code">发送</span>
+              <label for="validationDefaultUsername" required class="form-label">邮箱</label>
+              <input type="text" class="form-control" placeholder="请输入邮箱" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
           </div>
           <div class="col-md-12">
-            <label for="validationPwd" required class="form-label">密码</label>
-            <input type="password" class="form-control" placeholder="请输入密码" id="validationPwd" required>
+            <label for="validationDefault03" required class="form-label">验证码</label>
+            <input type="password" class="form-control" placeholder="请输入验证码" id="validationDefault03" required>
           </div>
           <div class="col-md-12">
-            <label for="validationRePwd" required class="form-label">确认密码</label>
-            <input type="password" class="form-control" placeholder="请再次输入密码" id="validationRePwd" required>
+            <label for="validationDefault03" required class="form-label">新密码</label>
+            <input type="password" class="form-control" placeholder="请输入新密码" id="validationDefault03" required>
+          </div>
+          <div class="col-md-12">
+            <label for="validationDefault03" required class="form-label">确认密码</label>
+            <input type="password" class="form-control" placeholder="请再次输入密码" id="validationDefault03" required>
           </div>
           <div class="col-12">
-            <button class="btn btn-primary col-12" type="submit">注册</button>
+            <button class="btn btn-primary col-12" type="submit">重置</button>
           </div>
         </form>
         
         <div class="row">
           <span class="col text-start">
             <router-link to="/login" style="text-decoration: none;">
-              已有账号，去登录！
+              去登录！
             </router-link>
           </span>
         </div>

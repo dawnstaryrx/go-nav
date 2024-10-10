@@ -123,11 +123,9 @@ export default {
         activeElement.tagName === 'INPUT' ||
         activeElement.tagName === 'TEXTAREA' ||
         activeElement.isContentEditable;
-
       if (isInputFocused) {
         return;
       }
-
       // 检查按下的键是否为可打印字符
       if (event.key.length === 1) {
         event.preventDefault(); // 防止其他默认行为

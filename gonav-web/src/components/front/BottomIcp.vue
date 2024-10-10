@@ -10,6 +10,10 @@
       CopyRight {{`© ${year} ${author} ` }}
       <a href="http://beian.miit.gov.cn/" target="_blank">
         {{ record }}
+      </a>&nbsp;
+      <a href="http://beian.miit.gov.cn/" target="_blank">
+        <img src="@/assets/RecordIcon.png" alt="备案号" />
+        {{ police }}
       </a>
     </div>
   </div>
@@ -19,6 +23,7 @@
 let year = new Date().getFullYear();        // 一般都是最新的一年
 let author = '智浪星辰';						// 作者名
 let record = '鲁ICP备2024107617号-1';		// 备案号
+let police = '鲁公网安备37011202000109号';
 </script>
 
 <style>

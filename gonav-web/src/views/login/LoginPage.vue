@@ -7,18 +7,18 @@
           登录
         </div> -->
         <div class="row login-container-card-type">
-          <div class="col" style="text-align: center; font-size: 20px; font-weight: 900;">
+          <div @click="changeLoginType(0)" :class="loginType === 0 ? 'col login-type-active' : 'col login-type'">
             密码登录
           </div>
-          <div class="col" style="text-align: center; font-size: 20px; font-weight: 900;">
+          <div @click="changeLoginType(1)" :class="loginType === 1 ? 'col login-type-active' : 'col login-type'">
             免密登录
           </div>
         </div>
 
-        <form class="row g-3">
+        <form v-if="loginType === 0" class="row g-3">
           <div class="col-md-12">
-              <label for="validationDefaultUsername" required class="form-label">用户名</label>
-              <input type="text" class="form-control" placeholder="请输入用户名" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
+              <label for="validationDefaultUsername" required class="form-label">用户名/邮箱</label>
+              <input type="text" class="form-control" placeholder="请输入用户名或邮箱" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
           </div>
           <div class="col-md-12">
             <label for="validationDefault03" required class="form-label">密码</label>
@@ -36,6 +36,30 @@
             <button class="btn btn-primary col-12" type="submit">登录</button>
           </div>
         </form>
+
+        <form v-else class="row g-3">
+          <div class="col-md-12">
+              <label for="validationDefaultUsername" required class="form-label">邮箱</label>
+              <input type="text" class="form-control" placeholder="请输入邮箱" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
+          </div>
+          <div class="col-md-12">
+            <label for="validationDefault03" required class="form-label">验证码</label>
+            <input type="password" class="form-control" placeholder="请输入验证码" id="validationDefault03" required>
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+              <label class="form-check-label" for="invalidCheck2">
+                记住我
+              </label>
+            </div>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-primary col-12" type="submit">登录</button>
+          </div>
+        </form>
+
+
         <div class="line text-center">
           第三方登录
         </div>
@@ -52,10 +76,14 @@
         
         <div class="row">
           <span class="col text-start">
-            没有账号，去注册！
+            <router-link to="/register" style="text-decoration: none;">
+              没有账号，去注册！
+            </router-link>
           </span>
           <span class="col text-end">
-            忘记密码？
+            <router-link to="/reset-pwd" style="text-decoration: none;">
+              忘记密码？
+            </router-link>
           </span>
         </div>
         
@@ -66,14 +94,38 @@
 
 <script>
 import TopBar from "@/components/front/TopBar.vue";
+import { ref } from "vue";
 export default {
   components: {
     TopBar,
+  },
+  setup() {
+    const loginType = ref(0);
+    const changeLoginType = (val) => {
+      loginType.value = val;
+    };
+    return {
+      loginType,
+      changeLoginType
+    };
   },
 };
 </script>
 
 <style scoped>
+.login-type{
+  cursor: pointer;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+}
+.login-type-active{
+  cursor: pointer;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: #de7622;
+}
 .login-container {
   background-image: url("@/assets/hk-bg.png");
   background-size: cover; /* 让背景图片铺满容器 */

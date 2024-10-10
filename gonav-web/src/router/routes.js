@@ -23,6 +23,12 @@ const routes = [
     name: 'register',
     title: '注册',
     component: () => import('@/views/login/RegisterPage.vue'),
+  },
+  {
+    path: '/reset-pwd',
+    name: 'reset-pwd',
+    title: '重置密码',
+    component: () => import('@/views/login/ResetPwdPage.vue'),
   }
 ]
 export default routes

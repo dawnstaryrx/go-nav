@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gonav-server
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/gonav?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: dfjb
+  data:
+    redis:
+      port: 6379
+      host: localhost
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+    #  mail:
+    #    host: smtp.126.com
+    #    username: ruanzhutool@126.com
+    #    password: TJBYKZIDQIIFGSNP
+    #    default-encoding: UTF-8
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.dawn.gonav.authentication: DEBUG
