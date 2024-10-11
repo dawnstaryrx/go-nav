@@ -10,4 +10,6 @@ public interface UserMapper {
     User findUserByEmail(String email);
 
     void update(User userByEmail);
+
+    User findUserByUsername(String usernameOrEmail);
 }

@@ -123,4 +123,17 @@ public class UserServiceImpl implements UserService {
         // 删除Redis中的验证码
         operations.getOperations().delete(key);
     }
+
+    @Override
+    public User getUserByUsernameOrEmail(String usernameOrEmail) {
+        User userByEmail = userMapper.findUserByEmail(usernameOrEmail);
+        if (userByEmail != null){
+            return userByEmail;
+        }
+        User userByUsername = userMapper.findUserByUsername(usernameOrEmail);
+        if (userByUsername != null){
+            return userByUsername;
+        }
+        throw new BusinessException("用户不存在");
+    }
 }
