@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.RedirectStrategy;
@@ -24,6 +25,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static com.dawn.gonav.model.constant.RedisConstant.USER_REFRESH_TOKEN_PREFIX;
+
 /**
  * 认证成功/登录成功 事件处理器
  */
@@ -36,6 +39,9 @@ public class LoginSuccessHandler extends
 
   @Autowired
   private JwtService jwtService;
+
+  @Autowired
+  private StringRedisTemplate stringRedisTemplate;
 
   public LoginSuccessHandler() {
     this.setRedirectStrategy(new RedirectStrategy() {
@@ -65,7 +71,8 @@ public class LoginSuccessHandler extends
     Map<String, Object> responseData = new LinkedHashMap<>();
     responseData.put("token", generateToken(currentUser));
     responseData.put("refreshToken", generateRefreshToken(currentUser));
-
+    // 将refreshToken存放到Redis中，并设置过期时间
+    stringRedisTemplate.opsForValue().set(USER_REFRESH_TOKEN_PREFIX + currentUser.getEmail(), responseData.get("refreshToken").toString(), 30, TimeUnit.DAYS);
     // 一些特殊的登录参数。比如三方登录，需要额外返回一个字段是否需要跳转的绑定已有账号页面
     Object details = authentication.getDetails();
     if (details instanceof Map) {
@@ -83,7 +90,8 @@ public class LoginSuccessHandler extends
   }
 
   public String generateToken(UserLoginDTO currentUser) {
-    long expiredTime = TimeTool.nowMilli() + TimeUnit.MINUTES.toMillis(10); // 10分钟后过期
+    // TODO
+    long expiredTime = TimeTool.nowMilli() + TimeUnit.MINUTES.toMillis(1); // 10分钟后过期
     currentUser.setExpiredTime(expiredTime);
     return jwtService.createJwt(currentUser, expiredTime);
   }

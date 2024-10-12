@@ -11,6 +11,12 @@ const userApi = {
   resetPwd: (data) => {
     return request.post('/public/user/resetPwd', data)
   },
+  loginPassword: (data) => {
+    return request.post('/public/user/login/password', data)
+  },
+  loginCode: (data) => {
+    return request.post('/public/user/login/code', data)
+  },
 }
 
 export default userApi;

@@ -42,6 +42,9 @@ html, body, #app {
 *, *::before, *::after {
   box-sizing: inherit;
 }
+.alert {
+    z-index: 1051 !important; /* 确保 z-index 覆盖其他样式 */
+}
 .m-content-display {
   display: flex;
   flex-direction: column;

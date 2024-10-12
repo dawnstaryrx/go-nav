@@ -15,18 +15,18 @@
           </div>
         </div>
 
-        <form v-if="loginType === 0" class="row g-3">
+        <form @submit.prevent="handleLoginPassword" v-if="loginType === 0" class="row g-3">
           <div class="col-md-12">
               <label for="validationDefaultUsername" required class="form-label">用户名/邮箱</label>
-              <input type="text" class="form-control" placeholder="请输入用户名或邮箱" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
+              <input v-model="loginPasswordData.username" type="text" class="form-control" placeholder="请输入用户名或邮箱" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
           </div>
           <div class="col-md-12">
             <label for="validationDefault03" required class="form-label">密码</label>
-            <input type="password" class="form-control" placeholder="请输入密码" id="validationDefault03" required>
+            <input v-model="loginPasswordData.password" type="password" class="form-control" placeholder="请输入密码" id="validationDefault03" required>
           </div>
           <div class="col-12">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+              <input class="form-check-input" type="checkbox" value="" id="invalidCheck2">
               <label class="form-check-label" for="invalidCheck2">
                 记住我
               </label>
@@ -37,18 +37,34 @@
           </div>
         </form>
 
-        <form v-else class="row g-3">
+        <form @submit.prevent="handleLoginCode" v-else class="row g-3">
           <div class="col-md-12">
               <label for="validationDefaultUsername" required class="form-label">邮箱</label>
-              <input type="text" class="form-control" placeholder="请输入邮箱" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
+              <input v-model="loginCodeData.email" type="text" class="form-control" placeholder="请输入邮箱" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" required>
           </div>
           <div class="col-md-12">
             <label for="validationDefault03" required class="form-label">验证码</label>
-            <input type="password" class="form-control" placeholder="请输入验证码" id="validationDefault03" required>
+            <div class="input-group" style="margin: 0px;">
+            <input 
+              v-model="loginCodeData.code" 
+              type="text" 
+              class="form-control" 
+              placeholder="请输入验证码" 
+              id="validationCode" 
+              required
+            >
+            <span 
+              :class="['input-group-text', { disabled: isSending }]" 
+              @click="sendCode" 
+              style="cursor: pointer;"
+            >
+              {{ sendButtonText }}
+            </span>
+          </div>
           </div>
           <div class="col-12">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+              <input class="form-check-input" type="checkbox" value="" id="invalidCheck2">
               <label class="form-check-label" for="invalidCheck2">
                 记住我
               </label>
@@ -94,19 +110,108 @@
 
 <script>
 import TopBar from "@/components/front/TopBar.vue";
-import { ref } from "vue";
+import userApi from "@/api/user";
+import alertUtil from "@/utils/alert";
+import { ref, computed } from "vue";
+import {useRouter} from "vue-router";
+import { useTokenStore } from "@/stores/token";
 export default {
   components: {
     TopBar,
   },
   setup() {
+    const router = useRouter()
     const loginType = ref(0);
+    const loginPasswordData = ref({
+      username: '',
+      password: '',
+    });
+    const loginCodeData = ref({
+      email: '',
+      code: '',
+    });
+    const isSending = ref(false);
+    const countdown = ref(60);
+    const timer = ref(null);
+    const tokenStore = useTokenStore(); // 获取 store 实例
+    const sendButtonText = computed(() => {
+      return isSending.value ? `${countdown.value}s 后重试` : '发送';
+    });
+    const validateEmail = (email) => {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    };
+    const sendCode = async () => {
+      if (isSending.value) return;
+      if (!validateEmail(loginCodeData.value.email)) {
+        alertUtil.message('请输入有效的邮箱地址', 'danger');
+        return;
+      }
+
+      isSending.value = true;
+
+      try {
+        // const res = await sendCodeService(registerData.value.email, 1);
+        const res = await userApi.sendCode(loginCodeData.value.email, 2);
+        console.log(res);
+        alertUtil.message('验证码已发送', 'success');
+        // 开始倒计时
+        timer.value = setInterval(() => {
+          if (countdown.value > 0) {
+            countdown.value--;
+          } else {
+            clearInterval(timer.value);
+            isSending.value = false;
+            countdown.value = 60;
+          }
+        }, 1000);
+      } catch (error) {
+        alertUtil.message('发送验证码失败，请稍后再试', 'danger');
+        isSending.value = false;
+      }
+    };
+    const handleLoginCode = async () => {
+      // 处理登录逻辑
+      if (!validateEmail(loginCodeData.value.email)) {
+        alertUtil.message('请输入有效的邮箱地址', 'danger');
+        return;
+      }
+
+      // 发送登录请求
+      const res = await userApi.loginCode(loginCodeData.value);
+      if(res.code == 0){
+        alertUtil.message('登录成功！');
+        router.push("/")
+      }
+    };
+    
+    const handleLoginPassword = async () => {
+      // 发送登录请求
+      const res = await userApi.loginPassword(loginPasswordData.value);
+      console.log(res.data);
+      if(res.code == 0){
+        alertUtil.message('登录成功！', 'success');
+        
+        
+        tokenStore.setToken(res.data); // res.data 是 token , refreshToken值
+        router.push("/")
+      }
+    };
     const changeLoginType = (val) => {
       loginType.value = val;
     };
     return {
       loginType,
-      changeLoginType
+      changeLoginType,
+      loginPasswordData,
+      loginCodeData,
+      isSending,
+      countdown,
+      timer,
+      sendButtonText,
+      sendCode,
+      handleLoginCode,
+      handleLoginPassword
     };
   },
 };

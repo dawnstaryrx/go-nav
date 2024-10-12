@@ -11,11 +11,17 @@ var alertUtil = {
             type = "success";
         }
         // 创建bootstrap的alert元素
-        var divElement = $("<div></div>").addClass('alert').addClass('alert-'+type).addClass('alert-dismissible').addClass('col-md-4').addClass('col-md-offset-4');
+        var divElement = $("<div></div>")
+                        .addClass('alert')
+                        .addClass('alert-'+type)
+                        .addClass('alert-dismissible')
+                        .addClass('col-md-4')
+                        .addClass('col-md-offset-4');
         divElement.css({ // 消息框的定位样式
             "position": "absolute",
             "right":"30px",
             "top": "80px",
+            "z-index": "9999"
         });
         divElement.text(msg); // 设置消息框的内容
         // 消息框添加可以关闭按钮

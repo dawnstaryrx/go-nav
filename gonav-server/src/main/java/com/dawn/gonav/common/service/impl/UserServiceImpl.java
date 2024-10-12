@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendCode(String email, Integer type) {
+        User userByEmail = userMapper.findUserByEmail(email);
         if (email == null){
 //            throw new BusinessException("邮箱不能为空");
             ExceptionTool.throwException("邮箱不能为空！");
@@ -42,16 +43,26 @@ public class UserServiceImpl implements UserService {
         String content = null;
         String key = null;
         if (CodeTypeEnum.REGISTER_CODE.getType().equals(type)){
+            // 判断是否已经注册
+            if (userByEmail != null){
+                ExceptionTool.throwException("用户已存在！");
+            }
             // 注册邮件
             emailDTO.setTitle("Go导航——注册");
             content = "注册验证码为 " + code + " ，五分钟有效，请妥善保管！";
             key = EMAIL_REGISTER_CODE_PREFIX + emailDTO.getEmail();
         } else if(CodeTypeEnum.LOGIN_CODE.getType().equals(type)){
+            if (userByEmail == null){
+                ExceptionTool.throwException("用户不存在，请注册！");
+            }
             // 登录邮件
             emailDTO.setTitle("Go导航——登录");
             content = "登录验证码为 " + code + " ，五分钟有效，请妥善保管！";
             key = EMAIL_LOGIN_CODE_PREFIX + emailDTO.getEmail();
         } else if (CodeTypeEnum.RESET_CODE.getType().equals(type)){
+            if (userByEmail == null){
+                ExceptionTool.throwException("用户不存在，请注册！");
+            }
             // 重置密码邮件
             emailDTO.setTitle("Go导航——重置密码");
             content = "重置密码的验证码为 " + code + " ，五分钟有效，请妥善保管！";
