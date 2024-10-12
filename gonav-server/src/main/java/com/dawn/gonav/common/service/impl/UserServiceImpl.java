@@ -3,7 +3,7 @@ package com.dawn.gonav.common.service.impl;
 import com.dawn.gonav.common.mapper.UserMapper;
 import com.dawn.gonav.common.service.EmailService;
 import com.dawn.gonav.common.service.UserService;
-import com.dawn.gonav.exception.BusinessException;
+import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.EmailDTO;
 import com.dawn.gonav.model.dto.RegisterDTO;
 import com.dawn.gonav.model.enums.CodeTypeEnum;
@@ -33,13 +33,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void sendCode(String email, Integer type) {
         if (email == null){
-            throw new BusinessException("邮箱不能为空");
+//            throw new BusinessException("邮箱不能为空");
+            ExceptionTool.throwException("邮箱不能为空！");
         }
         EmailDTO emailDTO = new EmailDTO();
         emailDTO.setEmail(email);
         String code = RandomUtil.getEmailCode();
-        String content;
-        String key;
+        String content = null;
+        String key = null;
         if (CodeTypeEnum.REGISTER_CODE.getType().equals(type)){
             // 注册邮件
             emailDTO.setTitle("Go导航——注册");
@@ -56,7 +57,8 @@ public class UserServiceImpl implements UserService {
             content = "重置密码的验证码为 " + code + " ，五分钟有效，请妥善保管！";
             key = EMAIL_RESET_CODE_PREFIX + emailDTO.getEmail();
         } else {
-            throw new BusinessException("未知的验证码类型");
+//            throw new BusinessException("未知的验证码类型");
+            ExceptionTool.throwException("未知的验证码类型");
         }
         emailDTO.setContent(content);
         // 往Redis中存储一个键值对
@@ -71,7 +73,8 @@ public class UserServiceImpl implements UserService {
     public void register(RegisterDTO registerDTO) {
         // 检查两次密码是否一致
         if (!registerDTO.getPassword().equals(registerDTO.getRePassword())){
-            throw new BusinessException("两次密码不一致");
+//            throw new BusinessException("两次密码不一致");
+            ExceptionTool.throwException("两次密码不一致！");
         }
         // 检查验证码是否正确
         // 从Redis中获取出验证码
@@ -79,12 +82,14 @@ public class UserServiceImpl implements UserService {
         String key = EMAIL_REGISTER_CODE_PREFIX + registerDTO.getEmail();
         String redisCode = operations.get(key);
         if (!registerDTO.getCode().equals(redisCode)){
-            throw new BusinessException("验证码错误！");
+//            throw new BusinessException("验证码错误！");
+            ExceptionTool.throwException("验证码错误！");
         }
         // 根据邮箱查询用户是否存在
         User userByEmail = userMapper.findUserByEmail(registerDTO.getEmail());
         if (userByEmail != null){
-            throw new BusinessException("用户已存在");
+//            throw new BusinessException("用户已存在");
+            ExceptionTool.throwException("用户已存在！");
         }
         User user = new User();
         user.setUsername(registerDTO.getEmail());
@@ -102,7 +107,8 @@ public class UserServiceImpl implements UserService {
     public void resetPwd(RegisterDTO registerDTO) {
         // 检查两次密码是否一致
         if (!registerDTO.getPassword().equals(registerDTO.getRePassword())){
-            throw new BusinessException("两次密码不一致");
+//            throw new BusinessException("两次密码不一致");
+            ExceptionTool.throwException("两次密码不一致");
         }
         // 检查验证码是否正确
         // 从Redis中获取出验证码
@@ -110,12 +116,14 @@ public class UserServiceImpl implements UserService {
         String key = EMAIL_RESET_CODE_PREFIX + registerDTO.getEmail();
         String redisCode = operations.get(key);
         if (!registerDTO.getCode().equals(redisCode)){
-            throw new BusinessException("验证码错误！");
+//            throw new BusinessException("验证码错误！");
+            ExceptionTool.throwException("验证码错误！");
         }
         // 根据邮箱查询用户是否存在
         User userByEmail = userMapper.findUserByEmail(registerDTO.getEmail());
         if (userByEmail == null){
-            throw new BusinessException("用户不存在，请注册");
+//            throw new BusinessException("用户不存在，请注册");
+            ExceptionTool.throwException("用户不存在，请注册");
         }
         userByEmail.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         userByEmail.setUpdateTime(LocalDateTime.now());
@@ -134,6 +142,29 @@ public class UserServiceImpl implements UserService {
         if (userByUsername != null){
             return userByUsername;
         }
-        throw new BusinessException("用户不存在");
+//        throw new BusinessException("用户不存在");
+        ExceptionTool.throwException("用户不存在");
+        return userByEmail;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        User userByEmail = userMapper.findUserByEmail(email);
+        if (userByEmail != null){
+            return userByEmail;
+        }
+//        throw new BusinessException("用户不存在");
+        ExceptionTool.throwException("用户不存在");
+        return userByEmail;
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        User userByUsername = userMapper.findUserByUsername(username);
+        if (userByUsername != null){
+            return userByUsername;
+        }
+        ExceptionTool.throwException("用户不存在");
+        return userByUsername;
     }
 }

@@ -29,7 +29,7 @@ public class CustomAuthenticationExceptionHandler implements AuthenticationEntry
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         PrintWriter writer = response.getWriter();
-        writer.print(JSONUtil.stringify(Result.error("${authentication.fail:认证失败}")));
+        writer.print(JSONUtil.stringify(Result.error("${authentication.fail:认证失败}", 1)));
         writer.flush();
         writer.close();
     }

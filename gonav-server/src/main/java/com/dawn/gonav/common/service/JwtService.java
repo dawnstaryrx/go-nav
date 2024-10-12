@@ -1,6 +1,6 @@
-package com.dawn.gonav.authentication.service;
+package com.dawn.gonav.common.service;
 
-import com.dawn.gonav.exception.BusinessException;
+import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.util.JSONUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyFactory;
@@ -57,8 +56,9 @@ public class JwtService implements InitializingBean {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
 //            throw new BusinessException( "获取Jwt私钥失败", HttpStatus.BAD_REQUEST);
-            throw new BusinessException( "获取Jwt私钥失败");
-//            return null;
+//            throw new BusinessException( "获取Jwt私钥失败");
+            ExceptionTool.throwException("获取JWT私钥失败");
+            return null;
         }
     }
 
@@ -74,8 +74,10 @@ public class JwtService implements InitializingBean {
         } catch (Exception e) {
             // 获取公钥失败
 //            throw new BusinessException("获取Jwt公钥失败",HttpStatus.BAD_REQUEST);
-            throw new BusinessException("获取Jwt公钥失败");
+//            throw new BusinessException("获取Jwt公钥失败");
+            ExceptionTool.throwException("获取JWT公钥失败");
         }
+        return null;
     }
 
     @Override

@@ -5,10 +5,14 @@ import com.dawn.gonav.authentication.handler.exception.CustomAuthenticationExcep
 import com.dawn.gonav.authentication.handler.exception.CustomSecurityExceptionHandler;
 import com.dawn.gonav.authentication.handler.login.LoginFailHandler;
 import com.dawn.gonav.authentication.handler.login.LoginSuccessHandler;
+import com.dawn.gonav.authentication.handler.login.email.EmailAuthenticationFilter;
+import com.dawn.gonav.authentication.handler.login.email.EmailAuthenticationProvider;
 import com.dawn.gonav.authentication.handler.login.username.UsernameAuthenticationFilter;
 import com.dawn.gonav.authentication.handler.login.username.UsernameAuthenticationProvider;
+import com.dawn.gonav.authentication.resourceApi.adminApi.AdminJwtAuthenticationFilter;
 import com.dawn.gonav.authentication.resourceApi.publicApi.PublicApiAuthenticationFilter;
 import com.dawn.gonav.authentication.resourceApi.userApi.UserJwtAuthenticationFilter;
+import com.dawn.gonav.common.service.JwtService;
 import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -41,7 +45,11 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Autowired
-    public SecurityConfig(ApplicationContext applicationContext, CustomAuthenticationExceptionHandler customAuthenticationExceptionHandler, CustomAccessDeniedHandler customAccessDeniedHandler){
+    public SecurityConfig(
+            ApplicationContext applicationContext,
+            CustomAuthenticationExceptionHandler customAuthenticationExceptionHandler,
+            CustomAccessDeniedHandler customAccessDeniedHandler
+    ){
         this.applicationContext = applicationContext;
         this.customAuthenticationExceptionHandler = customAuthenticationExceptionHandler;
         this.customAccessDeniedHandler = customAccessDeniedHandler;
@@ -91,7 +99,7 @@ public class SecurityConfig {
         LoginSuccessHandler loginSuccessHandler = applicationContext.getBean(LoginSuccessHandler.class);
         LoginFailHandler loginFailHandler = applicationContext.getBean(LoginFailHandler.class);
 
-        // 加一个登录方式。用户名、密码登录
+        // 加一个登录方式。用户名/邮箱、密码登录
         String usernameLoginPath = "/public/user/login/password";
         UsernameAuthenticationFilter usernameLoginFilter = new UsernameAuthenticationFilter(
                 // @PostMapping("/user/login/username")
@@ -102,6 +110,22 @@ public class SecurityConfig {
                 loginSuccessHandler,
                 loginFailHandler);
         http.addFilterBefore(usernameLoginFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 加一个登录方式。邮箱、验证码登录
+        String emailLoginPath = "/public/user/login/code";
+        EmailAuthenticationFilter emailLoginFilter = new EmailAuthenticationFilter(
+                new AntPathRequestMatcher(emailLoginPath, HttpMethod.POST.name()),
+                new ProviderManager(List.of(applicationContext.getBean(EmailAuthenticationProvider.class))),
+                // 成功失败处理
+                loginSuccessHandler,
+                loginFailHandler);
+        http.addFilterBefore(emailLoginFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 异常处理
+        http
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationExceptionHandler)
+                        .accessDeniedHandler(customAccessDeniedHandler));
 
         return http.build();
     }
@@ -114,10 +138,23 @@ public class SecurityConfig {
     public SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
         commonHttpSetting(http);
         // 使用securityMatcher限定当前配置作用的路径
-        http.securityMatcher("/private/**");
+        http.securityMatcher("/user/**");
         http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
         // JWT Filter
-        UserJwtAuthenticationFilter userJwtAuthenticationFilter = new UserJwtAuthenticationFilter();
+        UserJwtAuthenticationFilter userJwtAuthenticationFilter = new UserJwtAuthenticationFilter(applicationContext.getBean(JwtService.class));
+        http.addFilterBefore(userJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    @Bean
+    @Order(3)
+    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
+        commonHttpSetting(http);
+        // 使用securityMatcher限定当前配置作用的路径
+        http.securityMatcher("/admin/**");
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
+        // JWT Filter
+        AdminJwtAuthenticationFilter userJwtAuthenticationFilter = new AdminJwtAuthenticationFilter(applicationContext.getBean(JwtService.class));
         http.addFilterBefore(userJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

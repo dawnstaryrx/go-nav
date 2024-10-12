@@ -1,5 +1,6 @@
-package com.dawn.gonav.authentication.resourceApi.userApi;
+package com.dawn.gonav.authentication.resourceApi.adminApi;
 
+import com.dawn.gonav.authentication.resourceApi.userApi.UserJwtAuthentication;
 import com.dawn.gonav.common.service.JwtService;
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.UserLoginDTO;
@@ -15,10 +16,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-public class UserJwtAuthenticationFilter extends OncePerRequestFilter {
+public class AdminJwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
-    public UserJwtAuthenticationFilter(JwtService jwtService) {
+    public AdminJwtAuthenticationFilter(JwtService jwtService) {
         this.jwtService = jwtService;
     }
     @Override
@@ -45,7 +46,7 @@ public class UserJwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             ExceptionTool.throwException("jwt无效", HttpStatus.UNAUTHORIZED.value());
         }
-        if (0==userLoginInfo.getRole()){
+        if (0==userLoginInfo.getRole() || 1==userLoginInfo.getRole()){
             ExceptionTool.throwException("用户权限不足！", 403);
         }
         // 放行

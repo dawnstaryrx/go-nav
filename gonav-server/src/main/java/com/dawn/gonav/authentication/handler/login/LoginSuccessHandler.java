@@ -1,18 +1,15 @@
 package com.dawn.gonav.authentication.handler.login;
 
-import com.dawn.gonav.authentication.service.JwtService;
-import com.dawn.gonav.exception.BaseException;
-import com.dawn.gonav.exception.BusinessException;
+import com.dawn.gonav.common.service.JwtService;
+import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.model.po.Result;
 import com.dawn.gonav.util.JSONUtil;
 import com.dawn.gonav.util.TimeTool;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.RedirectStrategy;
@@ -59,9 +56,7 @@ public class LoginSuccessHandler extends
   ) throws IOException {
     Object principal = authentication.getPrincipal();
     if (principal == null || !(principal instanceof UserLoginDTO)) {
-//      ExceptionTool.throwException(
-//          "登陆认证成功后，authentication.getPrincipal()返回的Object对象必须是：UserLoginInfo！");
-      throw new BusinessException("登陆认证成功后，authentication.getPrincipal()返回的Object对象必须是：UserLoginInfo！");
+      ExceptionTool.throwException("登陆认证成功后，authentication.getPrincipal()返回的Object对象必须是：UserLoginInfo！");
     }
     UserLoginDTO currentUser = (UserLoginDTO) principal;
     currentUser.setSessionId(UUID.randomUUID().toString());

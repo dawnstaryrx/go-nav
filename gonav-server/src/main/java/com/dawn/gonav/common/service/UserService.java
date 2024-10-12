@@ -11,4 +11,8 @@ public interface UserService {
     void resetPwd(RegisterDTO registerDTO);
 
     User getUserByUsernameOrEmail(String username);
+
+    User getUserByEmail(String email);
+
+    User getUserByUsername(String username);
 }

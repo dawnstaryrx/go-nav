@@ -33,14 +33,9 @@ public class CustomSecurityExceptionHandler extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
     } catch (BaseException e) {
       // 自定义异常
-//      Result result = ResultBuilder.aResult()
-//          .msg(e.getMessage())
-//          .code(e.getCode())
-//          .build();
-//      Result result = Result.error(e.getMessage(), e.getCode());
-      Result result = Result.error(e.getMessage());
+      Result result = Result.error(e.getMessage(), e.getCode());
       response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-//      response.setStatus(e.getHttpStatus().value());
+      response.setStatus(e.getHttpStatus().value());
       PrintWriter writer = response.getWriter();
       writer.write(JSONUtil.stringify(result));
       writer.flush();
