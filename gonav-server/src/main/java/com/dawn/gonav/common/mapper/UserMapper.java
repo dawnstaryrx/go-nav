@@ -12,4 +12,6 @@ public interface UserMapper {
     void update(User userByEmail);
 
     User findUserByUsername(String usernameOrEmail);
+
+    User findUserByLinuxDoOpenId(String openId);
 }

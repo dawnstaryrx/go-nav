@@ -15,4 +15,8 @@ public interface UserService {
     User getUserByEmail(String email);
 
     User getUserByUsername(String username);
+
+    User getUserByOpenId(String openId, String platform);
+
+    void createUserWithOpenId(User user, String openId, String platform);
 }

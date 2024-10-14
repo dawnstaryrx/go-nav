@@ -10,6 +10,8 @@
                  email,
                  password,
                  role,
+                 wechat_openid,
+                 linuxdo_openid,
                  create_time,
                  update_time
         ) values(
@@ -17,15 +19,20 @@
                  #{email},
                  #{password},
                  #{role},
+                 #{wechatOpenid},
+                 #{linuxdoOpenid},
                  #{createTime},
                  #{updateTime}
-                 )
+        )
     </insert>
     <select id="findUserByEmail" resultType="com.dawn.gonav.model.po.User">
         select * from user where email = #{email}
     </select>
     <select id="findUserByUsername" resultType="com.dawn.gonav.model.po.User">
         select * from user where username = #{username}
+    </select>
+    <select id="findUserByLinuxDoOpenId" resultType="com.dawn.gonav.model.po.User">
+        select * from user where linuxdo_openid = #{openId}
     </select>
     <update id="update">
         update user

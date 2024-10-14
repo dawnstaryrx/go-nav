@@ -34,7 +34,6 @@ public class UserServiceImpl implements UserService {
     public void sendCode(String email, Integer type) {
         User userByEmail = userMapper.findUserByEmail(email);
         if (email == null){
-//            throw new BusinessException("邮箱不能为空");
             ExceptionTool.throwException("邮箱不能为空！");
         }
         EmailDTO emailDTO = new EmailDTO();
@@ -68,7 +67,6 @@ public class UserServiceImpl implements UserService {
             content = "重置密码的验证码为 " + code + " ，五分钟有效，请妥善保管！";
             key = EMAIL_RESET_CODE_PREFIX + emailDTO.getEmail();
         } else {
-//            throw new BusinessException("未知的验证码类型");
             ExceptionTool.throwException("未知的验证码类型");
         }
         emailDTO.setContent(content);
@@ -84,7 +82,6 @@ public class UserServiceImpl implements UserService {
     public void register(RegisterDTO registerDTO) {
         // 检查两次密码是否一致
         if (!registerDTO.getPassword().equals(registerDTO.getRePassword())){
-//            throw new BusinessException("两次密码不一致");
             ExceptionTool.throwException("两次密码不一致！");
         }
         // 检查验证码是否正确
@@ -93,13 +90,11 @@ public class UserServiceImpl implements UserService {
         String key = EMAIL_REGISTER_CODE_PREFIX + registerDTO.getEmail();
         String redisCode = operations.get(key);
         if (!registerDTO.getCode().equals(redisCode)){
-//            throw new BusinessException("验证码错误！");
             ExceptionTool.throwException("验证码错误！");
         }
         // 根据邮箱查询用户是否存在
         User userByEmail = userMapper.findUserByEmail(registerDTO.getEmail());
         if (userByEmail != null){
-//            throw new BusinessException("用户已存在");
             ExceptionTool.throwException("用户已存在！");
         }
         User user = new User();
@@ -118,7 +113,6 @@ public class UserServiceImpl implements UserService {
     public void resetPwd(RegisterDTO registerDTO) {
         // 检查两次密码是否一致
         if (!registerDTO.getPassword().equals(registerDTO.getRePassword())){
-//            throw new BusinessException("两次密码不一致");
             ExceptionTool.throwException("两次密码不一致");
         }
         // 检查验证码是否正确
@@ -127,13 +121,11 @@ public class UserServiceImpl implements UserService {
         String key = EMAIL_RESET_CODE_PREFIX + registerDTO.getEmail();
         String redisCode = operations.get(key);
         if (!registerDTO.getCode().equals(redisCode)){
-//            throw new BusinessException("验证码错误！");
             ExceptionTool.throwException("验证码错误！");
         }
         // 根据邮箱查询用户是否存在
         User userByEmail = userMapper.findUserByEmail(registerDTO.getEmail());
         if (userByEmail == null){
-//            throw new BusinessException("用户不存在，请注册");
             ExceptionTool.throwException("用户不存在，请注册");
         }
         userByEmail.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
@@ -153,9 +145,8 @@ public class UserServiceImpl implements UserService {
         if (userByUsername != null){
             return userByUsername;
         }
-//        throw new BusinessException("用户不存在");
         ExceptionTool.throwException("用户不存在");
-        return userByEmail;
+        return null;
     }
 
     @Override
@@ -164,9 +155,8 @@ public class UserServiceImpl implements UserService {
         if (userByEmail != null){
             return userByEmail;
         }
-//        throw new BusinessException("用户不存在");
         ExceptionTool.throwException("用户不存在");
-        return userByEmail;
+        return null;
     }
 
     @Override
@@ -176,6 +166,31 @@ public class UserServiceImpl implements UserService {
             return userByUsername;
         }
         ExceptionTool.throwException("用户不存在");
-        return userByUsername;
+        return null;
+    }
+
+    @Override
+    public User getUserByOpenId(String openId, String platform) {
+        User user = new User();
+        if ("LinuxDo".equals(platform)){
+            user = userMapper.findUserByLinuxDoOpenId(openId);
+        } else {
+            ExceptionTool.throwException("未知的第三方平台");
+        }
+        return user;
+    }
+
+    @Override
+    public void createUserWithOpenId(User user, String openId, String platform) {
+        User userByOpenId = new User();
+        if ("LinuxDo".equals(platform)){
+            userByOpenId.setRole(1);
+            userByOpenId.setLinuxdoOpenid(openId);
+            userByOpenId.setCreateTime(LocalDateTime.now());
+            userByOpenId.setUpdateTime(LocalDateTime.now());
+        } else {
+            ExceptionTool.throwException("未知的第三方平台");
+        }
+        userMapper.add(userByOpenId);
     }
 }

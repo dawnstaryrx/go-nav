@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +15,7 @@ public class UserLoginDTO {
     private String phone;
     private String nickname;
     private Integer role;
-    private String wechatOpenid;
+    private String githubOpenid;
+    private String linuxdoOpenid;
     private Long expiredTime; // 过期时间
 }

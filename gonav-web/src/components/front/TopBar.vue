@@ -59,14 +59,19 @@ export default {
     const router = useRouter()
     // 定义登出方法
     const logout = () => {
-      if (token.value === null) {
+      console.log("token", token)
+      console.log("token.token", token.token)
+      if (token == null || token == '') {
         // 如果 token 为 null，用户尚未登录，直接重定向到登录页
         router.push("/login");
       } else {
         // 清除 token（根据你的 tokenStore 实现可能需要调整）
+        console.log("tokenStore.removeToken();")
         tokenStore.removeToken(); // 假设你有一个 setToken 方法
         // 重定向到登录页或主页
+        console.log("router.push()")
         router.push("/login");
+        console.log("router.push()---")
       }
     };
     return {

@@ -21,8 +21,8 @@ public class User {
     private String password;
     private String nickname;
     private Integer role;
-    private String wechatOpenid;
+    private String githubOpenid;
+    private String linuxdoOpenid;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
-
 }

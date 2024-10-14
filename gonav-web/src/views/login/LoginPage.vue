@@ -81,7 +81,10 @@
         </div>
         <div>
           <div class="col text-center">
-            <img src="@/assets/linuxdo.png" alt="" height="30px">LINUX DO登录
+            <img src="@/assets/linuxdo.png" alt="" height="30px">
+            <span @click="loginWithLinuxDo" style="cursor: pointer;">
+              使用LinuxDo账号登录
+            </span>
           </div>
           <div class="col text-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 32 32" fill="none">
@@ -200,6 +203,32 @@ export default {
     const changeLoginType = (val) => {
       loginType.value = val;
     };
+    // TODO OAuth2配置
+    const CLIENT_ID = "1Yr9VGywAcdNrdORgCVn2BavUbvdAcEx"; // 替换为你的client_id
+    const REDIRECT_URI = "http://127.0.0.1/auth/linux-do/callback"; // 替换为你的重定向URI
+    const AUTHORIZATION_ENDPOINT = "https://connect.linux.do/oauth2/authorize";
+
+    const loginWithLinuxDo = () => {
+      const state = generateRandomString(16); // 生成随机状态参数以防止CSRF
+      localStorage.setItem("oauth_state", state); // 存储状态以便回调时验证
+      const authUrl = `${AUTHORIZATION_ENDPOINT}?response_type=code&client_id=${encodeURIComponent(
+        CLIENT_ID
+      )}&redirect_uri=${encodeURIComponent(
+        REDIRECT_URI
+      )}&state=${state}`;
+      window.location.href = authUrl;
+    };
+
+    // 生成随机字符串
+    const generateRandomString = (length) => {
+      const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    };
     return {
       loginType,
       changeLoginType,
@@ -211,7 +240,8 @@ export default {
       sendButtonText,
       sendCode,
       handleLoginCode,
-      handleLoginPassword
+      handleLoginPassword,
+      loginWithLinuxDo
     };
   },
 };

@@ -20,7 +20,7 @@ public class TestController {
         UserLoginDTO userLoginDTO = CurrentUserUtil.getCurrentUser();
         System.out.println(userLoginDTO.getEmail());
         System.out.println(userLoginDTO.getId());
-        return Result.success("hello world admin" + userLoginDTO.getId());
+        return Result.success("hello world user" + userLoginDTO.getId());
     }
 
     @GetMapping("/default/hello")
