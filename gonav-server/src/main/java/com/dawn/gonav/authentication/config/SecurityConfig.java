@@ -7,6 +7,8 @@ import com.dawn.gonav.authentication.handler.login.LoginFailHandler;
 import com.dawn.gonav.authentication.handler.login.LoginSuccessHandler;
 import com.dawn.gonav.authentication.handler.login.email.EmailAuthenticationFilter;
 import com.dawn.gonav.authentication.handler.login.email.EmailAuthenticationProvider;
+import com.dawn.gonav.authentication.handler.login.github.GitHubAuthenticationFilter;
+import com.dawn.gonav.authentication.handler.login.github.GitHubAuthenticationProvider;
 import com.dawn.gonav.authentication.handler.login.linuxDo.LinuxDoAuthenticationFilter;
 import com.dawn.gonav.authentication.handler.login.linuxDo.LinuxDoAuthenticationProvider;
 import com.dawn.gonav.authentication.handler.login.username.UsernameAuthenticationFilter;
@@ -124,13 +126,22 @@ public class SecurityConfig {
         http.addFilterBefore(emailLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
         // 加一个登录方式。linuxdo 登录
-        LinuxDoAuthenticationFilter giteeFilter = new LinuxDoAuthenticationFilter(
+        LinuxDoAuthenticationFilter linuxdoFilter = new LinuxDoAuthenticationFilter(
                 new AntPathRequestMatcher("/public/user/login/linuxdo", HttpMethod.POST.name()),
                 new ProviderManager(
                         List.of(applicationContext.getBean(LinuxDoAuthenticationProvider.class))),
                 loginSuccessHandler,
                 loginFailHandler);
-        http.addFilterBefore(giteeFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(linuxdoFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 加一个登录方式。github 登录
+        GitHubAuthenticationFilter githubFilter = new GitHubAuthenticationFilter(
+                new AntPathRequestMatcher("/public/user/login/github", HttpMethod.POST.name()),
+                new ProviderManager(
+                        List.of(applicationContext.getBean(GitHubAuthenticationProvider.class))),
+                loginSuccessHandler,
+                loginFailHandler);
+        http.addFilterBefore(githubFilter, UsernamePasswordAuthenticationFilter.class);
 
         // 异常处理
         http

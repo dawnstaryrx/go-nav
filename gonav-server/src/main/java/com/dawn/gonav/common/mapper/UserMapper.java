@@ -14,4 +14,6 @@ public interface UserMapper {
     User findUserByUsername(String usernameOrEmail);
 
     User findUserByLinuxDoOpenId(String openId);
+
+    User findUserByGitHubOpenId(String openId);
 }

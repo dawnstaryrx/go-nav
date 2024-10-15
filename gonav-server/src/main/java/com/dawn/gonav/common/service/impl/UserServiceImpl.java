@@ -174,6 +174,8 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         if ("LinuxDo".equals(platform)){
             user = userMapper.findUserByLinuxDoOpenId(openId);
+        } else if ("GitHub".equals(platform)) {
+            user = userMapper.findUserByGitHubOpenId(openId);
         } else {
             ExceptionTool.throwException("未知的第三方平台");
         }
@@ -186,6 +188,11 @@ public class UserServiceImpl implements UserService {
         if ("LinuxDo".equals(platform)){
             userByOpenId.setRole(1);
             userByOpenId.setLinuxdoOpenid(openId);
+            userByOpenId.setCreateTime(LocalDateTime.now());
+            userByOpenId.setUpdateTime(LocalDateTime.now());
+        } else if ("GitHub".equals(platform)) {
+            userByOpenId.setRole(1);
+            userByOpenId.setGithubOpenid(openId);
             userByOpenId.setCreateTime(LocalDateTime.now());
             userByOpenId.setUpdateTime(LocalDateTime.now());
         } else {

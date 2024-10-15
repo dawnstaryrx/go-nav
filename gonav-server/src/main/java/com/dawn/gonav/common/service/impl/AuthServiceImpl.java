@@ -36,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
             ExceptionTool.throwException("refreshToken无效");
         }
         // 刷新token
+        System.out.println("刷新token------------------");
         TokenDTO tokenDTO = new TokenDTO();
         tokenDTO.setToken(generateToken(userLoginDTO));
         tokenDTO.setRefreshToken(generateRefreshToken(userLoginDTO));
@@ -44,6 +45,7 @@ public class AuthServiceImpl implements AuthService {
         return tokenDTO;
     }
     private String generateToken(UserLoginDTO currentUser) {
+        // todo 10
         long expiredTime = TimeTool.nowMilli() + TimeUnit.MINUTES.toMillis(10); // 10分钟后过期
         currentUser.setExpiredTime(expiredTime);
         return jwtService.createJwt(currentUser, expiredTime);

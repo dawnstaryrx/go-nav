@@ -35,6 +35,12 @@ const routes = [
     name: 'linux-do-callback',
     title: 'linux-do回调',
     component: () => import('@/views/callback/LinuxDoPage.vue'),
+  },
+  {
+    path: '/auth/github/callback',
+    name: 'github-callback',
+    title: 'github回调',
+    component: () => import('@/views/callback/GitHubPage.vue'),
   }
 ]
 export default routes

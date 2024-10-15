@@ -10,7 +10,7 @@
                  email,
                  password,
                  role,
-                 wechat_openid,
+                 github_openid,
                  linuxdo_openid,
                  create_time,
                  update_time
@@ -19,7 +19,7 @@
                  #{email},
                  #{password},
                  #{role},
-                 #{wechatOpenid},
+                 #{githubOpenid},
                  #{linuxdoOpenid},
                  #{createTime},
                  #{updateTime}
@@ -33,6 +33,9 @@
     </select>
     <select id="findUserByLinuxDoOpenId" resultType="com.dawn.gonav.model.po.User">
         select * from user where linuxdo_openid = #{openId}
+    </select>
+    <select id="findUserByGitHubOpenId" resultType="com.dawn.gonav.model.po.User">
+        select * from user where github_openid = #{openId}
     </select>
     <update id="update">
         update user

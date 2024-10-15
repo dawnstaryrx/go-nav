@@ -43,3 +43,7 @@ login:
     clientId: 1Yr9VGywAcdNrdORgCVn2BavUbvdAcEx
     clientSecret: 2u8t7pB9Vfoz8FIfgKK6rd1c3cZwaINE
     redirectUri: http://127.0.0.1/auth/linux-do/callback
+  GitHub:
+    clientId: Ov23li7XYGfwUUzkXGza
+    clientSecret: a443d825325c00e63e5afc1181cf9347f839268e
+    redirectUri: http://127.0.0.1/auth/github/callback

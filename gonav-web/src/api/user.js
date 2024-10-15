@@ -24,6 +24,10 @@ const userApi = {
   // LinuxDo登录
   loginLinuxDo: (code) => {
     return request.post('/public/user/login/linuxdo', { code })
+  },
+  // GitHub登录
+  loginGitHub: (code) => {
+    return request.post('/public/user/login/github', { code })
   }
 }
 
