@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dawn.gonav.common.mapper.CategoryMapper">
+<!--    <insert id="add" parameterType="com.dawn.gonav.model.po.User">-->
+<!--        insert into-->
+<!--            user(-->
+<!--                 username,-->
+<!--                 email,-->
+<!--                 password,-->
+<!--                 role,-->
+<!--                 github_openid,-->
+<!--                 linuxdo_openid,-->
+<!--                 create_time,-->
+<!--                 update_time-->
+<!--        ) values(-->
+<!--                 #{username},-->
+<!--                 #{email},-->
+<!--                 #{password},-->
+<!--                 #{role},-->
+<!--                 #{githubOpenid},-->
+<!--                 #{linuxdoOpenid},-->
+<!--                 #{createTime},-->
+<!--                 #{updateTime}-->
+<!--        )-->
+<!--    </insert>-->
+<!--    <update id="update">-->
+<!--        update user-->
+<!--        <set>-->
+<!--            <if test="username != null">-->
+<!--                username = #{username},-->
+<!--            </if>-->
+<!--            <if test="phone != null">-->
+<!--                phone = #{phone},-->
+<!--            </if>-->
+<!--            <if test="password != null">-->
+<!--                password = #{password},-->
+<!--            </if>-->
+<!--            <if test="nickname != null">-->
+<!--                nickname = #{nickname},-->
+<!--            </if>-->
+<!--            <if test="role != null">-->
+<!--                role = #{role},-->
+<!--            </if>-->
+<!--            <if test="wechatOpenid != null">-->
+<!--                wechat_openid = #{wechatOpenid},-->
+<!--            </if>-->
+<!--            <if test="updateTime != null">-->
+<!--                update_time = #{updateTime}-->
+<!--            </if>-->
+<!--        </set>-->
+<!--        where id = #{id}-->
+<!--    </update>-->
+    <select id="findAll" resultType="com.dawn.gonav.model.po.Category">
+        select
+            *
+        from category
+        where create_user = #{userId}
+        order by weight desc
+    </select>
+</mapper>

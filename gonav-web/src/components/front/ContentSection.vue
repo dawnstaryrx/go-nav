@@ -75,6 +75,20 @@
       全部工具
     </span>
   </div>
+  <div class="row apps-container">
+    <div v-for="item in [1,2,3,4,5,8,9]" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container">
+      <div class="app-card d-flex align-items-center">
+        <div class="app-logo">
+          <img src="@/assets/linuxdo.png" alt="App Logo" class="img-fluid">
+        </div>
+        <div class="app-info">
+          <div class="app-title">App 名称 </div>
+          <div class="app-category">分类名称</div>
+          <div class="app-description"> 这里是的描述。这里是的描述。这里是的描述。这里是的描述。这里是的描述。</div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div v-for="item in [1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]" class="content-section-card-container">
   333
   </div>
@@ -147,6 +161,7 @@ export default {
   max-width: 1080px;
   margin: auto;
   margin-top: 66px;
+  margin-left: 8px;
   position: fixed;
   top: 20px;                      /* 垂直居中 */
   left: 50%;                     /* 水平居中 */
@@ -240,5 +255,133 @@ export default {
   font-weight: 500;
   font-style: normal;
 }
+/* APP 容器相关 */
+.apps-container {
+  max-width: 1080px;
+  padding: 0;
+  margin: auto;
+}
+
+.app-container {
+  padding: 12px;
+}
+
+/* APP 卡片样式 */
+.app-card {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
+    padding: 13px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid #f0f0f0;
+}
+
+.app-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px); /* 提升效果 */
+}
+
+.app-logo {
+    flex: 1 1 20%;
+    max-width: 20%;
+}
+
+.app-logo img {
+    border-radius: 50%; /* logo 图片圆形化 */
+    /* border: 2px solid #e0e0e0; */
+    /* padding: 5px; */
+}
+
+.app-info {
+    flex: 1 1 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 10px;
+}
+
+.app-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.app-category {
+    margin-top: 5px;
+    font-size: 0.6rem;
+    color: #666;
+    width: fit-content;
+    background-color: aliceblue;
+}
+.app-description {
+    /* margin-top: 5px; */
+    font-size: 0.9rem;
+    color: #666;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3; /* 行高可根据需求调整 */
+    max-height: 2.6em; /* 2 行的最大高度 = 2 x 行高 */
+}
+
+/* 中等屏幕 sm 下的调整 */
+@media (max-width: 991px) and (min-width: 576px) {
+    .app-card {
+        flex-direction: row;
+    }
+
+    .app-info {
+        justify-content: flex-start;
+    }
+
+    .app-description {
+        display: none; /* 隐藏描述 */
+    }
+
+    .app-title {
+        font-size: 1.2rem;
+    }
+}
+
+/* 小屏幕下的调整 */
+@media (max-width: 575px) {
+    .app-card {
+        flex-direction: column;
+        text-align: center;
+        border: 1px;
+        box-shadow: 1 0px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    .app-logo {
+        margin-bottom: 10px;
+        max-width: 50%; /* 适当放大 Logo */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .app-title {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+
+    .app-category {
+        font-size: 0.9rem;
+        display: none; /* 小屏幕下不展示分类名称 */
+    }
+
+    .app-description {
+        display: none; /* 小屏幕下不展示描述 */
+    }
+    .app-info{
+      padding: 0;
+    }
+}
+
+
 </style>
 

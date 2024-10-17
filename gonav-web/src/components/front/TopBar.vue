@@ -110,11 +110,15 @@ export default {
 }
 .header-navbar-top-content {
   max-width: 1100px;
+  margin: 0 auto;
+  padding: 0;
 }
 .navbar-brand:hover{
   color: #de7622 !important;
 }
+.header-navbar-top-icon{
 
+}
 .header-navbar-top-item:hover>a{
   color: #de7622 !important;
 }
