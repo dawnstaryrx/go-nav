@@ -1,13 +1,15 @@
 package com.dawn.gonav.common.controller;
 
 import com.dawn.gonav.common.service.CategoryService;
+import com.dawn.gonav.model.dto.CategoryDTO;
 import com.dawn.gonav.model.po.Category;
 import com.dawn.gonav.model.po.Result;
+import com.dawn.gonav.model.vo.CategoryPageVO;
 import com.dawn.gonav.model.vo.CategoryVO;
+import com.dawn.gonav.model.vo.PageBeanVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -30,12 +32,18 @@ public class CategoryController {
      * 获取后台分类列表，分页展示
      * @return
      */
-    @GetMapping
-    public Result getCategoryPageList(){
-        return null;
+    @GetMapping("/user/category")
+    public Result<PageBeanVO<CategoryPageVO>> getCategoryPageList(
+        @RequestParam Integer pageNum,
+        @RequestParam Integer pageSize
+    ){
+        PageBeanVO<CategoryPageVO> categoryPageList = categoryService.getCategoryPageList(pageNum, pageSize);
+        return Result.success(categoryPageList);
     }
 
-    public Result addCategory(){
-        return null;
+    @PutMapping("/user/category")
+    public Result addCategory(@RequestBody CategoryDTO categoryDTO){
+        categoryService.addCategory(categoryDTO);
+        return Result.success();
     }
 }

@@ -23,7 +23,7 @@ export default {
       }
       const path = route.path;
       // 检查当前路由是否是 /login, /register 或以 /admin 开头
-      return path === '/login' || path === '/register' || path === '/reset-pwd' || path.startsWith('/admin');
+      return path === '/login' || path === '/register' || path ==='/404' ||path === '/reset-pwd' || path.startsWith('/manage');
     }
   }
 }

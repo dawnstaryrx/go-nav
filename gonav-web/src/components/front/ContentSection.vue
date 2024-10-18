@@ -263,7 +263,7 @@ export default {
 }
 
 .app-container {
-  padding: 12px;
+  padding: 12px 12px 2px 12px;
 }
 
 /* APP 卡片样式 */
@@ -274,9 +274,7 @@ export default {
     border-radius: 6px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
-    padding: 13px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding:10px 13px 10px 13px;
     border: 1px solid #f0f0f0;
 }
 

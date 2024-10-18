@@ -3,28 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dawn.gonav.common.mapper.CategoryMapper">
-<!--    <insert id="add" parameterType="com.dawn.gonav.model.po.User">-->
-<!--        insert into-->
-<!--            user(-->
-<!--                 username,-->
-<!--                 email,-->
-<!--                 password,-->
-<!--                 role,-->
-<!--                 github_openid,-->
-<!--                 linuxdo_openid,-->
-<!--                 create_time,-->
-<!--                 update_time-->
-<!--        ) values(-->
-<!--                 #{username},-->
-<!--                 #{email},-->
-<!--                 #{password},-->
-<!--                 #{role},-->
-<!--                 #{githubOpenid},-->
-<!--                 #{linuxdoOpenid},-->
-<!--                 #{createTime},-->
-<!--                 #{updateTime}-->
-<!--        )-->
-<!--    </insert>-->
+    <insert id="addCategory" parameterType="com.dawn.gonav.model.po.Category">
+        insert into
+            category(
+                 parent_id,
+                 name,
+                 description,
+                 weight,
+                 status,
+                 create_user,
+                 create_time,
+                 update_user,
+                 update_time
+        ) values(
+                 #{parentId},
+                 #{name},
+                 #{description},
+                 #{weight},
+                 #{status},
+                 #{createUser},
+                 #{createTime},
+                 #{updateUser},
+                 #{updateTime}
+        )
+    </insert>
 <!--    <update id="update">-->
 <!--        update user-->
 <!--        <set>-->
@@ -59,4 +61,23 @@
         where create_user = #{userId}
         order by weight desc
     </select>
+
+    <select id="findAllPageVO" resultType="com.dawn.gonav.model.vo.CategoryPageVO">
+        SELECT
+        c.id,
+        c.name,
+        c.description,
+        c.weight,
+        c.status,
+        c.create_user,
+        c.create_time,
+        c.update_user,
+        c.update_time,
+        p.name AS parentName  <!-- 父分类名称，若无父分类则为null -->
+        FROM category c
+        LEFT JOIN category p ON c.parent_id = p.id  <!-- 左连接获取父分类名称 -->
+        WHERE c.create_user = #{userId}
+        ORDER BY c.weight DESC
+    </select>
+
 </mapper>

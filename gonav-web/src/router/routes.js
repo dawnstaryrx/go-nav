@@ -41,6 +41,49 @@ const routes = [
     name: 'github-callback',
     title: 'github回调',
     component: () => import('@/views/callback/GitHubPage.vue'),
+  },
+  {
+    path: '/manage',
+    name: 'manage',
+    title: '管理',
+    component: () => import('@/views/manage/BasePage.vue'),
+    children: [
+      {
+        path: 'index',
+        name: 'manage-index',
+        title: '首页',
+        component: () => import('@/views/manage/IndexPage.vue'),
+      },
+      {
+        path: 'category',
+        name: 'manage-category',
+        title: '类别',
+        component: () => import('@/views/manage/CategoryPage.vue'),
+      },
+      {
+        path: 'app',
+        name: 'admin-app',
+        title: '应用',
+        component: () => import('@/views/manage/AppPage.vue'),
+      },
+      {
+        path: 'admin/user',
+        name: 'admin-user',
+        title: '用户管理',
+        component: () => import('@/views/admin/UserAdminPage.vue'),
+      },
+    ],
+  },
+  {
+    path: '/404',
+    name: '404page',
+    component: () => import('@/views/404/IndexPage.vue'),
+  },
+    // 未知路由重定向
+  {
+    path: '/:pathMatch(.*)',
+    redirect: '/404',
+    hidden: true
   }
 ]
 export default routes

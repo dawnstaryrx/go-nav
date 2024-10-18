@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "jquery": "^3.7.1",
     "pinia": "^2.2.4",
     "pinia-plugin-persistedstate": "^4.0.2",
