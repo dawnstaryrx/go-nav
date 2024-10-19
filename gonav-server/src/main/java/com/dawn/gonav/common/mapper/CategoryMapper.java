@@ -13,5 +13,9 @@ public interface CategoryMapper {
 
     void addCategory(Category category);
 
-    List<CategoryPageVO> findAllPageVO(Long userId);
+    List<CategoryPageVO> findAllPageVOByUserId(Long userId);
+
+    void deleteById(Long id);
+
+    void updateCategory(Category category);
 }

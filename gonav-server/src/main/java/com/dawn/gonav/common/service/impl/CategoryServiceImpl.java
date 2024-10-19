@@ -2,6 +2,7 @@ package com.dawn.gonav.common.service.impl;
 
 import com.dawn.gonav.common.mapper.CategoryMapper;
 import com.dawn.gonav.common.service.CategoryService;
+import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.CategoryDTO;
 import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.model.po.Category;
@@ -65,8 +66,8 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.findAll(userId);
     }
 
-    public List<CategoryPageVO> findAllPageVO(Long userId){
-        return  categoryMapper.findAllPageVO(userId);
+    public List<CategoryPageVO> findAllPageVOByUserId(Long userId){
+        return  categoryMapper.findAllPageVOByUserId(userId);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
         PageHelper.startPage(pageNum, pageSize);
         UserLoginDTO userLoginDTO = CurrentUserUtil.getCurrentUser();
         assert userLoginDTO != null;
-        List<CategoryPageVO> categoryPageVOS = findAllPageVO(userLoginDTO.getId());
+        List<CategoryPageVO> categoryPageVOS = findAllPageVOByUserId(userLoginDTO.getId());
         Page<CategoryPageVO> page = (Page<CategoryPageVO>) categoryPageVOS;
         pageBeanVO.setTotal(page.getTotal());
         pageBeanVO.setItems(page.getResult());
@@ -92,5 +93,25 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCreateUser(nowUser.getId());
         category.setUpdateUser(nowUser.getId());
         categoryMapper.addCategory(category);
+    }
+
+    @Override
+    public void updateCategory(CategoryDTO categoryDTO) {
+        if (categoryDTO.getId() == null){
+            ExceptionTool.throwException("id 不能为空！");
+        }
+        if (categoryDTO.getParentId() == categoryDTO.getId()){
+            ExceptionTool.throwException("父分类不能为自身！");
+        }
+        Category category = CopyUtil.copy(categoryDTO, Category.class);
+        categoryMapper.updateCategory(category);
+    }
+
+    @Override
+    public void deleteCategory(Long id) {
+        if (id == null){
+            ExceptionTool.throwException("id 不能为空！");
+        }
+        categoryMapper.deleteById(id);
     }
 }

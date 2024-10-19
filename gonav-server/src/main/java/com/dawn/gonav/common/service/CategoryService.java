@@ -16,4 +16,8 @@ public interface CategoryService {
     PageBeanVO<CategoryPageVO> getCategoryPageList(Integer pageNum, Integer pageSize);
 
     void addCategory(CategoryDTO categoryDTO);
+
+    void updateCategory(CategoryDTO categoryDTO);
+
+    void deleteCategory(Long id);
 }

@@ -27,33 +27,33 @@
                  #{updateTime}
         )
     </insert>
-<!--    <update id="update">-->
-<!--        update user-->
-<!--        <set>-->
-<!--            <if test="username != null">-->
-<!--                username = #{username},-->
-<!--            </if>-->
-<!--            <if test="phone != null">-->
-<!--                phone = #{phone},-->
-<!--            </if>-->
-<!--            <if test="password != null">-->
-<!--                password = #{password},-->
-<!--            </if>-->
-<!--            <if test="nickname != null">-->
-<!--                nickname = #{nickname},-->
-<!--            </if>-->
-<!--            <if test="role != null">-->
-<!--                role = #{role},-->
-<!--            </if>-->
-<!--            <if test="wechatOpenid != null">-->
-<!--                wechat_openid = #{wechatOpenid},-->
-<!--            </if>-->
-<!--            <if test="updateTime != null">-->
-<!--                update_time = #{updateTime}-->
-<!--            </if>-->
-<!--        </set>-->
-<!--        where id = #{id}-->
-<!--    </update>-->
+    <update id="updateCategory" parameterType="com.dawn.gonav.model.po.Category">
+        update category
+        <set>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="weight != null">
+                weight = #{weight},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
     <select id="findAll" resultType="com.dawn.gonav.model.po.Category">
         select
             *
@@ -62,7 +62,7 @@
         order by weight desc
     </select>
 
-    <select id="findAllPageVO" resultType="com.dawn.gonav.model.vo.CategoryPageVO">
+    <select id="findAllPageVOByUserId" resultType="com.dawn.gonav.model.vo.CategoryPageVO">
         SELECT
         c.id,
         c.name,
@@ -73,11 +73,14 @@
         c.create_time,
         c.update_user,
         c.update_time,
+        c.parent_id,
         p.name AS parentName  <!-- 父分类名称，若无父分类则为null -->
         FROM category c
         LEFT JOIN category p ON c.parent_id = p.id  <!-- 左连接获取父分类名称 -->
         WHERE c.create_user = #{userId}
         ORDER BY c.weight DESC
     </select>
-
+    <delete id="deleteById">
+        delete from category where id = #{id}
+    </delete>
 </mapper>

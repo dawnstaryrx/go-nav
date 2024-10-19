@@ -8,6 +8,7 @@ import com.dawn.gonav.model.vo.CategoryPageVO;
 import com.dawn.gonav.model.vo.CategoryVO;
 import com.dawn.gonav.model.vo.PageBeanVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,8 +43,20 @@ public class CategoryController {
     }
 
     @PutMapping("/user/category")
-    public Result addCategory(@RequestBody CategoryDTO categoryDTO){
+    public Result addCategory(@RequestBody @Validated CategoryDTO categoryDTO){
         categoryService.addCategory(categoryDTO);
+        return Result.success();
+    }
+
+    @PostMapping("/user/category")
+    public Result updateCategory(@RequestBody @Validated CategoryDTO categoryDTO){
+        categoryService.updateCategory(categoryDTO);
+        return Result.success();
+    }
+
+    @DeleteMapping("/user/category")
+    public Result deleteCategory(@RequestParam Long id){
+        categoryService.deleteCategory(id);
         return Result.success();
     }
 }

@@ -29,8 +29,8 @@
             style="margin-left: 25px; margin-bottom: 10px; background-color: white; border-radius: 10%;">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
             <li><router-link to="/manage/admin/user" :class="currentRoute.path === '/manage/admin/user' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">用户管理</router-link></li>
-            <li><a href="#" class="nav-link link-dark ps-4">分类管理</a></li>
-            <li><a href="#" class="nav-link link-dark ps-4">应用管理</a></li>
+            <li><router-link to="/manage/admin/category" :class="currentRoute.path === '/manage/admin/category' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">分类管理</router-link></li>
+            <li><router-link to="/manage/admin/setting" :class="currentRoute.path === '/manage/admin/setting' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">设置</router-link></li>
           </ul>
         </div>
       </li>

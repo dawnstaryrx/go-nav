@@ -67,11 +67,30 @@ const routes = [
         component: () => import('@/views/manage/AppPage.vue'),
       },
       {
-        path: 'admin/user',
-        name: 'admin-user',
-        title: '用户管理',
-        component: () => import('@/views/admin/UserAdminPage.vue'),
-      },
+        path: 'admin',
+        name: 'admin',
+        children: [
+          {
+            path: 'user',
+            name: 'admin-user',
+            title: '用户管理',
+            component: () => import('@/views/admin/UserAdminPage.vue'),
+          },
+          {
+            path: 'setting',
+            name: 'admin-setting',
+            title: '设置',
+            component: () => import('@/views/admin/SettingPage.vue'),
+          },
+          {
+            path: 'category',
+            name: 'admin-category',
+            title: '分类超级管理',
+            component: () => import('@/views/admin/CategoryAdminPage.vue'),
+          },
+        ]
+      }
+      
     ],
   },
   {
