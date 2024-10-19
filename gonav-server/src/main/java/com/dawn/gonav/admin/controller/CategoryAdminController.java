@@ -5,10 +5,7 @@ import com.dawn.gonav.model.po.Result;
 import com.dawn.gonav.model.vo.CategoryPageVO;
 import com.dawn.gonav.model.vo.PageBeanVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,5 +19,11 @@ public class CategoryAdminController {
     ) {
         PageBeanVO<CategoryPageVO> categoryPageList = categoryAdminService.getCategoryPageList(pageNum, pageSize);
         return Result.success(categoryPageList);
+    }
+
+    @DeleteMapping
+    public Result deleteCategory(@RequestParam Long id) {
+        categoryAdminService.deleteCategoryById(id);
+        return Result.success();
     }
 }

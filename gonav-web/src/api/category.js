@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { param } from 'jquery';
 
 const categoryApi = {
   // --------------------------------- 公开 ----------------------------------
@@ -29,6 +28,9 @@ const categoryApi = {
         pageSize
       }
     })
+  },
+  deleteCategoryAdmin: (id) => {
+    return request.delete('/admin/category', {params:{"id":id}})
   },
 }
 

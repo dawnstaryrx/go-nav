@@ -18,4 +18,6 @@ public interface CategoryMapper {
     void deleteById(Long id);
 
     void updateCategory(Category category);
+
+    Category getCategoryById(Long id);
 }

@@ -187,7 +187,7 @@ export default {
       const res = await userApi.loginCode(loginCodeData.value);
       if(res.code == 0){
         alertUtil.message('登录成功！');
-	tokenStore.setToken(res.data); // res.data 是 token , refreshToken值
+	      tokenStore.setToken(res.data); // res.data 是 token , refreshToken值
         router.push("/")
       }
     };

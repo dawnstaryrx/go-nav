@@ -7,16 +7,20 @@ import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.EmailDTO;
 import com.dawn.gonav.model.dto.RegisterDTO;
 import com.dawn.gonav.model.enums.CodeTypeEnum;
+import com.dawn.gonav.model.enums.UserTypeEnum;
 import com.dawn.gonav.model.po.User;
+import com.dawn.gonav.model.properties.AdminProperties;
 import com.dawn.gonav.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.dawn.gonav.model.constant.RedisConstant.*;
@@ -29,7 +33,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final EmailService emailService;
-
+    @Autowired
+    private AdminProperties adminProperties;
     @Override
     public void sendCode(String email, Integer type) {
         User userByEmail = userMapper.findUserByEmail(email);
@@ -97,11 +102,16 @@ public class UserServiceImpl implements UserService {
         if (userByEmail != null){
             ExceptionTool.throwException("用户已存在！");
         }
+        List<String> adminEmails = adminProperties.getEmail();
         User user = new User();
         user.setUsername(registerDTO.getEmail());
         user.setEmail(registerDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-        user.setRole(0);
+        if (adminEmails.contains(registerDTO.getEmail())){
+            user.setRole(UserTypeEnum.ADMIN.getCode());
+        } else {
+            user.setRole(UserTypeEnum.USER.getCode());
+        }
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         userMapper.add(user);

@@ -83,6 +83,7 @@ import TopBar from "@/components/front/TopBar.vue";
 import alertUtil from "@/utils/alert";
 import userApi from "@/api/user";
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
@@ -138,7 +139,7 @@ export default {
         isSending.value = false;
       }
     };
-
+    const router = useRouter();
     const handleRegister = async () => {
       // 处理注册逻辑
       if (!validateEmail(registerData.value.email)) {
@@ -150,11 +151,12 @@ export default {
         alertUtil.message('两次密码输入不一致', 'danger');
         return;
       }
-
       // 发送注册请求
       const res = await userApi.register(registerData.value);
       if(res.code === 0){
         alertUtil.message('注册成功！');
+        registerData.value = {};
+        router.push('/login');
       }
     };
 

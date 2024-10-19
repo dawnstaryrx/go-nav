@@ -112,6 +112,16 @@ public class CategoryServiceImpl implements CategoryService {
         if (id == null){
             ExceptionTool.throwException("id 不能为空！");
         }
+        Category category = getCategoryById(id);
+        UserLoginDTO userLoginDTO = CurrentUserUtil.getCurrentUser();
+        assert userLoginDTO != null;
+        if (!userLoginDTO.getId().equals(category.getCreateUser())){
+            ExceptionTool.throwException("只有创建者才能删除！");
+        }
         categoryMapper.deleteById(id);
+    }
+
+    public Category getCategoryById(Long id){
+        return categoryMapper.getCategoryById(id);
     }
 }

@@ -83,4 +83,7 @@
     <delete id="deleteById">
         delete from category where id = #{id}
     </delete>
+    <select id="getCategoryById" resultType="com.dawn.gonav.model.po.Category">
+        select * from category where id = #{id}
+    </select>
 </mapper>

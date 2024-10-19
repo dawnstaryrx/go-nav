@@ -47,3 +47,7 @@ login:
     clientId: Ov23li7XYGfwUUzkXGza
     clientSecret: a443d825325c00e63e5afc1181cf9347f839268e
     redirectUri: http://127.0.0.1/auth/github/callback
+admin:
+  email:
+    - rongxingyang@outlook.com
+    - 1650396516@qq.com
