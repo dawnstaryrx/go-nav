@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dawn.gonav.common.mapper.AppMapper">
+    <insert id="addApp" parameterType="com.dawn.gonav.model.po.App">
+        insert into
+            app(
+                 name,
+                 url,
+                 icon_url,
+                 category_id,
+                 description,
+                 weight,
+                 click_count,
+                 status,
+                 create_user,
+                 create_time,
+                 update_user,
+                 update_time
+        ) values(
+                 #{name},
+                 #{url},
+                 #{iconUrl},
+                 #{categoryId},
+                 #{description},
+                 #{weight},
+                 #{clickCount},
+                 #{status},
+                 #{createUser},
+                 #{createTime},
+                 #{updateUser},
+                 #{updateTime}
+        )
+    </insert>
+    <update id="updateApp" parameterType="com.dawn.gonav.model.po.App">
+        update app
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="url != null">
+                url = #{url},
+            </if>
+            <if test="iconUrl != null">
+                icon_url = #{iconUrl},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="weight != null">
+                weight = #{weight},
+            </if>
+            <if test="clickCount != null">
+                click_count = #{clickCount},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="getAppById" resultType="com.dawn.gonav.model.po.App">
+        select * from app where id = #{id}
+    </select>
+    <delete id="deleteApp">
+        delete from app where id = #{id}
+    </delete>
+    <select id="getAppVOsByUserId" resultType="com.dawn.gonav.model.vo.AppVO">
+        select
+            app.id,
+            app.name,
+            app.url,
+            app.icon_url,
+            app.category_id,
+            category.name as category_name,
+            app.description,
+            app.weight,
+            app.click_count
+        from app
+        left join category on app.category_id = category.id
+        where app.create_user = #{userId} and app.status &lt;= #{status}
+    </select>
+</mapper>

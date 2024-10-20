@@ -1,6 +1,7 @@
 package com.dawn.gonav.common.service.impl;
 
 import com.dawn.gonav.common.mapper.CategoryMapper;
+import com.dawn.gonav.common.mapper.UserMapper;
 import com.dawn.gonav.common.service.CategoryService;
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.CategoryDTO;
@@ -20,13 +21,16 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
+    private final UserMapper userMapper;
     @Override
-    public List<CategoryVO> getCategoryTreeList(Long userId) {
+    public List<CategoryVO> getCategoryTreeList(String username) {
+        Long userId = userMapper.findUserByUsername(username).getId();
         List<Category> categories = findAll(userId);
         // 将 Category 转换为 CategoryVO
         List<CategoryVO> categoryVOs = categories.stream()
@@ -40,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
                         new ArrayList<>()
                 )).toList();
         List<CategoryVO> rootCategoryVOs = categoryVOs.stream()
-                .filter(categoryVO -> categoryVO.getParentId() == 0)
+                .filter(categoryVO -> categoryVO.getParentId() == null)
                 .toList();
         // 为每个父分类设置子分类
         for (CategoryVO parent : rootCategoryVOs) {
@@ -51,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
     // 递归查找并设置子分类
     private List<CategoryVO> getChildren(CategoryVO parent, List<CategoryVO> allCategories) {
         List<CategoryVO> children = allCategories.stream()
-                .filter(categoryVO -> categoryVO.getParentId().equals(parent.getId()))
+                .filter(categoryVO -> Objects.equals(parent.getId(), categoryVO.getParentId()))
                 .toList();
 
         for (CategoryVO child : children) {

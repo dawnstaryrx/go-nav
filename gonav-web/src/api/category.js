@@ -2,6 +2,13 @@ import request from '@/utils/request'
 
 const categoryApi = {
   // --------------------------------- 公开 ----------------------------------
+  getCategoryByUsername: (username) => {
+    return request.get('/public/category', {
+      params: {
+        username
+      }
+    })
+  },
   // --------------------------------- 用户 ----------------------------------
   addCategory: (data) => {
     return request.put('/user/category', data)

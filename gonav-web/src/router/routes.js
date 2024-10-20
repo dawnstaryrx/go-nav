@@ -43,6 +43,12 @@ const routes = [
     component: () => import('@/views/callback/GitHubPage.vue'),
   },
   {
+    path: '/nav/:username',
+    name: 'user-nav',
+    title: '用户导航',
+    component: () => import('@/views/nav/NavPage.vue'),
+  },
+  {
     path: '/manage',
     name: 'manage',
     title: '管理',

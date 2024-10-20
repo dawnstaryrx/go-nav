@@ -24,8 +24,8 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/public/category")
-    public Result<List<CategoryVO>> getCategoryTreeList(@RequestParam Long userId) {
-        List<CategoryVO> categoryTreeList = categoryService.getCategoryTreeList(userId);
+    public Result<List<CategoryVO>> getCategoryTreeList(@RequestParam String username) {
+        List<CategoryVO> categoryTreeList = categoryService.getCategoryTreeList(username);
         return Result.success(categoryTreeList);
     }
 

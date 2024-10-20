@@ -9,7 +9,7 @@ import com.dawn.gonav.model.vo.PageBeanVO;
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryVO> getCategoryTreeList(Long userId);
+    List<CategoryVO> getCategoryTreeList(String username);
 
     List<Category> findAll(Long userId);
 
