@@ -1,4 +1,4 @@
-package com.dawn.gonav.common.service;
+package com.dawn.gonav.user.service;
 
 import com.dawn.gonav.model.dto.CategoryDTO;
 import com.dawn.gonav.model.po.Category;

@@ -1,4 +1,4 @@
-package com.dawn.gonav.common.mapper;
+package com.dawn.gonav.user.mapper;
 
 import com.dawn.gonav.model.po.User;
 import org.apache.ibatis.annotations.Mapper;

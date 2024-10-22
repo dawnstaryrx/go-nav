@@ -7,6 +7,7 @@
       class="capsule"
       @click="selectCategory(subCategory)"
       :class="{ 'capsule-active': nowCategory && nowCategory.id === subCategory.id }"
+      :title="subCategory.description"
     >
       {{ subCategory.name }}
     </span>

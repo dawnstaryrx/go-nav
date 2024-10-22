@@ -12,7 +12,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item header-navbar-top-item">
-              <router-link class="nav-link noto-serif-sc-text" aria-current="page" to="/hello">Hello</router-link>
+              <router-link class="nav-link noto-serif-sc-text" aria-current="page" :to="{name: 'index'}">返回首页</router-link>
             </li>
             <li class="nav-item header-navbar-top-item">
               <a class="nav-link noto-serif-sc-text" href="https://www.baidu.com">百度</a>

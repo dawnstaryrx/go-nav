@@ -1,8 +1,8 @@
-package com.dawn.gonav.common.service.impl;
+package com.dawn.gonav.user.service.impl;
 
-import com.dawn.gonav.common.mapper.UserMapper;
-import com.dawn.gonav.common.service.EmailService;
-import com.dawn.gonav.common.service.UserService;
+import com.dawn.gonav.user.mapper.UserMapper;
+import com.dawn.gonav.user.service.EmailService;
+import com.dawn.gonav.user.service.UserService;
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.EmailDTO;
 import com.dawn.gonav.model.dto.RegisterDTO;

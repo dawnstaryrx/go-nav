@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dawn.gonav.common.mapper.UserMapper">
+<mapper namespace="com.dawn.gonav.user.mapper.UserMapper">
     <insert id="add" parameterType="com.dawn.gonav.model.po.User">
         insert into
             user(

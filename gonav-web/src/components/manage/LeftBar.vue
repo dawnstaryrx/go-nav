@@ -10,8 +10,14 @@
       </li>
       <li>
         <router-link to="/manage/category" :class="currentRoute.path === '/manage/category' ? 'nav-link active' : 'nav-link link-dark'">
-          <i class="bi bi-house"></i>
+          <i class="bi bi-bookmarks"></i>
           分类管理
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/manage/app" :class="currentRoute.path === '/manage/app' ? 'nav-link active' : 'nav-link link-dark'">
+          <i class="bi bi-google-play"></i>
+          应用管理
         </router-link>
       </li>
       <!-- 超级管理菜单 -->
@@ -21,24 +27,33 @@
           href="#collapseExample" 
           role="button" 
           :aria-expanded="currentRoute.path.startsWith('/manage/admin')" >
-          <i class="bi bi-house"></i>
+          <i class="bi bi-airplane-engines"></i>
           超级管理
         </a>
         <div :class="['collapse', currentRoute.path.startsWith('/manage/admin') ? 'show' : '']" 
             id="collapseExample" 
             style="margin-left: 25px; margin-bottom: 10px; background-color: white; border-radius: 10%;">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><router-link to="/manage/admin/user" :class="currentRoute.path === '/manage/admin/user' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">用户管理</router-link></li>
-            <li><router-link to="/manage/admin/category" :class="currentRoute.path === '/manage/admin/category' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">分类管理</router-link></li>
-            <li><router-link to="/manage/admin/setting" :class="currentRoute.path === '/manage/admin/setting' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">设置</router-link></li>
+            <li>
+              <router-link to="/manage/admin/user" :class="currentRoute.path === '/manage/admin/user' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">
+                <i class="bi bi-people"></i> 
+                用户管理
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/manage/admin/category" :class="currentRoute.path === '/manage/admin/category' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">
+                <i class="bi bi-bookmarks"></i> 
+                分类管理
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/manage/admin/setting" :class="currentRoute.path === '/manage/admin/setting' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">
+                <i class="bi bi-gear"></i>
+                设置
+              </router-link>
+            </li>
           </ul>
         </div>
-      </li>
-      <li>
-        <router-link to="/manage/app" :class="currentRoute.path === '/manage/app' ? 'nav-link active' : 'nav-link link-dark'">
-          <i class="bi bi-house"></i>
-          应用管理
-        </router-link>
       </li>
     </ul>
     <hr>

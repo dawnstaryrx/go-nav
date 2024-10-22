@@ -1,7 +1,6 @@
 package com.dawn.gonav.authentication.handler.login.linuxDo;
 
-import com.dawn.gonav.authentication.handler.login.username.UsernameAuthentication;
-import com.dawn.gonav.common.service.UserService;
+import com.dawn.gonav.user.service.UserService;
 import com.dawn.gonav.exception.BaseException;
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.UserLoginDTO;
@@ -12,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

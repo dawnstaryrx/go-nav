@@ -1,4 +1,4 @@
-package com.dawn.gonav.common.service;
+package com.dawn.gonav.user.service;
 
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.util.JSONUtil;

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dawn.gonav.common.mapper.CategoryMapper">
+<mapper namespace="com.dawn.gonav.user.mapper.CategoryMapper">
     <insert id="addCategory" parameterType="com.dawn.gonav.model.po.Category">
         insert into
             category(
@@ -58,7 +58,7 @@
         select
             *
         from category
-        where create_user = #{userId}
+        where create_user = #{userId} and status = 1
         order by weight desc
     </select>
 

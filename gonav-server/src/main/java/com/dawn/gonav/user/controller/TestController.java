@@ -1,11 +1,9 @@
-package com.dawn.gonav.common.controller;
+package com.dawn.gonav.user.controller;
 
 import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.model.po.Result;
-import com.dawn.gonav.model.po.User;
 import com.dawn.gonav.util.CurrentUserUtil;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

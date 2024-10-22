@@ -1,6 +1,6 @@
-package com.dawn.gonav.common.controller;
+package com.dawn.gonav.user.controller;
 
-import com.dawn.gonav.common.service.AuthService;
+import com.dawn.gonav.user.service.AuthService;
 import com.dawn.gonav.model.dto.TokenDTO;
 import com.dawn.gonav.model.po.Result;
 import lombok.RequiredArgsConstructor;

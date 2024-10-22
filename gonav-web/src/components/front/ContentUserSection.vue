@@ -42,8 +42,35 @@
     <div class="content-section-category-container">
       <span
         class="capsule"
+        @click="nowCategory = null; getAllApp()"
+        :class="{ 'capsule-active': (!nowCategory) }"
       >
         全部分类
+      </span>
+      <span
+        class="capsule"
+      >
+        热门分类
+      </span>
+      <span
+        class="capsule"
+      >
+        热门分类
+      </span>
+      <span
+        class="capsule"
+      >
+        热门分类
+      </span>
+      <span
+        class="capsule"
+      >
+        热门分类
+      </span>
+      <span
+        class="capsule"
+      >
+        热门分类
       </span>
       <span
         class="capsule"
@@ -55,8 +82,9 @@
         v-for="category in topLevelCategories"
         :key="category.id"
         class="capsule"
-        :class="{ 'capsule-active': (selectedCategory === category) || (selectedCategory && selectedCategory.parentId === category.id) || (nowCategory && nowCategory.id === category.id) }"
+        :class="{ 'capsule-active': (selectedCategory && selectedCategory.parentId === category.id) || (nowCategory && nowCategory.id === category.id) }"
         @click="selectCategory(category);"
+        :title="category.description"
       >
         {{ category.name }}
       </span>
@@ -72,26 +100,30 @@
     </div>
   <!-- 11111111111111111 -->
   <div class="row apps-container">
-    <div v-for="item in [1,2,3,4,5,8,9]" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container">
+    <div v-for="app in appList" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container">
+    <a :href="app.url" style="text-decoration: none;">
       <div class="app-card d-flex align-items-center">
         <div class="app-logo">
-          <img src="@/assets/linuxdo.png" alt="App Logo" class="img-fluid">
+          <img :src="app.iconUrl" alt="App Logo" class="img-fluid">
         </div>
         <div class="app-info">
-          <div class="app-title">App 名称 </div>
-          <div class="app-category">分类名称</div>
-          <div class="app-description"> 这里是的描述。这里是的描述。这里是的描述。这里是的描述。这里是的描述。</div>
+          <div class="app-title"> {{ app.name }} </div>
+          <div class="app-category">{{ app.categoryName }}</div>
+          <div class="app-description"> {{ app.description }}</div>
         </div>
       </div>
+    </a>
+    
+      
     </div>
   </div>
-  <p>User ID: {{ userId }}</p>
 </template>
 
 <script>
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import RecursiveCategory from './RecursiveCategory.vue'; // 引入递归组件
-import categoryApi from '../../api/category';
+import categoryApi from '@/api/category';
+import appApi from '@/api/app';
 
 export default {
   name: 'SearchCenter',
@@ -107,6 +139,12 @@ export default {
   setup(props) {
     // 引用搜索输入框
     const searchInput = ref(null);
+    // APP
+    const appList = ref([]);
+    const appListDTO = ref({
+      username: props.username,
+      categoryId: null
+    });
 
     // 初始化一级分类选项
     onMounted(() => {
@@ -178,17 +216,19 @@ export default {
       // console.log('选中的分类:', selectedCategory.value.id);
       if (nowCategory.value && selectedCategory.value) { // 检查两个值是否存在
         if( nowCategory.value.id != selectedCategory.value.id && nowCategory.value.parentId !== selectedCategory.value.id){
-        selectedCategory.value = null;
+          selectedCategory.value = null;
+        }
       }
-      }
-      
+      appListDTO.value.categoryId = nowCategory ? nowCategory.value.id : null;
+      console.log('选中的分类id:', nowCategory.value.id, '更新app appListDTO.value.categoryId' , appListDTO.value.categoryId);
+      getAppList();
     };
 
     // 从后端获取分类数据
     const fetchCategories = async () => {
       try {
-        const res = await categoryApi.getCategoryByUsername(props.username);
-        console.log(res);
+        const res = await categoryApi.getCategoryByUsername(appListDTO.value.username, appListDTO.value.categoryId);
+        console.log("从后端获取分类数据",res);
         categories.value = res.data;
       } catch (error) {
         console.error(error);
@@ -199,6 +239,23 @@ export default {
     onMounted(() => {
       fetchCategories();
     });
+    // 获取APP
+    const getAppList = async () => {
+      try {
+        const res = await appApi.getAppByUsernameAndCategoryIdPublic(appListDTO.value.username, appListDTO.value.categoryId);
+        console.log("获取APP",res);
+        appList.value = res.data;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const getAllApp = () => {
+      appListDTO.value.categoryId = null
+      selectCategory.value = null
+      getAppList()
+    }
+    getAppList();
     // ------------------------------------------------
     return {
       searchInput,
@@ -206,7 +263,10 @@ export default {
       topLevelCategories,
       selectedCategory,
       selectCategory,
-      nowCategory
+      nowCategory,
+      appList,
+      getAppList,
+      getAllApp,
     };
   },
 };
@@ -366,6 +426,7 @@ export default {
 .app-title {
     font-weight: bold;
     font-size: 1.1rem;
+    color: #000;
 }
 
 .app-category {

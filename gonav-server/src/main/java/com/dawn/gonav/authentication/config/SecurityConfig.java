@@ -16,7 +16,7 @@ import com.dawn.gonav.authentication.handler.login.username.UsernameAuthenticati
 import com.dawn.gonav.authentication.resourceApi.adminApi.AdminJwtAuthenticationFilter;
 import com.dawn.gonav.authentication.resourceApi.publicApi.PublicApiAuthenticationFilter;
 import com.dawn.gonav.authentication.resourceApi.userApi.UserJwtAuthenticationFilter;
-import com.dawn.gonav.common.service.JwtService;
+import com.dawn.gonav.user.service.JwtService;
 import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

@@ -1,6 +1,6 @@
 package com.dawn.gonav.authentication.handler.login.email;
 
-import com.dawn.gonav.common.service.UserService;
+import com.dawn.gonav.user.service.UserService;
 import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.model.po.User;
 import com.dawn.gonav.util.JSONUtil;
@@ -14,7 +14,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import static com.dawn.gonav.model.constant.RedisConstant.EMAIL_LOGIN_CODE_PREFIX;
-import static com.dawn.gonav.model.constant.RedisConstant.EMAIL_RESET_CODE_PREFIX;
 
 /**
  * 帐号密码登录认证

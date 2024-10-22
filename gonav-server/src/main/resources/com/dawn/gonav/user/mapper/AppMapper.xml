@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dawn.gonav.common.mapper.AppMapper">
+<mapper namespace="com.dawn.gonav.user.mapper.AppMapper">
     <insert id="addApp" parameterType="com.dawn.gonav.model.po.App">
         insert into
             app(
@@ -88,6 +88,19 @@
             app.click_count
         from app
         left join category on app.category_id = category.id
-        where app.create_user = #{userId} and app.status &lt;= #{status}
+        <where>
+            <if test="userId != null">
+                app.create_user = #{userId}
+            </if>
+            <if test="status != null">
+                and app.status &lt;= #{status}
+            </if>
+            <if test="categoryId != null">
+                and app.category_id = #{categoryId}
+            </if>
+            <!-- 新增 category 的状态条件 -->
+            and category.status = 1
+        </where>
+        order by app.weight desc
     </select>
 </mapper>

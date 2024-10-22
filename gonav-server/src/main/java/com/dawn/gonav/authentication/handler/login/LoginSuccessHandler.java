@@ -1,6 +1,6 @@
 package com.dawn.gonav.authentication.handler.login;
 
-import com.dawn.gonav.common.service.JwtService;
+import com.dawn.gonav.user.service.JwtService;
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.model.po.Result;

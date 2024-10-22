@@ -1,7 +1,7 @@
-package com.dawn.gonav.common.service.impl;
+package com.dawn.gonav.user.service.impl;
 
-import com.dawn.gonav.common.service.AuthService;
-import com.dawn.gonav.common.service.JwtService;
+import com.dawn.gonav.user.service.AuthService;
+import com.dawn.gonav.user.service.JwtService;
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.TokenDTO;
 import com.dawn.gonav.model.dto.UserLoginDTO;

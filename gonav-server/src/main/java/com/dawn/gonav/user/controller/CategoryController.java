@@ -1,8 +1,7 @@
-package com.dawn.gonav.common.controller;
+package com.dawn.gonav.user.controller;
 
-import com.dawn.gonav.common.service.CategoryService;
+import com.dawn.gonav.user.service.CategoryService;
 import com.dawn.gonav.model.dto.CategoryDTO;
-import com.dawn.gonav.model.po.Category;
 import com.dawn.gonav.model.po.Result;
 import com.dawn.gonav.model.vo.CategoryPageVO;
 import com.dawn.gonav.model.vo.CategoryVO;

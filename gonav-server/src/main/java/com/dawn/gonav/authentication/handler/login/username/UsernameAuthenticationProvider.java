@@ -1,6 +1,6 @@
 package com.dawn.gonav.authentication.handler.login.username;
 
-import com.dawn.gonav.common.service.UserService;
+import com.dawn.gonav.user.service.UserService;
 import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.model.po.User;
 import com.dawn.gonav.util.JSONUtil;

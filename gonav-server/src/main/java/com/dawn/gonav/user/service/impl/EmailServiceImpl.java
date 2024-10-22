@@ -1,6 +1,6 @@
-package com.dawn.gonav.common.service.impl;
+package com.dawn.gonav.user.service.impl;
 
-import com.dawn.gonav.common.service.EmailService;
+import com.dawn.gonav.user.service.EmailService;
 import com.dawn.gonav.model.dto.EmailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

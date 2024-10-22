@@ -1,4 +1,4 @@
-package com.dawn.gonav.common.mapper;
+package com.dawn.gonav.user.mapper;
 
 import com.dawn.gonav.model.po.App;
 import com.dawn.gonav.model.vo.AppVO;
@@ -16,5 +16,5 @@ public interface AppMapper {
 
     void updateApp(App app);
 
-    List<AppVO> getAppVOsByUserId(Long userId, Integer status);
+    List<AppVO> getAppVOsByUserId(Long userId, Integer status, Long categoryId);
 }

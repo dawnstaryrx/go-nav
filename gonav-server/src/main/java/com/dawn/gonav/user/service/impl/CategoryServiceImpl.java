@@ -1,13 +1,12 @@
-package com.dawn.gonav.common.service.impl;
+package com.dawn.gonav.user.service.impl;
 
-import com.dawn.gonav.common.mapper.CategoryMapper;
-import com.dawn.gonav.common.mapper.UserMapper;
-import com.dawn.gonav.common.service.CategoryService;
+import com.dawn.gonav.user.mapper.CategoryMapper;
+import com.dawn.gonav.user.mapper.UserMapper;
+import com.dawn.gonav.user.service.CategoryService;
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.CategoryDTO;
 import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.model.po.Category;
-import com.dawn.gonav.model.po.User;
 import com.dawn.gonav.model.vo.CategoryPageVO;
 import com.dawn.gonav.model.vo.CategoryVO;
 import com.dawn.gonav.model.vo.PageBeanVO;

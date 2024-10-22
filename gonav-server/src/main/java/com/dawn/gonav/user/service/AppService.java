@@ -1,4 +1,4 @@
-package com.dawn.gonav.common.service;
+package com.dawn.gonav.user.service;
 
 import com.dawn.gonav.model.dto.AppDTO;
 import com.dawn.gonav.model.vo.AppVO;
@@ -12,5 +12,5 @@ public interface AppService {
 
     void updateApp(AppDTO appDTO);
 
-    List<AppVO> getAppsByUserId(Long userId);
+    List<AppVO> getAppsByUsername(String username, Long categoryId);
 }

@@ -1,8 +1,6 @@
 package com.dawn.gonav.authentication.handler.login.github;
 
-import com.dawn.gonav.authentication.handler.login.linuxDo.LinuxDoApiClient;
-import com.dawn.gonav.authentication.handler.login.linuxDo.LinuxDoAuthentication;
-import com.dawn.gonav.common.service.UserService;
+import com.dawn.gonav.user.service.UserService;
 import com.dawn.gonav.exception.BaseException;
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.dto.UserLoginDTO;
