@@ -15,90 +15,43 @@
     </form>
     <br>
   </div>
-  <!-- 多级分类选择 -->
-  <!-- <div class="content-section-category-container"  >
-    <span class="capsule">
-      全部工具
-    </span>
-    <span class="capsule">
-      常用网站
-    </span>
-    <span class="capsule">
-      AI工具
-    </span>
-  </div> -->
-  <!-- 多级分类选择 -->
-  <!-- <div class="content-section-category-container" style="margin-top: 10px;" >
-    <span class="capsule">
-      全部工具
-    </span>
-    <span class="capsule">
-      常用网站
-    </span>
-  </div> -->
-  <!-- 11111111111111111 -->
 
-    <!-- 顶级父分类展示 -->
-    <div class="content-section-category-container">
-      <span
-        class="capsule"
-        @click="nowCategory = null; getAllApp()"
-        :class="{ 'capsule-active': (!nowCategory) }"
-      >
-        全部分类
-      </span>
-      <span
-        class="capsule"
-      >
-        热门分类
-      </span>
-      <span
-        class="capsule"
-      >
-        热门分类
-      </span>
-      <span
-        class="capsule"
-      >
-        热门分类
-      </span>
-      <span
-        class="capsule"
-      >
-        热门分类
-      </span>
-      <span
-        class="capsule"
-      >
-        热门分类
-      </span>
-      <span
-        class="capsule"
-      >
-        热门分类
-      </span>
-      <!-- 遍历顶级父分类 -->
-      <span
-        v-for="category in topLevelCategories"
-        :key="category.id"
-        class="capsule"
-        :class="{ 'capsule-active': (selectedCategory && selectedCategory.parentId === category.id) || (nowCategory && nowCategory.id === category.id) }"
-        @click="selectCategory(category);"
-        :title="category.description"
-      >
-        {{ category.name }}
-      </span>
-    </div>
+  <!-- 顶级父分类展示 -->
+  <div class="content-section-category-container">
+    <span
+      class="capsule"
+      @click="nowCategory = null; getAllApp(); "
+      :class="{ 'capsule-active': (!nowCategory) }"
+    >
+      全部分类
+    </span>
+    <span
+      class="capsule"
+    >
+      热门分类
+    </span>
+    <!-- 遍历顶级父分类 -->
+    <span
+      v-for="category in topLevelCategories"
+      :key="category.id"
+      class="capsule"
+      :class="{ 'capsule-active': (selectedCategory && selectedCategory.parentId === category.id) || (nowCategory && nowCategory.id === category.id) }"
+      @click="selectCategory(category);"
+      :title="category.description"
+    >
+      {{ category.name }}
+    </span>
+  </div>
 
-    <!-- 当前选中的分类的子分类展示 -->
-    <div v-if="selectedCategory" class="content-section-category-container" style="margin-top: 10px;">
-      <RecursiveCategory
-        :category="selectedCategory"
-        :now-category="nowCategory"
-        @select-category="selectCategory"
-      />
-    </div>
-  <!-- 11111111111111111 -->
+  <!-- 当前选中的分类的子分类展示 -->
+  <div v-if="selectedCategory" class="content-section-category-container" style="margin-top: 10px;">
+    <RecursiveCategory
+      :category="selectedCategory"
+      :now-category="nowCategory"
+      @select-category="selectCategory"
+    />
+  </div>
+  <!-- APP -->
   <div class="row apps-container">
     <div v-for="app in appList" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container">
     <a :href="app.url" style="text-decoration: none;">
@@ -113,8 +66,6 @@
         </div>
       </div>
     </a>
-    
-      
     </div>
   </div>
 </template>

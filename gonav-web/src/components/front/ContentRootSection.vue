@@ -16,93 +16,81 @@
     <br>
   </div>
   <!-- 多级分类选择 -->
-  <div class="content-section-category-container"  >
-    <span class="capsule">
-      全部工具
+  <!-- 顶级父分类展示 -->
+  <div class="content-section-category-container">
+    <span
+      class="capsule"
+      @click="nowCategory = null; getAllApp(); "
+      :class="{ 'capsule-active': (!nowCategory) }"
+    >
+      全部分类
     </span>
-    <span class="capsule">
-      常用网站
+    <span
+      class="capsule"
+    >
+      热门分类
     </span>
-    <span class="capsule">
-      AI工具
-    </span>
-    <span class="capsule">
-      邮箱
-    </span>
-    <span class="capsule">
-      全部工具
-    </span>
-    <span class="capsule">
-      常用网站
-    </span>
-    <span class="capsule">
-      AI工具
-    </span>
-    <span class="capsule">
-      邮箱
-    </span>
-    <span class="capsule">
-      全部工具
-    </span>
-    <span class="capsule">
-      常用网站常用网站常用网站
-    </span>
-    <span class="capsule">
-      AI工具
-    </span>
-    <span class="capsule">
-      常用网站常用网站常用网站
-    </span>
-    <span class="capsule">
-      AI工具
+    <!-- 遍历顶级父分类 -->
+    <span
+      v-for="category in topLevelCategories"
+      :key="category.id"
+      class="capsule"
+      :class="{ 'capsule-active': (selectedCategory && selectedCategory.parentId === category.id) || (nowCategory && nowCategory.id === category.id) }"
+      @click="selectCategory(category);"
+      :title="category.description"
+    >
+      {{ category.name }}
     </span>
   </div>
-  <!-- 多级分类选择 -->
-  <div class="content-section-category-container" style="margin-top: 10px;" >
-    <span class="capsule">
-      全部工具
-    </span>
-    <span class="capsule">
-      常用网站
-    </span>
-    <span class="capsule">
-      AI工具
-    </span>
-    <span class="capsule">
-      邮箱
-    </span>
-    <span class="capsule">
-      全部工具
-    </span>
+
+  <!-- 当前选中的分类的子分类展示 -->
+  <div v-if="selectedCategory" class="content-section-category-container" style="margin-top: 10px;">
+    <RecursiveCategory
+      :category="selectedCategory"
+      :now-category="nowCategory"
+      @select-category="selectCategory"
+    />
   </div>
+
   <div class="row apps-container">
-    <div v-for="item in [1,2,3,4,5,8,9]" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container">
+    <div v-for="app in appList" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container">
+    <a :href="app.url" style="text-decoration: none;">
       <div class="app-card d-flex align-items-center">
         <div class="app-logo">
-          <img src="@/assets/linuxdo.png" alt="App Logo" class="img-fluid">
+          <img :src="app.iconUrl" alt="App Logo" class="img-fluid">
         </div>
         <div class="app-info">
-          <div class="app-title">App 名称 </div>
-          <div class="app-category">分类名称</div>
-          <div class="app-description"> 这里是的描述。这里是的描述。这里是的描述。这里是的描述。这里是的描述。</div>
+          <div class="app-title"> {{ app.name }} </div>
+          <div class="app-category">{{ app.categoryName }}</div>
+          <div class="app-description"> {{ app.description }}</div>
         </div>
       </div>
+    </a>
     </div>
-  </div>
-  <div v-for="item in [1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,1,2,3,4,5,8,9,1,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]" class="content-section-card-container">
-  333
   </div>
 
 </template>
 
 <script>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import RecursiveCategory from './RecursiveCategory.vue'; // 引入递归组件
+import categoryApi from '@/api/category';
+import appApi from '@/api/app';
 
 export default {
   name: 'SearchCenter',
+  components: {
+    RecursiveCategory
+  },
   setup() {
     // 引用搜索输入框
     const searchInput = ref(null);
+    // APP
+    const appList = ref([]);
+    const appListDTO = ref({
+      username: 'admin',
+      categoryId: null
+    });
 
     // 初始化一级分类选项
     onMounted(() => {
@@ -147,9 +135,83 @@ export default {
         searchInput.value.value = event.key;
       }
     };
+    // ------------------------------------------
+    // 所有分类数据
+    const categories = ref([]);
+    // 当前选中的父分类
+    const selectedCategory = ref(null);
+    // 当前选中分类ID
+    const nowCategory = ref(null);
+
+    // 顶级分类 (即 parentId 为 null 的分类)
+    const topLevelCategories = computed(() => {
+      return categories.value.filter(category => category.parentId === null);
+    });
+
+    // 选择分类时，将其id设为当前选中的分类id
+    const selectCategory = (category) => {
+      nowCategory.value = category;
+      console.log('选中的分类ID:', nowCategory.value.id);
+      // 如果没有子分类，保留选中状态
+      if (category.children.length > 0) {
+        selectedCategory.value = category; // 选择有子分类的分类
+      } else {
+        // 保持选中状态，不更改 selectedCategory
+        selectedCategory.value = selectedCategory.value; // 保持当前分类
+      }
+      // console.log('选中的分类:', selectedCategory.value.id);
+      if (nowCategory.value && selectedCategory.value) { // 检查两个值是否存在
+        if( nowCategory.value.id != selectedCategory.value.id && nowCategory.value.parentId !== selectedCategory.value.id){
+          selectedCategory.value = null;
+        }
+      }
+      appListDTO.value.categoryId = nowCategory ? nowCategory.value.id : null;
+      console.log('选中的分类id:', nowCategory.value.id, '更新app appListDTO.value.categoryId' , appListDTO.value.categoryId);
+      getAppList();
+    };
+
+    // 从后端获取分类数据
+    const fetchCategories = async () => {
+      try {
+        const res = await categoryApi.getCategoryByUsername(appListDTO.value.username, appListDTO.value.categoryId);
+        console.log("从后端获取分类数据",res);
+        categories.value = res.data;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    // 组件挂载时加载分类数据
+    onMounted(() => {
+      fetchCategories();
+    });
+    // 获取APP
+    const getAppList = async () => {
+      try {
+        const res = await appApi.getAppByUsernameAndCategoryIdPublic(appListDTO.value.username, appListDTO.value.categoryId);
+        console.log("获取APP",res);
+        appList.value = res.data;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const getAllApp = () => {
+      appListDTO.value.categoryId = null
+      selectCategory.value = null
+      getAppList()
+    }
+    getAppList();
     return {
       searchInput,
       handleSearch,
+      topLevelCategories,
+      selectedCategory,
+      selectCategory,
+      nowCategory,
+      appList,
+      getAppList,
+      getAllApp,
     };
   },
 };
@@ -248,7 +310,10 @@ export default {
   background-color: #de7622; /* 悬浮和点击后的背景颜色 */
   color: white; /* 悬浮和点击后的文字颜色 */
 }
-
+.capsule-active{
+  background-color: #de7622; /* 悬浮和点击后的背景颜色 */
+  color: white; /* 悬浮和点击后的文字颜色 */
+}
 .noto-serif-sc-font {
   font-family: "Noto Serif SC", system-ui;
   font-optical-sizing: auto;
@@ -305,6 +370,7 @@ export default {
 .app-title {
     font-weight: bold;
     font-size: 1.1rem;
+    color: #000;
 }
 
 .app-category {

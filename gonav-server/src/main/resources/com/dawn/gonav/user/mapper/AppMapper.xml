@@ -103,4 +103,37 @@
         </where>
         order by app.weight desc
     </select>
+    <select id="getAppVOsPageNowUser" resultType="com.dawn.gonav.model.vo.AppVO">
+        select
+        app.id,
+        app.name,
+        app.url,
+        app.icon_url,
+        app.category_id,
+        category.name as category_name,
+        app.description,
+        app.weight,
+        app.click_count,
+        app.status
+        from app
+        left join category on app.category_id = category.id
+        <where>
+            <if test="userId != null">
+                app.create_user = #{userId}
+            </if>
+            <if test="status != null">
+                and app.status = #{status}
+            </if>
+            <if test="categoryId != null">
+                and app.category_id = #{categoryId}
+            </if>
+            <if test="searchContent != null">
+                and (
+                    app.name like concat('%', #{searchContent}, '%')
+                    or app.description like concat('%', #{searchContent}, '%')
+                )
+            </if>
+        </where>
+        order by app.weight desc
+    </select>
 </mapper>

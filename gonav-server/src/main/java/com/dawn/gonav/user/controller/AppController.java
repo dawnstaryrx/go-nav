@@ -2,6 +2,7 @@ package com.dawn.gonav.user.controller;
 
 import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.po.User;
+import com.dawn.gonav.model.vo.PageBeanVO;
 import com.dawn.gonav.user.service.AppService;
 import com.dawn.gonav.model.dto.AppDTO;
 import com.dawn.gonav.model.po.Result;
@@ -39,6 +40,17 @@ public class AppController {
     public Result updateApp(@RequestBody AppDTO appDTO){
         appService.updateApp(appDTO);
         return Result.success();
+    }
+
+    @GetMapping("/user/app/page")
+    public Result<PageBeanVO<AppVO>> getAppsPageNowUser(
+            @RequestParam Integer pageNum,
+            @RequestParam Integer pageSize,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) String searchContent
+    ){
+        return Result.success(appService.getAppsPageNowUser(pageNum, pageSize, categoryId, status, searchContent));
     }
 
     @GetMapping("/public/app")

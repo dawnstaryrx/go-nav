@@ -19,14 +19,17 @@ const appApi = {
       }
     })
   },
-  addCategory: (data) => {
-    return request.put('/user/category', data)
+  addApp: (data) => {
+    return request.put('/user/app', data)
   },
-  getCategoryPageList: (pageNum, pageSize) => {
-    return request.get('/user/category', {
+  getAppPageList: (pageNum, pageSize, categoryId, status, searchContent) => {
+    return request.get('/user/app/page', {
       params: {
         pageNum,
-        pageSize
+        pageSize,
+        categoryId,
+        status,
+        searchContent
       }
     });
   },

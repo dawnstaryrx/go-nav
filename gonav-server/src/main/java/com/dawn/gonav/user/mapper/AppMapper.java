@@ -17,4 +17,6 @@ public interface AppMapper {
     void updateApp(App app);
 
     List<AppVO> getAppVOsByUserId(Long userId, Integer status, Long categoryId);
+
+    List<AppVO> getAppVOsPageNowUser(Long userId, Integer status, Long categoryId, String searchContent);
 }

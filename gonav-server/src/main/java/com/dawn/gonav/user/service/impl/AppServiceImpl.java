@@ -1,6 +1,7 @@
 package com.dawn.gonav.user.service.impl;
 
 import com.dawn.gonav.model.po.User;
+import com.dawn.gonav.model.vo.PageBeanVO;
 import com.dawn.gonav.user.mapper.AppMapper;
 import com.dawn.gonav.user.mapper.UserMapper;
 import com.dawn.gonav.user.service.AppService;
@@ -14,6 +15,8 @@ import com.dawn.gonav.model.vo.AppVO;
 import com.dawn.gonav.user.service.UserService;
 import com.dawn.gonav.util.CopyUtil;
 import com.dawn.gonav.util.CurrentUserUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -93,5 +96,18 @@ public class AppServiceImpl implements AppService {
 
     public App getAppById(Long id){
         return appMapper.getAppById(id);
+    }
+
+    @Override
+    public PageBeanVO<AppVO> getAppsPageNowUser(Integer pageNum, Integer pageSize, Long categoryId, Integer status, String searchContent) {
+        PageBeanVO<AppVO> pageBeanVO = new PageBeanVO<>();
+        PageHelper.startPage(pageNum, pageSize);
+        UserLoginDTO nowUser = CurrentUserUtil.getCurrentUser();
+        assert nowUser != null;
+        List<AppVO> appVOS = appMapper.getAppVOsPageNowUser(nowUser.getId(), status, categoryId, searchContent);
+        Page<AppVO> page = (Page<AppVO>) appVOS;
+        pageBeanVO.setTotal(page.getTotal());
+        pageBeanVO.setItems(page.getResult());
+        return pageBeanVO;
     }
 }
