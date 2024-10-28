@@ -53,19 +53,19 @@
   </div>
 
   <div class="row apps-container">
-    <div v-for="app in appList" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container">
-    <a :href="app.url" style="text-decoration: none;">
-      <div class="app-card d-flex align-items-center">
-        <div class="app-logo">
-          <img :src="app.iconUrl" alt="App Logo" class="img-fluid">
+    <div v-for="app in appList" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container" :title="app.description">
+      <a :href="app.url" style="text-decoration: none;">
+        <div class="app-card d-flex align-items-center">
+          <div class="app-logo">
+            <img :src="app.iconUrl" alt="App Logo" class="img-fluid">
+          </div>
+          <div class="app-info">
+            <div class="app-title"> {{ app.name }} </div>
+            <div class="app-category">{{ app.categoryName }}</div>
+            <div class="app-description"> {{ app.description }}</div>
+          </div>
         </div>
-        <div class="app-info">
-          <div class="app-title"> {{ app.name }} </div>
-          <div class="app-category">{{ app.categoryName }}</div>
-          <div class="app-description"> {{ app.description }}</div>
-        </div>
-      </div>
-    </a>
+      </a>
     </div>
   </div>
 
@@ -333,24 +333,24 @@ export default {
 
 /* APP 卡片样式 */
 .app-card {
-    display: flex;
-    flex-direction: row;
-    background-color: white;
-    border-radius: 6px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
-    padding:10px 13px 10px 13px;
-    border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
+  padding:10px 13px 10px 13px;
+  border: 1px solid #f0f0f0;
 }
 
 .app-card:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    transform: translateY(-5px); /* 提升效果 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px); /* 提升效果 */
 }
 
 .app-logo {
-    flex: 1 1 20%;
-    max-width: 20%;
+  flex: 1 1 20%;
+  max-width: 20%;
 }
 
 .app-logo img {

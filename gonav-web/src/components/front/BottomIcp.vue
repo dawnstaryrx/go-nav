@@ -1,8 +1,11 @@
 <template>
   <div class="page-container noto-serif-sc-font-family">
     <!-- 页面主体内容 -->
-    <div class="content">
-      <!-- 这里是页面的其他内容 -->
+    <div v-if="bottomMenus.length > 0" class="content icp" style="max-width: 1100px; margin: auto;">
+      友情链接：
+      <a v-for="item in bottomMenus" :href="item.url" style="margin-right: 10px; text-decoration: none;">
+        {{ item.title }} 
+      </a>
     </div>
     
     <!-- 备案号部分 -->
@@ -20,10 +23,24 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import menuApi from '@/api/menu.js';
 let year = new Date().getFullYear();        // 一般都是最新的一年
 let author = '智浪星辰';						// 作者名
 let record = '鲁ICP备2024107617号-1';		// 备案号
 let police = '鲁公网安备37011202000109号';
+const bottomMenus = ref([])
+const getBottomMenu = async () => {
+  try {
+    const res = await menuApi.getMenuList(1);
+    bottomMenus.value = res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+onMounted(() => {
+  getBottomMenu();
+});
 </script>
 
 <style>
@@ -52,7 +69,7 @@ let police = '鲁公网安备37011202000109号';
   width: 100%;
   text-align: center;
   color: gray;
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 .icp > a {

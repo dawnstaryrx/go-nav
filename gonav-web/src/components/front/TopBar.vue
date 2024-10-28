@@ -14,11 +14,8 @@
             <li class="nav-item header-navbar-top-item">
               <router-link class="nav-link noto-serif-sc-text" aria-current="page" to="/hello">Hello</router-link>
             </li>
-            <li class="nav-item header-navbar-top-item">
-              <a class="nav-link noto-serif-sc-text" href="https://www.baidu.com">百度</a>
-            </li>
-            <li class="nav-item header-navbar-top-item">
-              <a class="nav-link noto-serif-sc-text" href="https://google.com/">谷歌</a>
+            <li v-for="item in topMenus" class="nav-item header-navbar-top-item">
+              <a class="nav-link noto-serif-sc-text" :href="item.url"> {{ item.title }} </a>
             </li>
           </ul>
         </div>
@@ -52,31 +49,42 @@
 <script>
 import {useTokenStore} from "@/stores/token.js";
 import { useRouter } from 'vue-router';
+import menuApi from '@/api/menu.js';
+import { onMounted, ref } from "vue";
 export default {
   setup() {
     const tokenStore = useTokenStore();
     const token = tokenStore.token.token;
     const router = useRouter()
+    const topMenus = ref([])
     // 定义登出方法
     const logout = () => {
-      console.log("token", token)
-      console.log("token.token", token.token)
       if (token == null || token == '') {
         // 如果 token 为 null，用户尚未登录，直接重定向到登录页
         router.push("/login");
       } else {
         // 清除 token（根据你的 tokenStore 实现可能需要调整）
-        console.log("tokenStore.removeToken();")
         tokenStore.removeToken(); // 假设你有一个 setToken 方法
         // 重定向到登录页或主页
-        console.log("router.push()")
         router.push("/login");
-        console.log("router.push()---")
       }
     };
+    const getTopMenu = async () => {
+      try {
+        const res = await menuApi.getMenuList(0);
+        topMenus.value = res.data;
+        console.log(topMenus.value);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    onMounted(() => {
+      getTopMenu();
+    });
     return {
       token,
       logout,
+      topMenus,
     };
   }
 };

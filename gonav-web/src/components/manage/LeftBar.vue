@@ -41,6 +41,12 @@
               </router-link>
             </li>
             <li>
+              <router-link to="/manage/admin/menu" :class="currentRoute.path === '/manage/admin/menu' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">
+                <i class="bi bi-menu-button-wide-fill"></i>
+                菜单管理
+              </router-link>
+            </li>
+            <li>
               <router-link to="/manage/admin/category" :class="currentRoute.path === '/manage/admin/category' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">
                 <i class="bi bi-bookmarks"></i> 
                 分类管理

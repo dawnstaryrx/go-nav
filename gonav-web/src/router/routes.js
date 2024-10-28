@@ -83,6 +83,12 @@ const routes = [
             component: () => import('@/views/admin/UserAdminPage.vue'),
           },
           {
+            path: 'menu',
+            name: 'admin-menu',
+            title: '菜单',
+            component: () => import('@/views/admin/MenuPage.vue'),
+          },
+          {
             path: 'setting',
             name: 'admin-setting',
             title: '设置',
