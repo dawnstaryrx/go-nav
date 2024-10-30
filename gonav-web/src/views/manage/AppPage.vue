@@ -33,15 +33,15 @@
                 <input v-model="appDTO.name" type="text" class="form-control" id="add-name" placeholder="输入APP名称">
               </div>
               <div class="mb-3">
-                <label for="add-categoryId" class="form-label">分类ID</label>
+                <label for="add-categoryId" class="form-label">所属分类</label>
                 <input v-model="appDTO.categoryId" type="number" class="form-control" id="add-categoryId" placeholder="输入分类ID">
               </div>
               <div class="mb-3">
-                <label for="add-url" class="form-label">URL</label>
-                <input v-model="appDTO.url" type="text" class="form-control" id="add-url" placeholder="输入APP URL">
+                <label for="add-url" class="form-label">网址</label>
+                <input v-model="appDTO.url" type="text" class="form-control" id="add-url" placeholder="输入APP 网址">
               </div>
               <div class="mb-3">
-                <label for="add-icon-url" class="form-label">图标URL</label>
+                <label for="add-icon-url" class="form-label">图标</label>
                 <input v-model="appDTO.iconUrl" type="text" class="form-control" id="add-icon-url" placeholder="输入APP 图标 URL">
               </div>
               <div class="mb-3">

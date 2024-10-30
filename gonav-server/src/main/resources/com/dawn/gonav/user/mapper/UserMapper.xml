@@ -31,6 +31,9 @@
     <select id="findUserByUsername" resultType="com.dawn.gonav.model.po.User">
         select * from user where username = #{username}
     </select>
+    <select id="findUserById" resultType="com.dawn.gonav.model.po.User">
+        select * from user where id = #{id}
+    </select>
     <select id="findUserByLinuxDoOpenId" resultType="com.dawn.gonav.model.po.User">
         select * from user where linuxdo_openid = #{openId}
     </select>
@@ -64,4 +67,28 @@
         </set>
         where id = #{id}
     </update>
+    <select id="getUserVOs">
+        select
+            id,
+            username,
+            email,
+            phone,
+            nickname,
+            role,
+            create_time,
+            (select count(1) from app where create_user = u.id) as app_num,
+            (select count(1) from category where create_user = u.id) as category_num
+        from user u
+        <where>
+            <if test="searchContent != null">
+                and username like concat('%',#{searchContent},'%')
+                or email like concat('%',#{searchContent},'%')
+                or phone like concat('%',#{searchContent},'%')
+                or nickname like concat('%',#{searchContent},'%')
+            </if>
+        </where>
+        <if test="orderBy != null">
+            order by ${orderBy} desc
+        </if>
+    </select>
 </mapper>

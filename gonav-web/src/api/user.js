@@ -28,7 +28,11 @@ const userApi = {
   // GitHub登录
   loginGitHub: (code) => {
     return request.post('/public/user/login/github', { code })
-  }
+  },
+  // 获取当前用户信息
+  getCurrentUser: () => {
+    return request.get('/user/current')
+  },
 }
 
 export default userApi;

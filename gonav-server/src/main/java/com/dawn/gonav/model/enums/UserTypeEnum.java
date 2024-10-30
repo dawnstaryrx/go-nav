@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 public enum UserTypeEnum {
+    BLOCK(0, "封禁"),
     ADMIN(2, "管理员"),
     USER(1, "用户");
 

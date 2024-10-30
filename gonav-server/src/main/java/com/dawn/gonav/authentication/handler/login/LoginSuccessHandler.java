@@ -91,7 +91,7 @@ public class LoginSuccessHandler extends
 
   public String generateToken(UserLoginDTO currentUser) {
     // todo 1分种
-    long expiredTime = TimeTool.nowMilli() + TimeUnit.MINUTES.toMillis(1); // 10分钟后过期
+    long expiredTime = TimeTool.nowMilli() + TimeUnit.MINUTES.toMillis(10); // 10分钟后过期
     currentUser.setExpiredTime(expiredTime);
     return jwtService.createJwt(currentUser, expiredTime);
   }

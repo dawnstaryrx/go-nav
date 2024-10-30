@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
     }
     private String generateToken(UserLoginDTO currentUser) {
         // todo 10
-        long expiredTime = TimeTool.nowMilli() + TimeUnit.MINUTES.toMillis(1); // 10分钟后过期
+        long expiredTime = TimeTool.nowMilli() + TimeUnit.MINUTES.toMillis(10); // 10分钟后过期
         currentUser.setExpiredTime(expiredTime);
         return jwtService.createJwt(currentUser, expiredTime);
     }

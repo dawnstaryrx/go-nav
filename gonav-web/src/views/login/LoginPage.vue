@@ -121,6 +121,7 @@ import alertUtil from "@/utils/alert";
 import { ref, computed } from "vue";
 import {useRouter} from "vue-router";
 import { useTokenStore } from "@/stores/token";
+import { useUserInfoStore } from "@/stores/userInfo";
 export default {
   components: {
     TopBar,
@@ -176,6 +177,10 @@ export default {
         isSending.value = false;
       }
     };
+    const getNowUser = async () => {
+      const res = await userApi.getCurrentUser();
+      return res.data;
+    };
     const handleLoginCode = async () => {
       // 处理登录逻辑
       if (!validateEmail(loginCodeData.value.email)) {
@@ -188,6 +193,9 @@ export default {
       if(res.code == 0){
         alertUtil.message('登录成功！');
 	      tokenStore.setToken(res.data); // res.data 是 token , refreshToken值
+        const nowUser = await getNowUser()
+        const userInfoStore = useUserInfoStore()
+        userInfoStore.setInfo(nowUser)
         router.push("/")
       }
     };
@@ -199,6 +207,9 @@ export default {
       if(res.code == 0){
         alertUtil.message('登录成功！', 'success');
         tokenStore.setToken(res.data); // res.data 是 token , refreshToken值
+        const nowUser = await getNowUser()
+        const userInfoStore = useUserInfoStore()
+        userInfoStore.setInfo(nowUser)
         router.push("/")
       }
     };

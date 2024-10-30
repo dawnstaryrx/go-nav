@@ -10,6 +10,7 @@ import { onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import userApi from '@/api/user' // 导入 userApi
 import { useTokenStore } from '@/stores/token.js'
+import { useUserInfoStore } from "@/stores/userInfo";
 
 export default {
   name: 'OAuthCallback',
@@ -17,6 +18,11 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const tokenStore = useTokenStore()
+
+    const getNowUser = async () => {
+      const res = await userApi.getCurrentUser();
+      return res.data;
+    };
 
     onMounted(async () => {
       const urlParams = new URLSearchParams(route.query)
@@ -38,7 +44,9 @@ export default {
             tokenStore.setToken(tokenData)
 
             // 如果需要存储用户信息
-
+            const nowUser = await getNowUser()
+            const userInfoStore = useUserInfoStore()
+            userInfoStore.setInfo(nowUser)
             // 重定向到首页并携带欢迎消息
             router.push("/")
           } else {

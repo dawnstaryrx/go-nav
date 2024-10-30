@@ -49,7 +49,33 @@
           </button>
         </h2>
         <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-          <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+          <div class="accordion-body">
+            <table class="table text-center">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">名称</th>
+                  <th scope="col">网址</th>
+                  <th scope="col">权重</th>
+                  <th scope="col">创建时间</th>
+                  <th scope="col">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in menuTopList" :key="index">
+                  <th scope="row">{{ index + 1 }}</th>
+                  <td>{{ item.title }}</td>
+                  <td>{{ item.url }}</td>
+                  <td>{{ item.weight }}</td>
+                  <td>{{ item.createTime }}</td>
+                  <td>
+                    <!-- <button class="btn" @click="editMenu(item)">编辑</button>
+                    <button class="btn" @click="deleteMenu(item.id)">删除</button> -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="accordion-item">
@@ -59,7 +85,33 @@
           </button>
         </h2>
         <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-          <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+          <div class="accordion-body">
+            <table class="table text-center">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">名称</th>
+                  <th scope="col">网址</th>
+                  <th scope="col">权重</th>
+                  <th scope="col">创建时间</th>
+                  <th scope="col">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in menuBottomList" :key="index">
+                  <th scope="row">{{ index + 1 }}</th>
+                  <td>{{ item.title }}</td>
+                  <td>{{ item.url }}</td>
+                  <td>{{ item.weight }}</td>
+                  <td>{{ item.createTime }}</td>
+                  <td>
+                    <!-- <button class="btn" @click="editMenu(item)">编辑</button>
+                    <button class="btn" @click="deleteMenu(item.id)">删除</button> -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -67,7 +119,7 @@
 </template>
 <script>
 import menuApi from '../../api/menu';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Modal } from 'bootstrap';
 import alertUtil from "@/utils/alert";
 
@@ -81,7 +133,8 @@ export default {
       type: 0,
       weight: 0,
     })
-    const menuList = ref([]);
+    const menuTopList = ref([]);
+    const menuBottomList = ref([]);
     // 打开模态框
     let modal = null;
     const openModal = (name) => {
@@ -115,10 +168,34 @@ export default {
         type: 0
       };
     };
+    // 获取TopMenu
+    const getTopMenu = async() => {
+      try {
+        const res = await menuApi.getMenuList(0);
+        menuTopList.value = res.data;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    // 获取BottomMenu
+    const getBottomMenu = async() => {
+      try {
+        const res = await menuApi.getMenuList(1);
+        menuBottomList.value = res.data;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    onMounted(() => {
+      getTopMenu();
+      getBottomMenu();
+    });
     return{
       menuDTO,
       submitMenu,
-      openModal
+      openModal,
+      menuTopList,
+      menuBottomList
     }
   }
 }

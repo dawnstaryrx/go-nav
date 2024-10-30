@@ -1,13 +1,12 @@
 package com.dawn.gonav.user.controller;
 
+import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.user.service.UserService;
 import com.dawn.gonav.model.dto.RegisterDTO;
 import com.dawn.gonav.model.po.Result;
+import com.dawn.gonav.util.CurrentUserUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,6 +45,12 @@ public class UserController {
     public Result resetPwd(@RequestBody RegisterDTO registerDTO){
         userService.resetPwd(registerDTO);
         return Result.success();
+    }
+
+    @GetMapping("/user/current")
+    public Result<UserLoginDTO> getCurrentUser(){
+        UserLoginDTO userLoginDTO = CurrentUserUtil.getCurrentUser();
+        return Result.success(userLoginDTO);
     }
 
 }

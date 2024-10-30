@@ -57,7 +57,9 @@
       <a :href="app.url" style="text-decoration: none;">
         <div class="app-card d-flex align-items-center">
           <div class="app-logo">
-            <img :src="app.iconUrl" alt="App Logo" class="img-fluid">
+            <!-- 条件渲染 Logo 或默认占位符 -->
+            <img v-if="app.iconUrl" :src="app.iconUrl" alt="App Logo" class="img-fluid  rounded-circle" />
+            <div v-else class="default-logo  rounded-circle">{{ app.name.charAt(0) }}</div>
           </div>
           <div class="app-info">
             <div class="app-title"> {{ app.name }} </div>
@@ -237,13 +239,8 @@ export default {
   justify-content: space-between;
   z-index: 999;                 /* 确保搜索框位于其他内容之上 */
 }
-@media (max-width: 768px) {
-  .content-section-search-container {
-    width: 90%;
-  }
-}
 .content-section-category-container {
-  max-width: 1080px;
+  max-width: 1050px;
   margin: auto;
   margin-top: 120px;
 }
@@ -351,99 +348,130 @@ export default {
 .app-logo {
   flex: 1 1 20%;
   max-width: 20%;
+  position: relative;
+  width: 50px; /* 设置宽高确保是圆形 */
+  height: 43px;
+}
+.app-logo img,
+.default-logo {
+  border-radius: 50%; /* 使图片和默认 Logo 都是圆形 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 确保图片内容适应圆形区域 */
+}
+.default-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #de7622;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .app-logo img {
-    border-radius: 50%; /* logo 图片圆形化 */
-    /* border: 2px solid #e0e0e0; */
-    /* padding: 5px; */
+  border-radius: 50%; /* logo 图片圆形化 */
+  /* border: 2px solid #e0e0e0;  */
+  /* padding: 5px; */
 }
 
 .app-info {
-    flex: 1 1 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-left: 10px;
+  flex: 1 1 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 10px;
 }
 
 .app-title {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #000;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #000;
 }
 
 .app-category {
-    margin-top: 5px;
-    font-size: 0.6rem;
-    color: #666;
-    width: fit-content;
-    background-color: aliceblue;
+  margin-top: 5px;
+  font-size: 0.6rem;
+  color: #666;
+  width: fit-content;
+  background-color: aliceblue;
 }
 .app-description {
-    /* margin-top: 5px; */
-    font-size: 0.9rem;
-    color: #666;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.3; /* 行高可根据需求调整 */
-    max-height: 2.6em; /* 2 行的最大高度 = 2 x 行高 */
+  /* margin-top: 5px; */
+  font-size: 0.9rem;
+  color: #666;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3; /* 行高可根据需求调整 */
+  max-height: 2.6em; /* 2 行的最大高度 = 2 x 行高 */
 }
-
+@media (max-width: 768px) {
+  .content-section-search-container {
+    width: 90%;
+  }
+  .content-section-category-container {
+    max-width: 90%;
+    margin: auto;
+    margin-top: 120px;
+  }
+}
 /* 中等屏幕 sm 下的调整 */
 @media (max-width: 991px) and (min-width: 576px) {
-    .app-card {
-        flex-direction: row;
-    }
+  .app-card {
+    flex-direction: row;
+  }
 
-    .app-info {
-        justify-content: flex-start;
-    }
+  .app-info {
+    justify-content: flex-start;
+  }
 
-    .app-description {
-        display: none; /* 隐藏描述 */
-    }
+  .app-description {
+    display: none; /* 隐藏描述 */
+  }
 
-    .app-title {
-        font-size: 1.2rem;
-    }
+  .app-title {
+    font-size: 1.2rem;
+  }
 }
 
 /* 小屏幕下的调整 */
 @media (max-width: 575px) {
-    .app-card {
-        flex-direction: column;
-        text-align: center;
-        border: 1px;
-        box-shadow: 1 0px 0px rgba(0, 0, 0, 0.1);
-    }
+  .app-card {
+    flex-direction: column;
+    text-align: center;
+    border: 1px;
+    box-shadow: 1 0px 0px rgba(0, 0, 0, 0.1);
+  }
 
-    .app-logo {
-        margin-bottom: 10px;
-        max-width: 50%; /* 适当放大 Logo */
-        margin-left: auto;
-        margin-right: auto;
-    }
+  .app-logo {
+    margin-bottom: 10px;
+    max-width: 40%; /* 适当放大 Logo */
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-    .app-title {
-        font-size: 1rem;
-        margin-bottom: 5px;
-    }
+  .app-title {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
 
-    .app-category {
-        font-size: 0.9rem;
-        display: none; /* 小屏幕下不展示分类名称 */
-    }
+  .app-category {
+    font-size: 0.9rem;
+    display: none; /* 小屏幕下不展示分类名称 */
+  }
 
-    .app-description {
-        display: none; /* 小屏幕下不展示描述 */
-    }
-    .app-info{
-      padding: 0;
-    }
+  .app-description {
+    display: none; /* 小屏幕下不展示描述 */
+  }
+  .app-info{
+    padding: 0;
+  }
 }
 
 
