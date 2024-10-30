@@ -110,4 +110,11 @@ public class AppServiceImpl implements AppService {
         pageBeanVO.setItems(page.getResult());
         return pageBeanVO;
     }
+
+    @Override
+    public void clickApp(Long id) {
+        App app = getAppById(id);
+        app.setClickCount(app.getClickCount() + 1);
+        appMapper.updateApp(app);
+    }
 }

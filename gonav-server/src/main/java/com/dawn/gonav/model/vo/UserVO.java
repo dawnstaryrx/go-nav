@@ -13,6 +13,8 @@ public class UserVO {
     private Long id;
     private String username;
     private String email;
+    private String githubOpenid;
+    private String linuxdoOpenid;
     private String phone;
     private String nickname;
     private Integer role;

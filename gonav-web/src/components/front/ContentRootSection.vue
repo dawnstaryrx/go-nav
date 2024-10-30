@@ -54,7 +54,7 @@
 
   <div class="row apps-container">
     <div v-for="app in appList" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container" :title="app.description">
-      <a :href="app.url" style="text-decoration: none;">
+      <a :href="app.url" @click="clickApp(app.id);" style="text-decoration: none;">
         <div class="app-card d-flex align-items-center">
           <div class="app-logo">
             <!-- 条件渲染 Logo 或默认占位符 -->
@@ -63,7 +63,17 @@
           </div>
           <div class="app-info">
             <div class="app-title"> {{ app.name }} </div>
-            <div class="app-category">{{ app.categoryName }}</div>
+              <div class="app-category">
+                <span style="  background-color: aliceblue;">
+                  {{ app.categoryName }}
+                </span>
+                <span style="background-color: white;">
+                  &nbsp;
+                </span>
+                <span style="background-color: beige;">  
+                  {{ app.clickCount }}
+                </span>
+              </div>
             <div class="app-description"> {{ app.description }}</div>
           </div>
         </div>
@@ -93,7 +103,7 @@ export default {
       username: 'admin',
       categoryId: null
     });
-
+    
     // 初始化一级分类选项
     onMounted(() => {
       // 添加键盘事件监听
@@ -182,6 +192,10 @@ export default {
         console.error(error);
       }
     };
+    // 点击APP
+    const clickApp = async (id) => {
+      await appApi.clickApp(id);
+    }
 
     // 组件挂载时加载分类数据
     onMounted(() => {
@@ -214,6 +228,7 @@ export default {
       appList,
       getAppList,
       getAllApp,
+      clickApp
     };
   },
 };
@@ -397,7 +412,6 @@ export default {
   font-size: 0.6rem;
   color: #666;
   width: fit-content;
-  background-color: aliceblue;
 }
 .app-description {
   /* margin-top: 5px; */

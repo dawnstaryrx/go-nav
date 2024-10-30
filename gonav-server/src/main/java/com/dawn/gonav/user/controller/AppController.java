@@ -81,4 +81,10 @@ public class AppController {
         assert user != null;
         return getAppsByUsernameUser(user.getUsername(), categoryId);
     }
+
+    @PostMapping("/public/app/click")
+    public Result clickApp(@RequestParam Long id){
+        appService.clickApp(id);
+        return Result.success();
+    }
 }

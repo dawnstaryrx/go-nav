@@ -72,6 +72,8 @@
             id,
             username,
             email,
+            github_openid,
+            linuxdo_openid,
             phone,
             nickname,
             role,
@@ -88,7 +90,7 @@
             </if>
         </where>
         <if test="orderBy != null">
-            order by ${orderBy} desc
+            order by ${orderBy}
         </if>
     </select>
 </mapper>

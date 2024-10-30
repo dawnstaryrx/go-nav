@@ -16,4 +16,6 @@ public interface AppService {
     List<AppVO> getAppsByUsername(String username, Long categoryId);
 
     PageBeanVO<AppVO> getAppsPageNowUser(Integer pageNum, Integer pageSize, Long categoryId, Integer status, String searchContent);
+
+    void clickApp(Long id);
 }

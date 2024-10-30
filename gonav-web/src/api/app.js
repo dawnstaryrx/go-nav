@@ -10,6 +10,16 @@ const appApi = {
       }
     })
   },
+  clickApp: (id) => {
+    return request.post('/public/app/click', {
+      id: id
+    }, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+  },
+  
   // --------------------------------- 用户 ----------------------------------
   getAppByUsernameAndCategoryIdUser: (username, categoryId) => {
     return request.get('/user/app', {

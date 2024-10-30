@@ -93,7 +93,7 @@
               <img :src=item.iconUrl alt="" class="img-thumbnail" width="40" height="40" />
               <!-- {{ item.iconUrl }} -->
             </td>
-            <td>{{ item.description.slice(0, 10) }}{{ item.description.length > 20 ? '...' : '' }}</td>
+            <td>{{ item.description.slice(0, 10) }}{{ item.description.length > 10 ? '...' : '' }}</td>
             <td>{{ item.url }}</td>
             <td>{{ item.weight }}</td>
             <td>

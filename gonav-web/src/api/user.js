@@ -33,6 +33,21 @@ const userApi = {
   getCurrentUser: () => {
     return request.get('/user/current')
   },
+  // 获取用户分页列表
+  getUserPageList: (pageNum, pageSize, searchContent, orderBy) => {
+    return request.get('/admin/user/page', {
+      params: {
+        "pageNum":pageNum,
+        "pageSize":pageSize,
+        "searchContent":searchContent,
+        "orderBy":orderBy,
+      }
+    })
+  },
+  // 删除用户
+  deleteUser: (id) => {
+    return request.delete('/admin/user/' + id)
+  },
 }
 
 export default userApi;
