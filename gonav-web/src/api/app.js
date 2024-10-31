@@ -43,11 +43,11 @@ const appApi = {
       }
     });
   },
-  deleteCategory: (id) => {
-    return request.delete('/user/category', {params:{"id":id}})
+  deleteApp: (id) => {
+    return request.delete('/user/app', {params:{"id":id}})
   },
-  updateCategory: (data) => {
-    return request.post('/user/category', data)
+  updateApp: (data) => {
+    return request.post('/user/app', data)
   },
   // -------------------------------- 超级管理 --------------------------------
   getAllCategory: (pageNum, pageSize) => {

@@ -53,12 +53,17 @@
   </div>
 
   <div class="row apps-container">
-    <div v-for="app in appList" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container" :title="app.description">
+    <div v-for="(app, index) in appList" :key="index" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container" :title="app.description">
       <a :href="app.url" @click="clickApp(app.id);" style="text-decoration: none;">
         <div class="app-card d-flex align-items-center">
           <div class="app-logo">
             <!-- 条件渲染 Logo 或默认占位符 -->
-            <img v-if="app.iconUrl" :src="app.iconUrl" alt="App Logo" class="img-fluid  rounded-circle" />
+            <img 
+              v-if="app.iconUrl !== ''"
+              :src="app.iconUrl" 
+              alt="App Logo" 
+              class="img-fluid  rounded-circle" 
+            />
             <div v-else class="default-logo  rounded-circle">{{ app.name.charAt(0) }}</div>
           </div>
           <div class="app-info">
@@ -103,7 +108,6 @@ export default {
       username: 'admin',
       categoryId: null
     });
-    
     // 初始化一级分类选项
     onMounted(() => {
       // 添加键盘事件监听
@@ -154,6 +158,7 @@ export default {
     const selectedCategory = ref(null);
     // 当前选中分类ID
     const nowCategory = ref(null);
+    
 
     // 顶级分类 (即 parentId 为 null 的分类)
     const topLevelCategories = computed(() => {
@@ -200,6 +205,7 @@ export default {
     // 组件挂载时加载分类数据
     onMounted(() => {
       fetchCategories();
+      
     });
     // 获取APP
     const getAppList = async () => {
@@ -228,7 +234,7 @@ export default {
       appList,
       getAppList,
       getAllApp,
-      clickApp
+      clickApp,
     };
   },
 };

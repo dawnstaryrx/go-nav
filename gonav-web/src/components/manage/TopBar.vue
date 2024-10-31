@@ -32,7 +32,8 @@
               <svg t="1728716103482" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5754" width="20" height="20"><path d="M768 298.666667c0 141.386667-114.613333 256-256 256S256 440.053333 256 298.666667 370.613333 42.666667 512 42.666667s256 114.613333 256 256z m108.18 446.486666A211.94 211.94 0 0 0 725.333333 682.666667H298.666667a213.333333 213.333333 0 0 0-213.333334 213.333333v32a53.393333 53.393333 0 0 0 53.333334 53.333333h746.666666a53.393333 53.393333 0 0 0 53.333334-53.333333v-32a211.94 211.94 0 0 0-62.486667-150.846667z" fill="currentColor" p-id="5755"></path></svg>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="/admin/index">管理</a></li>
+              <!-- <li><a class="dropdown-item" href="/admin/index">管理</a></li> -->
+              <li><a class="dropdown-item" href="/manage/index">{{ greeting }} ！ {{ nowUser.nickname }}</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#" @click.prevent="logout()">登出</a></li>
             </ul>

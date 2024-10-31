@@ -20,6 +20,12 @@
           应用管理
         </router-link>
       </li>
+      <li>
+        <router-link to="/manage/user" :class="currentRoute.path === '/manage/user' ? 'nav-link active' : 'nav-link link-dark'">
+          <i class="bi bi-person"></i>
+          个人中心
+        </router-link>
+      </li>
       <!-- 超级管理菜单 -->
       <li class="nav-item">
         <a :class="currentRoute.path.startsWith('/manage/admin') ? 'nav-link active' : 'nav-link link-dark'" 
