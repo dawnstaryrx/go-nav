@@ -7,4 +7,6 @@ public interface UserAdminService {
     PageBeanVO<UserVO> getUserPageList(Integer pageNum, Integer pageSize, String orderBy, String searchContent);
 
     void delUser(Long id);
+
+    void updateRole(Long userId, Integer role);
 }

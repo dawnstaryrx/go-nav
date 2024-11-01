@@ -19,4 +19,8 @@ public interface AppMapper {
     List<AppVO> getAppVOsByUserId(Long userId, Integer status, Long categoryId);
 
     List<AppVO> getAppVOsPageNowUser(Long userId, Integer status, Long categoryId, String searchContent);
+
+    List<AppVO> getHotAppVOs(Long userId);
+
+    List<AppVO> searchAppVOs(String searchContent, Long userId);
 }

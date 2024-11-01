@@ -58,6 +58,10 @@
                 分类管理
               </router-link>
             </li>
+            <router-link to="/manage/admin/announce" :class="currentRoute.path === '/manage/admin/announce' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">
+                <i class="bi bi-megaphone"></i> 
+                通知公告
+              </router-link>
             <li>
               <router-link to="/manage/admin/setting" :class="currentRoute.path === '/manage/admin/setting' ? 'nav-link active ps-4' : 'nav-link link-dark ps-4'">
                 <i class="bi bi-gear"></i>

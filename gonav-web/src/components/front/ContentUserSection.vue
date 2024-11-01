@@ -20,15 +20,17 @@
   <div class="content-section-category-container">
     <span
       class="capsule"
-      @click="nowCategory = null; getAllApp(); "
-      :class="{ 'capsule-active': (!nowCategory) }"
+      @click="nowCategory = null;nowHotOrAll = 'ALL'; getAllApp(); "
+      :class="{ 'capsule-active': (!nowCategory && nowHotOrAll === 'ALL') }"
     >
-      全部分类
+      全部应用
     </span>
     <span
       class="capsule"
+      @click="nowCategory = null;nowHotOrAll='HOT'; getHotApp(); "
+      :class="{ 'capsule-active': (!nowCategory && nowHotOrAll === 'HOT') }"
     >
-      热门分类
+      热门应用
     </span>
     <!-- 遍历顶级父分类 -->
     <span
@@ -53,15 +55,25 @@
   </div>
   <!-- APP -->
   <div class="row apps-container">
-    <div v-for="app in appList" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container">
-    <a :href="app.url" style="text-decoration: none;">
+    <div v-for="app in appList" class=" col-md-3 col-lg-3 col-sm-4 col-4 app-container"  :title="app.description">
+    <a :href="app.url" @click="clickApp(app.id);" style="text-decoration: none;">
       <div class="app-card d-flex align-items-center">
         <div class="app-logo">
           <img :src="app.iconUrl" alt="App Logo" class="img-fluid">
         </div>
         <div class="app-info">
           <div class="app-title"> {{ app.name }} </div>
-          <div class="app-category">{{ app.categoryName }}</div>
+          <div class="app-category">
+            <span style="background-color: aliceblue;">
+              {{ app.categoryName }}
+            </span>
+            <span style="background-color: white;">
+              &nbsp;
+            </span>
+            <span style="background-color: beige; float: right;">  
+              {{ app.clickCount }}
+            </span>
+          </div>
           <div class="app-description"> {{ app.description }}</div>
         </div>
       </div>
@@ -96,7 +108,7 @@ export default {
       username: props.username,
       categoryId: null
     });
-
+    const nowHotOrAll = ref("ALL");
     // 初始化一级分类选项
     onMounted(() => {
       // 添加键盘事件监听
@@ -107,12 +119,19 @@ export default {
     });
 
     // 处理表单提交
-    const handleSearch = (event) => {
+    const handleSearch = async (event) => {
       event.preventDefault(); // 阻止表单默认提交行为
-
       const query = searchInput.value.value.trim();
-      if (query) {
+      if (query && query !== '') {
+        const res = await appApi.searchAppByUsername(appListDTO.value.username, query)
+        appList.value = res.data
+        console.log('query', query)
+        console.log(res.data)
         console.log('搜索查询:', query);
+      } else if (query === '') {
+        // 如果用户没有输入任何内容，则显示所有分类
+        // await getAllCategory();
+        getAllApp();
       } else {
         console.log('请输入搜索内容');
       }
@@ -190,7 +209,7 @@ export default {
     onMounted(() => {
       fetchCategories();
     });
-    // 获取APP
+    // TODO 获取APP  区分登录未登录
     const getAppList = async () => {
       try {
         const res = await appApi.getAppByUsernameAndCategoryIdPublic(appListDTO.value.username, appListDTO.value.categoryId);
@@ -200,12 +219,23 @@ export default {
         console.error(error);
       }
     };
-
+    // 点击APP
+    const clickApp = async (id) => {
+      await appApi.clickApp(id);
+    }
     const getAllApp = () => {
       appListDTO.value.categoryId = null
       selectCategory.value = null
       getAppList()
     }
+    // 获取热门APP
+    const getHotApp = async () => {
+      const res = await appApi.getHotAppByUsername(appListDTO.value.username)
+      console.log("获取热门APP",res)
+      nowCategory.id = "hot"
+      appList.value = res.data
+    }
+
     getAppList();
     // ------------------------------------------------
     return {
@@ -218,6 +248,9 @@ export default {
       appList,
       getAppList,
       getAllApp,
+      nowHotOrAll,
+      clickApp,
+      getHotApp
     };
   },
 };
@@ -249,7 +282,7 @@ export default {
   }
 }
 .content-section-category-container {
-  max-width: 1080px;
+  max-width: 1050px;
   margin: auto;
   margin-top: 120px;
 }
@@ -303,7 +336,7 @@ export default {
   display: inline-block; /* 使 span 可以设置宽高 */
   padding: 0px 12px; /* 内边距，调整胶囊的大小 */
   line-height: 30px;
-  border: 1px solid ; /* 默认边框颜色 */
+  border: 1px solid #b5aa90; /* 默认边框颜色 */
   border-radius: 999px; /* 使元素呈现胶囊形状 */
   background-color: white; /* 默认背景颜色 */
   color: #000; /* 默认文字颜色 */
@@ -314,10 +347,12 @@ export default {
 .capsule:hover,
 .capsule:active {
   background-color: #de7622; /* 悬浮和点击后的背景颜色 */
+  border:1px solid  #de7622;
   color: white; /* 悬浮和点击后的文字颜色 */
 }
 .capsule-active{
   background-color: #de7622; /* 悬浮和点击后的背景颜色 */
+  border:1px solid  #de7622;
   color: white; /* 悬浮和点击后的文字颜色 */
 }
 
@@ -385,7 +420,7 @@ export default {
     font-size: 0.6rem;
     color: #666;
     width: fit-content;
-    background-color: aliceblue;
+    width: 100%;
 }
 .app-description {
     /* margin-top: 5px; */
@@ -399,7 +434,19 @@ export default {
     line-height: 1.3; /* 行高可根据需求调整 */
     max-height: 2.6em; /* 2 行的最大高度 = 2 x 行高 */
 }
-
+.content-section-search-container {
+    width: 90%;
+  }
+@media (max-width: 768px) {
+  .content-section-search-container {
+    width: 90%;
+  }
+  .content-section-category-container {
+    max-width: 90%;
+    margin: auto;
+    margin-top: 120px;
+  }
+}
 /* 中等屏幕 sm 下的调整 */
 @media (max-width: 991px) and (min-width: 576px) {
     .app-card {

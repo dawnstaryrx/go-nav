@@ -29,4 +29,10 @@ public class UserAdminController {
         userAdminService.delUser(id);
         return Result.success();
     }
+
+    @PostMapping
+    public Result updateRole(@RequestParam Integer role, @RequestParam Long userId){
+        userAdminService.updateRole(userId, role);
+        return Result.success();
+    }
 }

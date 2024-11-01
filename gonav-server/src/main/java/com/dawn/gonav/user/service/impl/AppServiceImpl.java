@@ -136,6 +136,18 @@ public class AppServiceImpl implements AppService {
         return appVOS;
     }
 
+    @Override
+    public List<AppVO> getHotApps(String username) {
+        User user = userService.getUserByUsername(username);
+        return appMapper.getHotAppVOs(user.getId());
+    }
+
+    @Override
+    public List<AppVO> searchApps(String searchContent, String username) {
+        User user = userService.getUserByUsername(username);
+        return appMapper.searchAppVOs(searchContent, user.getId());
+    }
+
     public App getAppById(Long id){
         return appMapper.getAppById(id);
     }

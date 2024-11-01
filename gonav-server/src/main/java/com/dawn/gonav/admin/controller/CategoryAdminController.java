@@ -15,9 +15,11 @@ public class CategoryAdminController {
     @GetMapping
     public Result<PageBeanVO<CategoryPageVO>> getCategoryPageList(
             @RequestParam Integer pageNum,
-            @RequestParam Integer pageSize
+            @RequestParam Integer pageSize,
+            @RequestParam(required = false) String orderBy,
+            @RequestParam(required = false) String searchContent
     ) {
-        PageBeanVO<CategoryPageVO> categoryPageList = categoryAdminService.getCategoryPageList(pageNum, pageSize);
+        PageBeanVO<CategoryPageVO> categoryPageList = categoryAdminService.getCategoryPageList(pageNum, pageSize, orderBy, searchContent);
         return Result.success(categoryPageList);
     }
 

@@ -58,8 +58,11 @@
             <if test="role != null">
                 role = #{role},
             </if>
-            <if test="wechatOpenid != null">
-                wechat_openid = #{wechatOpenid},
+            <if test="githubOpenid != null">
+                github_openid = #{githubOpenid},
+            </if>
+            <if test="linuxdoOpenid != null">
+                linuxdo_openid = #{linuxdoOpenid},
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime}

@@ -18,4 +18,8 @@ public interface AppService {
     PageBeanVO<AppVO> getAppsPageNowUser(Integer pageNum, Integer pageSize, Long categoryId, Integer status, String searchContent);
 
     void clickApp(Long id);
+
+    List<AppVO> getHotApps(String username);
+
+    List<AppVO> searchApps(String searchContent, String username);
 }

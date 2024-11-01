@@ -1,6 +1,7 @@
 package com.dawn.gonav.admin.service.impl;
 
 import com.dawn.gonav.admin.service.UserAdminService;
+import com.dawn.gonav.exception.ExceptionTool;
 import com.dawn.gonav.model.enums.UserTypeEnum;
 import com.dawn.gonav.model.po.User;
 import com.dawn.gonav.model.vo.PageBeanVO;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,20 @@ public class UserAdminServiceImpl implements UserAdminService {
     public void delUser(Long id) {
         User user = userMapper.findUserById(id);
         user.setRole(UserTypeEnum.BLOCK.getCode());
+        userMapper.update(user);
+    }
+
+    @Override
+    public void updateRole(Long userId, Integer role) {
+        if (
+                !Objects.equals(role, UserTypeEnum.ADMIN.getCode()) &&
+                !Objects.equals(role, UserTypeEnum.USER.getCode()) &&
+                !Objects.equals(role, UserTypeEnum.BLOCK.getCode())
+        ){
+            ExceptionTool.throwException("角色不存在");
+        }
+        User user = userMapper.findUserById(userId);
+        user.setRole(role);
         userMapper.update(user);
     }
 }

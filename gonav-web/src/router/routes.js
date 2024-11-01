@@ -95,6 +95,12 @@ const routes = [
             component: () => import('@/views/admin/SettingPage.vue'),
           },
           {
+            path: 'announce',
+            name: 'admin-announce',
+            title: '用户管理',
+            component: () => import('@/views/admin/AnnouncePage.vue'),
+          },
+          {
             path: 'category',
             name: 'admin-category',
             title: '分类超级管理',

@@ -50,7 +50,7 @@ export default {
   display: inline-block; /* 使 span 可以设置宽高 */
   padding: 0px 12px; /* 内边距，调整胶囊的大小 */
   line-height: 30px;
-  border: 1px solid; /* 默认边框颜色 */
+  border: 1px solid #b5aa90; /* 默认边框颜色 */
   border-radius: 999px; /* 使元素呈现胶囊形状 */
   background-color: white; /* 默认背景颜色 */
   color: #000; /* 默认文字颜色 */
@@ -61,10 +61,12 @@ export default {
 .capsule:hover,
 .capsule:active {
   background-color: #de7622; /* 悬浮和点击后的背景颜色 */
+  border:1px solid  #de7622;
   color: white; /* 悬浮和点击后的文字颜色 */
 }
 .capsule-active{
   background-color: #de7622; /* 悬浮和点击后的背景颜色 */
+  border:1px solid  #de7622;
   color: white; /* 悬浮和点击后的文字颜色 */
 }
 .content-section-category-container {

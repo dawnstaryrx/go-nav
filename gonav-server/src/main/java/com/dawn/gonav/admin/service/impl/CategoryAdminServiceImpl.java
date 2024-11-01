@@ -20,10 +20,10 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     private final CategoryAdminMapper categoryAdminMapper;
     private final CategoryMapper categoryMapper;
     @Override
-    public PageBeanVO<CategoryPageVO> getCategoryPageList(Integer pageNum, Integer pageSize) {
+    public PageBeanVO<CategoryPageVO> getCategoryPageList(Integer pageNum, Integer pageSize, String orderBy, String searchContent) {
         PageBeanVO<CategoryPageVO> pageBeanVO = new PageBeanVO<>();
         PageHelper.startPage(pageNum, pageSize);
-        List<CategoryPageVO> categoryPageVOS = categoryAdminMapper.findAllPageVO();
+        List<CategoryPageVO> categoryPageVOS = categoryAdminMapper.findAllPageVO(orderBy, searchContent);
         Page<CategoryPageVO> page = (Page<CategoryPageVO>) categoryPageVOS;
         pageBeanVO.setTotal(page.getTotal());
         pageBeanVO.setItems(page.getResult());

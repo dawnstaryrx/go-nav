@@ -28,11 +28,13 @@ const categoryApi = {
     return request.post('/user/category', data)
   },
   // -------------------------------- 超级管理 --------------------------------
-  getAllCategory: (pageNum, pageSize) => {
+  getAllCategory: (pageNum, pageSize, searchContent, orderBy) => {
     return request.get('/admin/category',{
       params: {
         pageNum,
-        pageSize
+        pageSize,
+        searchContent,
+        orderBy
       }
     })
   },

@@ -76,7 +76,16 @@
         p.name AS parentName  <!-- 父分类名称，若无父分类则为null -->
         FROM category c
         LEFT JOIN category p ON c.parent_id = p.id  <!-- 左连接获取父分类名称 -->
-        ORDER BY c.weight DESC
+        <where>
+            <if test="searchContent != null">
+                (c.name LIKE concat('%',#{searchContent},'%')
+                OR c.description LIKE concat('%',#{searchContent},'%')
+                OR p.name LIKE concat('%',#{searchContent},'%'))
+            </if>
+        </where>
+        <if test="orderBy != null">
+            order by ${orderBy}
+        </if>
     </select>
 
 </mapper>

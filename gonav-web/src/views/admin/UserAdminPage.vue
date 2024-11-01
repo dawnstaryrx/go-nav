@@ -28,8 +28,20 @@
       <tbody>
         <tr v-for="(item,index) in userPageList" :key="index">
           <th scope="row">{{ index + 1 }}</th>
-          <td> {{ item.id }} </td>
-          <td :style="item.role == 2 ? 'background-color: antiquewhite;' : ''">{{ item.username }}</td>
+          <td> 
+            <span v-if="item.role === 0" style="background-color: grey; color: white;">
+                {{ item.id }}
+            </span>
+            <span v-else-if="item.role === 1">
+                {{ item.id }}
+            </span>
+            <span v-else-if="item.role === 2" style="background-color: antiquewhite;">
+                {{ item.id }}
+            </span> 
+          </td>
+          <td >
+            {{ item.username }}
+          </td>
           <td>{{ item.email }}</td>
           <td>{{ item.githubOpenid }}</td>
           <td>{{ item.linuxdoOpenid }}</td>
@@ -37,9 +49,37 @@
           <td>{{ item.appNum }}</td>
           <td>{{ item.categoryNum }}</td>
           <td>
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-primary btn-sm" @click="updateRoleData.role = item.role; updateRoleData.userId = item.id" data-bs-toggle="modal" :data-bs-target="'#updateModal'+item.id" >
               修改
             </button>
+            <!-- 添加编辑分类模态框 -->
+            <div class="modal fade text-start" :id="'updateModal' + item.id" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModalLabel">修改用户状态</h5>
+                    <button type="button"  class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form @submit.prevent="submitDeleteCategory">
+                      <div class="mb-3">
+                        <label for="username" class="form-label">用户名</label>
+                        <input :value="item.username" type="text" class="form-control" id="username" disabled>
+                      </div>
+                      <div class="mb-3">
+                        <label for="role" class="form-label">角色</label>
+                        <select v-model="updateRoleData.role" class="form-select" id="role">
+                          <option value="0">拉黑用户</option>
+                          <option value="1">用户</option>
+                          <option value="2">管理员</option>
+                        </select>
+                      </div>
+                      <button @click="updateUserRole(updateRoleData.role, updateRoleData.userId)" class="btn btn-primary">确认修改</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -63,6 +103,7 @@
 <script>
 import { ref, onMounted } from 'vue'
 import userApi from '@/api/user'
+import alertUtil from "@/utils/alert";
 export default {
   name: 'UserAdminPage',
   setup() {
@@ -74,6 +115,22 @@ export default {
       searchContent: '',
       orderBy: 'id desc'
     })
+    const updateRoleData = ref({
+      role: 0,
+      userId: null
+    })
+    const updateUserRole = async (role, userId) => {
+      const res = await userApi.updateUserRole(role, userId)
+      if (res.code === 0) {
+        alertUtil.message('修改成功');
+        getUserPageList()
+        // 刷新
+        // window.location.reload()
+      } else {
+        alertUtil.message('修改失败', 'danger');
+      }
+      console.log(res)
+    }
     const getUserPageList = async () => {
       const res = await userApi.getUserPageList(
         userPageListDTO.value.pageNum,
@@ -116,6 +173,8 @@ export default {
       changePage,
       changePageSize,
       totalPages,
+      updateUserRole,
+      updateRoleData
     }
   }
 }

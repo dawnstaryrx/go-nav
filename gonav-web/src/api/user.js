@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { param } from 'jquery'
 
 const userApi = {
   // 发送验证码
@@ -48,6 +49,15 @@ const userApi = {
   deleteUser: (id) => {
     return request.delete('/admin/user/' + id)
   },
+  // 修改用户状态
+  updateUserRole: (role, userId) => {
+    return request.post("/admin/user", null, {
+      params: {
+        "role":role,
+        "userId":userId
+      }
+    })
+  }
 }
 
 export default userApi;

@@ -20,15 +20,17 @@
   <div class="content-section-category-container">
     <span
       class="capsule"
-      @click="nowCategory = null; getAllApp(); "
-      :class="{ 'capsule-active': (!nowCategory) }"
+      @click="nowCategory = null;nowHotOrAll = 'ALL'; getAllApp(); "
+      :class="{ 'capsule-active': (!nowCategory && nowHotOrAll === 'ALL') }"
     >
-      全部分类
+      全部应用
     </span>
     <span
       class="capsule"
+      @click="nowCategory = null;nowHotOrAll='HOT'; getHotApp(); "
+      :class="{ 'capsule-active': (!nowCategory && nowHotOrAll === 'HOT') }"
     >
-      热门分类
+      热门应用
     </span>
     <!-- 遍历顶级父分类 -->
     <span
@@ -75,7 +77,7 @@
                 <span style="background-color: white;">
                   &nbsp;
                 </span>
-                <span style="background-color: beige;">  
+                <span style="background-color: beige; float: right;">  
                   {{ app.clickCount }}
                 </span>
               </div>
@@ -106,8 +108,9 @@ export default {
     const appList = ref([]);
     const appListDTO = ref({
       username: 'admin',
-      categoryId: null
+      categoryId: null,
     });
+    const nowHotOrAll = ref("ALL");
     // 初始化一级分类选项
     onMounted(() => {
       // 添加键盘事件监听
@@ -118,16 +121,27 @@ export default {
     });
 
     // 处理表单提交
-    const handleSearch = (event) => {
+    const handleSearch = async (event) => {
       event.preventDefault(); // 阻止表单默认提交行为
-
       const query = searchInput.value.value.trim();
-      if (query) {
+      if (query && query !== '') {
+        const res = await appApi.searchAppByUsername(appListDTO.value.username, query)
+        appList.value = res.data
+        console.log('query', query)
+        console.log(res.data)
         console.log('搜索查询:', query);
+      } else if (query === '') {
+        // 如果用户没有输入任何内容，则显示所有分类
+        // await getAllCategory();
+        getAllApp();
       } else {
         console.log('请输入搜索内容');
       }
     };
+
+    const searchApp = async() => {
+
+    }
 
     const handleKeydown = (event) => {
       // 忽略修饰键（Ctrl, Alt, Meta, Shift）
@@ -210,6 +224,7 @@ export default {
     // 获取APP
     const getAppList = async () => {
       try {
+        // TODO 区分登录和未登录的情况
         const res = await appApi.getAppByUsernameAndCategoryIdPublic(appListDTO.value.username, appListDTO.value.categoryId);
         console.log("获取APP",res);
         appList.value = res.data;
@@ -218,11 +233,21 @@ export default {
       }
     };
 
+    // 获取全部APP
     const getAllApp = () => {
       appListDTO.value.categoryId = null
       selectCategory.value = null
       getAppList()
     }
+
+    // TODO 获取热门APP
+    const getHotApp = async () => {
+      const res = await appApi.getHotAppByUsername(appListDTO.value.username)
+      console.log("获取热门APP",res)
+      nowCategory.id = "hot"
+      appList.value = res.data
+    }
+
     getAppList();
     return {
       searchInput,
@@ -235,6 +260,8 @@ export default {
       getAppList,
       getAllApp,
       clickApp,
+      getHotApp,
+      nowHotOrAll
     };
   },
 };
@@ -260,6 +287,7 @@ export default {
   justify-content: space-between;
   z-index: 999;                 /* 确保搜索框位于其他内容之上 */
 }
+
 .content-section-category-container {
   max-width: 1050px;
   margin: auto;
@@ -315,7 +343,7 @@ export default {
   display: inline-block; /* 使 span 可以设置宽高 */
   padding: 0px 12px; /* 内边距，调整胶囊的大小 */
   line-height: 30px;
-  border: 1px solid ; /* 默认边框颜色 */
+  border: 1px solid #b5aa90; /* 默认边框颜色 */
   border-radius: 999px; /* 使元素呈现胶囊形状 */
   background-color: white; /* 默认背景颜色 */
   color: #000; /* 默认文字颜色 */
@@ -326,10 +354,12 @@ export default {
 .capsule:hover,
 .capsule:active {
   background-color: #de7622; /* 悬浮和点击后的背景颜色 */
+  border:1px solid  #de7622;
   color: white; /* 悬浮和点击后的文字颜色 */
 }
 .capsule-active{
   background-color: #de7622; /* 悬浮和点击后的背景颜色 */
+  border:1px solid  #de7622;
   color: white; /* 悬浮和点击后的文字颜色 */
 }
 .noto-serif-sc-font {
@@ -418,6 +448,7 @@ export default {
   font-size: 0.6rem;
   color: #666;
   width: fit-content;
+  width: 100%;
 }
 .app-description {
   /* margin-top: 5px; */

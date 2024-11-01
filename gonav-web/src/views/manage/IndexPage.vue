@@ -1,21 +1,32 @@
 <template>
-  <!-- <TopBar></TopBar>
-  <div class="row">
-    <LeftBar class="col-1" style="padding-right: 0;"></LeftBar>
-    <div class="col" style="margin-top: 70px;">
-      <router-view></router-view>
-    </div>
-  </div> -->
-  111
+  <div v-html="setting.valueText">
+
+  </div>
 </template>
 <script>
-import TopBar from '@/components/manage/TopBar.vue';
-import LeftBar from '@/components/manage/LeftBar.vue';
+import settingApi from '@/api/setting';
+import { ref, onMounted, computed } from 'vue';
 export default {
   name: 'AdminIndex',
   components: {
-    TopBar,
-    LeftBar
   },
+  setup() {
+    // 获取数据
+    const setting = ref({
+      key: 'announce',
+      valueVarchar: '',
+      valueText: ''
+    });
+    const getSetting = async () => {
+      const res = await settingApi.getSetting(setting.value.key);
+      setting.value = res.data;
+    }
+    onMounted(() => {
+      getSetting();
+    })
+    return {
+      setting
+    }
+  }
 }
 </script>

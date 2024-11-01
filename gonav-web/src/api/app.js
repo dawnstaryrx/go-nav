@@ -10,6 +10,21 @@ const appApi = {
       }
     })
   },
+  getHotAppByUsername: (username) => {
+    return request.get('/public/app/hot', {
+      params: {
+        username
+      }
+    })
+  },
+  searchAppByUsername: (username, searchContent) => {
+    return request.get('/public/app/search', {
+      params: {
+        'username': username,
+        'searchContent': searchContent
+      }
+    })
+  },
   clickApp: (id) => {
     return request.post('/public/app/click', {
       id: id

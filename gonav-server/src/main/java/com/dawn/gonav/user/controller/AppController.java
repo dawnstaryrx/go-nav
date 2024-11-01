@@ -61,6 +61,15 @@ public class AppController {
     public Result<List<AppVO>> getAppsByUsernameUser(@RequestParam String username, @RequestParam(required = false) Long categoryId){
         return Result.success(appService.getAppsByUsername(username, categoryId));
     }
+    @GetMapping("/public/app/hot")
+    public Result<List<AppVO>> getHotApps(@RequestParam String username){
+        return Result.success(appService.getHotApps(username));
+    }
+
+    @GetMapping("/public/app/search")
+    public Result<List<AppVO>> searchApps(@RequestParam String searchContent, @RequestParam String username){
+        return Result.success(appService.searchApps(searchContent, username));
+    }
 
     @GetMapping("/public/app/index")
     public Result<List<AppVO>> getAppsIndexPublic(@RequestParam(required = false) Long categoryId){

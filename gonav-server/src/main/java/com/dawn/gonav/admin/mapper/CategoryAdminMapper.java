@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface CategoryAdminMapper {
-    List<CategoryPageVO> findAllPageVO();
+    List<CategoryPageVO> findAllPageVO(String orderBy, String searchContent);
 }

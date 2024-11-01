@@ -16,11 +16,11 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">id</th>
-            <th scope="col">名称</th>
-            <th scope="col">父分类</th>
-            <th scope="col">权重</th>
-            <th scope="col">状态</th>
+            <th scope="col" @click="sortColumn('c.id')" style="cursor: pointer;">id</th>
+            <th scope="col" @click="sortColumn('c.name')" style="cursor: pointer;">名称</th>
+            <th scope="col" @click="sortColumn('parentName')" style="cursor: pointer;">父分类</th>
+            <th scope="col" @click="sortColumn('c.weight')" style="cursor: pointer;">权重</th>
+            <th scope="col" @click="sortColumn('c.status')" style="cursor: pointer;">状态</th>
             <th scope="col">操作</th>
           </tr>
         </thead>
@@ -36,9 +36,10 @@
               <span v-else class="badge bg-danger">禁用</span>
             </td>
             <td>
-              <button class="btn btn-danger btn-sm" @click="categoryDTO=item;openModal('deleteCategoryModal')">删除</button>
+              <!-- TODO 删除分类 -->
+              <button class="btn btn-danger btn-sm" @click="categoryDTO=item;openModal('deleteCategoryModal' + item.id)">删除</button>
               <!-- 添加编辑分类模态框 -->
-              <div class="modal fade text-start" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true" @click="getCategoryPageList()">
+              <div class="modal fade text-start" :id="'deleteCategoryModal' + item.id" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true" @click="getCategoryPageList()">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -46,8 +47,9 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                      确定删除分类  {{ item.name }} ？
                       <form @submit.prevent="submitDeleteCategory">
-                        <button type="submit" class="btn btn-primary">确认删除</button>
+                        <button type="submit" class="btn btn-primary" style="float: inline-end;">确认删除</button>
                       </form>
                     </div>
                   </div>
@@ -99,7 +101,9 @@ export default {
     const totalPages = ref(1); // 总页数
     const getCategoryPageListData = ref({
       pageNum: 1,
-      pageSize: 10
+      pageSize: 10,
+      orderBy: null,
+      searchContent: null
     });
     // 打开模态框
     const openModal = (name) => {
@@ -118,6 +122,16 @@ export default {
       getCategoryPageListData.value.pageNum = 1; // 修改每页条数时，重置为第一页
       getCategoryPageList(); // 重新获取数据
     };
+    const sortColumn = (field) => {
+      // 判断当前排序字段和顺序，切换正序或倒序
+      if (getCategoryPageListData.value.orderBy === `${field} asc`) {
+        getCategoryPageListData.value.orderBy = `${field} desc`;
+      } else {
+        getCategoryPageListData.value.orderBy = `${field} asc`;
+      }
+      console.log(getCategoryPageListData.orderBy)
+      getCategoryPageList(); // 重新获取数据
+    }
     // 提交分类信息
     const submitCategory = async () => {
       try {
@@ -152,7 +166,12 @@ export default {
     // 获取分类分页列表
     const getCategoryPageList = async () => {
       try {
-        const res = await categoryApi.getAllCategory(getCategoryPageListData.value.pageNum, getCategoryPageListData.value.pageSize);
+        const res = await categoryApi.getAllCategory(
+          getCategoryPageListData.value.pageNum, 
+          getCategoryPageListData.value.pageSize,
+          getCategoryPageListData.value.searchContent,
+          getCategoryPageListData.value.orderBy
+        );
         console.log(res);
         categoryList.value = res.data.items;
         console.log(categoryList.value);
@@ -187,6 +206,7 @@ export default {
       changePage,
       totalPages,
       changePageSize,
+      sortColumn
     };
   }
 };
