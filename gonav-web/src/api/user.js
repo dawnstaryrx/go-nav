@@ -57,6 +57,10 @@ const userApi = {
         "userId":userId
       }
     })
+  },
+  // 修改用户信息
+  updateUser: (data) => {
+    return request.post("/user/user", data)
   }
 }
 

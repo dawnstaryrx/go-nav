@@ -21,6 +21,7 @@
             <th scope="col" @click="sortColumn('parentName')" style="cursor: pointer;">父分类</th>
             <th scope="col" @click="sortColumn('c.weight')" style="cursor: pointer;">权重</th>
             <th scope="col" @click="sortColumn('c.status')" style="cursor: pointer;">状态</th>
+            <th scope="col">所属用户Id</th>
             <th scope="col">操作</th>
           </tr>
         </thead>
@@ -35,6 +36,7 @@
               <span v-if="item.status === 1" class="badge bg-success">启用</span>
               <span v-else class="badge bg-danger">禁用</span>
             </td>
+            <td>{{ item.createUser }}</td>
             <td>
               <!-- TODO 删除分类 -->
               <button class="btn btn-danger btn-sm" @click="categoryDTO=item;openModal('deleteCategoryModal' + item.id)">删除</button>

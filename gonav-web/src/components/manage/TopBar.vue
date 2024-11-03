@@ -33,7 +33,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <!-- <li><a class="dropdown-item" href="/admin/index">管理</a></li> -->
-              <li><a class="dropdown-item" href="/manage/index">{{ greeting }} ！ {{ nowUser.nickname }}</a></li>
+              <li><a class="dropdown-item" style="pointer-events: none;">{{ greeting }} ！ {{ nowUser.nickname }}</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#" @click.prevent="logout()">登出</a></li>
             </ul>

@@ -30,11 +30,20 @@
             <form @submit.prevent="submitApp">
               <div class="mb-3">
                 <label for="add-name" class="form-label">名称</label>
-                <input v-model="appDTO.name" type="text" class="form-control" id="add-name" placeholder="输入APP名称">
+                <input v-model="appDTO.name" type="text" class="form-control" id="add-name" placeholder="输入APP名称（非必填）">
               </div>
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label for="add-categoryId" class="form-label">所属分类</label>
                 <input v-model="appDTO.categoryId" type="number" class="form-control" id="add-categoryId" placeholder="输入分类ID">
+              </div> -->
+              <div class="mb-3">
+                <label for="add-categoryId" class="form-label">所属分类</label>
+                <select v-model="appDTO.categoryId" class="form-select" id="add-categoryId">
+                    <option value="" disabled>请选择分类</option>
+                    <option v-for="category in categoryNowList" :key="category.id" :value="category.id">
+                        {{ category.name }} <!-- 假设每个分类对象都有 id 和 name 属性 -->
+                    </option>
+                </select>
               </div>
               <div class="mb-3">
                 <label for="add-url" class="form-label">网址</label>
@@ -46,7 +55,7 @@
               </div> -->
               <div class="mb-3">
                 <label for="add-description" class="form-label">描述</label>
-                <input v-model="appDTO.description" type="text" class="form-control" id="add-description" placeholder="输入APP描述"></input>
+                <input v-model="appDTO.description" type="text" class="form-control" id="add-description" placeholder="输入APP描述（非必填）"></input>
               </div>
               <div class="mb-3">
                 <label for="add-weight" class="form-label">权重</label>
@@ -90,15 +99,17 @@
             <td>{{ item.name }}</td>
             <td>{{ item.categoryName }}</td>
             <td>
-              <img :src=item.iconUrl alt="" class="img-thumbnail" width="40" height="40" />
+              <img v-if="item.iconUrl !== ''" :src=item.iconUrl alt="" class="img-thumbnail" width="40" height="40" />
               <!-- {{ item.iconUrl }} -->
             </td>
             <td>{{ item.description.slice(0, 10) }}{{ item.description.length > 10 ? '...' : '' }}</td>
             <td>{{ item.url }}</td>
             <td>{{ item.weight }}</td>
             <td>
-              <span v-if="item.status === 1" class="badge bg-success">启用</span>
-              <span v-else class="badge bg-danger">禁用</span>
+              <span v-if="item.status === 1" class="badge bg-success">公开</span>
+              <span v-else-if="item.status === 2" class="badge bg-success">登录</span>
+              <span v-else-if="item.status === 3" class="badge bg-success">私有</span>
+              <span v-else class="badge bg-danger">隐藏</span>
             </td>
             <td>{{ item.clickCount }}</td>
             <td>
@@ -118,16 +129,29 @@
                             <input v-model="appDTO.name" type="text" class="form-control" id="name" placeholder="输入应用名称">
                           </div>
                           <div class="mb-3">
-                            <label for="name" class="form-label">应用地址</label>
+                            <label for="url" class="form-label">应用地址</label>
                             <input v-model="appDTO.url" type="text" class="form-control" id="url" placeholder="输入应用地址">
                           </div>
                           <div class="mb-3">
-                            <label for="name" class="form-label">图标</label>
+                            <label for="iconUrl" class="form-label">图标</label>
                             <input v-model="appDTO.iconUrl" type="text" class="form-control" id="iconUrl" placeholder="输入图标地址">
                           </div>
-                          <div class="mb-3">
-                            <label for="name" class="form-label">分类</label>
+                          <!-- <div class="mb-3">
+                            <label for="categoryName" class="form-label">分类</label>
                             <input v-model="appDTO.categoryName" type="text" class="form-control" id="categoryName" disabled>
+                          </div> -->
+                          <!-- <div class="mb-3">
+                            <label for="categoryId" class="form-label">分类</label>
+                            <input v-model="appDTO.categoryId" type="number" class="form-control" id="categoryId">
+                          </div> -->
+                          <div class="mb-3">
+                            <label for="categoryId" class="form-label">分类</label>
+                            <select v-model="appDTO.categoryId" class="form-select" id="categoryId">
+                                <option value="" disabled>请选择分类</option>
+                                <option v-for="category in categoryNowList" :key="category.id" :value="category.id">
+                                    {{ category.name }} <!-- 假设每个分类对象都有 id 和 name 属性 -->
+                                </option>
+                            </select>
                           </div>
                           <div class="mb-3">
                             <label for="description" class="form-label">描述</label>
@@ -166,8 +190,9 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                      确认删除应用{{ appDTO.name }}？
                       <form @submit.prevent="submitDeleteApp">
-                        <button type="submit" class="btn btn-primary">确认删除</button>
+                        <button type="submit" class="btn btn-primary" style="float: inline-end;">确认删除</button>
                       </form>
                     </div>
                   </div>
@@ -196,10 +221,11 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import appApi from '@/api/app.js';
 import { Modal } from 'bootstrap';
 import alertUtil from "@/utils/alert";
+import categoryApi from '@/api/category.js';
 
 export default {
   setup() {
@@ -216,6 +242,20 @@ export default {
       categoryId: null,
     });
     const appList = ref([]);
+    const categoryNowList = ref([]);
+    // 获取分类不分页列表
+    const getCategoryList = async () => {
+      try {
+        const res = await categoryApi.getCategoryList();
+        console.log(res);
+        categoryNowList.value = res.data;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    onMounted(() => {
+      getCategoryList();
+    });
     // 保存模态框实例
     let modal = null;
     const totalPages = ref(1); // 总页数
@@ -251,7 +291,7 @@ export default {
           alertUtil.message('分类添加成功');
           resetForm();  // 清空表单
           modal.hide(); // 关闭模态框
-          // getAppPageList()
+          getAppPageList()
         } else {
           alertUtil.message('添加分类失败，请重试', 'danger');
         }
@@ -339,7 +379,8 @@ export default {
       changePage,
       totalPages,
       changePageSize,
-      appList
+      appList,
+      categoryNowList
     };
   }
 };

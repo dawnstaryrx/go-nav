@@ -441,6 +441,12 @@ export default {
   font-weight: bold;
   font-size: 1.1rem;
   color: #000;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3; /* 行高可根据需求调整 */
+  max-height: 1.3em; /* 2 行的最大高度 = 2 x 行高 */
 }
 
 .app-category {

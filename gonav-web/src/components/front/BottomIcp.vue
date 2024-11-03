@@ -10,11 +10,15 @@
     
     <!-- 备案号部分 -->
     <div class="icp">
-      CopyRight {{`© ${year} ${author} ` }}
-      <a href="http://beian.miit.gov.cn/" target="_blank">
+      <span v-if="author !== ''">
+        CopyRight {{`© ${year} ${author} ` }}
+      </span>
+      
+      <a v-if="record !== ''" href="http://beian.miit.gov.cn/" target="_blank">
         {{ record }}
       </a>&nbsp;
-      <a href="http://beian.miit.gov.cn/" target="_blank">
+
+      <a v-if="police !== ''" href="https://beian.mps.gov.cn/#/query/webSearch" target="_blank">
         <img src="@/assets/RecordIcon.png" alt="备案号" />
         {{ police }}
       </a>
@@ -22,25 +26,55 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { ref, onMounted } from 'vue';
 import menuApi from '@/api/menu.js';
-let year = new Date().getFullYear();        // 一般都是最新的一年
-let author = '智浪星辰';						// 作者名
-let record = '鲁ICP备2024107617号-1';		// 备案号
-let police = '鲁公网安备37011202000109号';
-const bottomMenus = ref([])
-const getBottomMenu = async () => {
-  try {
-    const res = await menuApi.getMenuList(1);
-    bottomMenus.value = res.data;
-  } catch (error) {
-    console.error(error);
-  }
+import settingApi from '@/api/setting.js';
+
+export default {
+  name: 'BottomIcp',
+  setup() {
+    const year = new Date().getFullYear();        // 一般都是最新的一年
+    const author = ref('');						// 作者名
+    const record = ref('');		// 备案号
+    const police = ref('');
+    const bottomMenus = ref([])
+    const getBottomMenu = async () => {
+      try {
+        const res = await menuApi.getMenuList(1);
+        bottomMenus.value = res.data;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const getBottomSetting = async () => {
+      try {
+        const res = await settingApi.getBottomSetting();
+        console.log(res.data);
+        author.value = res.data.companyName;
+        record.value = res.data.icp;
+        police.value = res.data.police;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getBottomSetting();
+    onMounted(() => {
+      getBottomMenu();
+      getBottomSetting();
+    });
+    return {
+      year,
+      author,
+      record,
+      police,
+      bottomMenus
+    };
+  },
 };
-onMounted(() => {
-  getBottomMenu();
-});
+
+
+
 </script>
 
 <style>

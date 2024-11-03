@@ -1,5 +1,7 @@
 package com.dawn.gonav.user.service.impl;
 
+import com.dawn.gonav.model.dto.UserInfoDTO;
+import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.user.mapper.UserMapper;
 import com.dawn.gonav.user.service.EmailService;
 import com.dawn.gonav.user.service.UserService;
@@ -10,6 +12,7 @@ import com.dawn.gonav.model.enums.CodeTypeEnum;
 import com.dawn.gonav.model.enums.UserTypeEnum;
 import com.dawn.gonav.model.po.User;
 import com.dawn.gonav.model.properties.AdminProperties;
+import com.dawn.gonav.util.CurrentUserUtil;
 import com.dawn.gonav.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -209,5 +212,22 @@ public class UserServiceImpl implements UserService {
             ExceptionTool.throwException("未知的第三方平台");
         }
         userMapper.add(userByOpenId);
+    }
+
+    @Override
+    public void updateUser(UserInfoDTO userInfoDTO) {
+        UserLoginDTO curr = CurrentUserUtil.getCurrentUser();
+        if (!curr.getId().equals(userInfoDTO.getId())){
+            ExceptionTool.throwException("用户信息错误");
+        }
+        User user = userMapper.findUserById(userInfoDTO.getId());
+        user.setNickname(userInfoDTO.getNickname());
+        user.setPhone(userInfoDTO.getPhone());
+        user.setEmail(userInfoDTO.getEmail());
+        user.setUpdateTime(LocalDateTime.now());
+        user.setUsername(userInfoDTO.getUsername());
+        user.setGithubOpenid(userInfoDTO.getGithubOpenid());
+        user.setLinuxdoOpenid(userInfoDTO.getLinuxdoOpenid());
+        userMapper.update(user);
     }
 }

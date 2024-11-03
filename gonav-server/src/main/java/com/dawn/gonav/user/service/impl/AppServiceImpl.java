@@ -38,9 +38,6 @@ public class AppServiceImpl implements AppService {
     @Override
     public void addApp(AppDTO appDTO) {
         App app = CopyUtil.copy(appDTO, App.class);
-        if (app.getName() == null || app.getName().trim().isEmpty()){
-            ExceptionTool.throwException("应用名称不能为空");
-        }
         if (app.getUrl() == null || app.getUrl().trim().isEmpty()){
             ExceptionTool.throwException("应用地址不能为空");
         }
@@ -48,11 +45,12 @@ public class AppServiceImpl implements AppService {
         if (nowUser == null){
             ExceptionTool.throwException("用户未登录");
         }
+        String url = app.getUrl();
+        ExecutorService executor = Executors.newFixedThreadPool(3);
         if (app.getIconUrl() == null || app.getIconUrl().trim().isEmpty()){
             String favImage = "";
-            String url = app.getUrl();
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Future<String> future = executor.submit(new Callable<String>() {
+//            ExecutorService executor = Executors.newFixedThreadPool(3);
+            Future<String> faviconFuture = executor.submit(new Callable<String>() {
                 @Override
                 public String call() throws Exception {
                     Document document = Jsoup.connect(url).get();
@@ -66,13 +64,11 @@ public class AppServiceImpl implements AppService {
                 }
             });
             try {
-                favImage = future.get(3, TimeUnit.SECONDS); // 设置超时为3秒
+                favImage = faviconFuture.get(3, TimeUnit.SECONDS); // 设置超时为3秒
             } catch (TimeoutException e) {
                 System.out.println("Operation timed out. Returning default value.");
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
-            } finally {
-                executor.shutdown();
             }
 
             // 处理相对路径
@@ -82,6 +78,49 @@ public class AppServiceImpl implements AppService {
 
             // 得到图标链接
             app.setIconUrl(favImage);
+        }
+        if (app.getName() == null || app.getName().trim().isEmpty()){
+            String title = "";
+            // Callable 任务2：爬取 title
+            Future<String> titleFuture = executor.submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    Document document = Jsoup.connect(url).get();
+                    return document.title();
+                }
+            });
+            try {
+                // 获取 title 结果
+                title = titleFuture.get(3, TimeUnit.SECONDS);
+            } catch (TimeoutException e) {
+                System.out.println("Operation timed out. Returning default values.");
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            app.setName(title);
+        }
+        if (app.getDescription() == null || app.getDescription().trim().isEmpty()){
+            String description = "";
+            // Callable 任务3：爬取 description
+            Future<String> descriptionFuture = executor.submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    Document document = Jsoup.connect(url).get();
+                    Element descriptionElement = document.select("meta[name=description], meta[property=og:description]").first();
+                    return descriptionElement != null ? descriptionElement.attr("content") : "Not Found";
+                }
+            });
+            try {
+                description = descriptionFuture.get(3, TimeUnit.SECONDS);
+            } catch (TimeoutException e) {
+                System.out.println("Operation timed out. Returning default values.");
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            app.setDescription(description);
+        }
+        if ( !executor.isTerminated() ){
+            executor.shutdown();
         }
         assert nowUser != null;
         app.setCreateUser(nowUser.getId());

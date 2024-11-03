@@ -127,4 +127,11 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategoryById(Long id){
         return categoryMapper.getCategoryById(id);
     }
+
+    // 当前登录用户的分类列表
+    @Override
+    public List<Category> getCategoryList() {
+        UserLoginDTO userLoginDTO = CurrentUserUtil.getCurrentUser();
+        return categoryMapper.getNowUserCategoryList(userLoginDTO.getId());
+    }
 }

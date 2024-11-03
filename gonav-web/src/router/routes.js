@@ -73,6 +73,12 @@ const routes = [
         component: () => import('@/views/manage/AppPage.vue'),
       },
       {
+        path: 'my',
+        name: 'manage-my',
+        title: '我的',
+        component: () => import('@/views/manage/MyPage.vue'),
+      },
+      {
         path: 'admin',
         name: 'admin',
         children: [

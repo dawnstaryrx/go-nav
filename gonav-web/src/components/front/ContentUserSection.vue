@@ -59,7 +59,14 @@
     <a :href="app.url" @click="clickApp(app.id);" style="text-decoration: none;">
       <div class="app-card d-flex align-items-center">
         <div class="app-logo">
-          <img :src="app.iconUrl" alt="App Logo" class="img-fluid">
+          <!-- 条件渲染 Logo 或默认占位符 -->
+          <img 
+              v-if="app.iconUrl !== ''"
+              :src="app.iconUrl" 
+              alt="App Logo" 
+              class="img-fluid  rounded-circle" 
+            />
+          <div v-else class="default-logo  rounded-circle">{{ app.name.charAt(0) }}</div>
         </div>
         <div class="app-info">
           <div class="app-title"> {{ app.name }} </div>
@@ -87,6 +94,7 @@ import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import RecursiveCategory from './RecursiveCategory.vue'; // 引入递归组件
 import categoryApi from '@/api/category';
 import appApi from '@/api/app';
+import {useRouter} from "vue-router";
 
 export default {
   name: 'SearchCenter',
@@ -375,52 +383,74 @@ export default {
 
 /* APP 卡片样式 */
 .app-card {
-    display: flex;
-    flex-direction: row;
-    background-color: white;
-    border-radius: 6px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
-    padding:10px 13px 10px 13px;
-    border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
+  padding:10px 13px 10px 13px;
+  border: 1px solid #f0f0f0;
 }
 
 .app-card:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    transform: translateY(-5px); /* 提升效果 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px); /* 提升效果 */
 }
 
 .app-logo {
-    flex: 1 1 20%;
-    max-width: 20%;
+  flex: 1 1 20%;
+  max-width: 20%;
+  position: relative;
+  width: 50px; /* 设置宽高确保是圆形 */
+  height: 43px;
 }
 
-.app-logo img {
-    border-radius: 50%; /* logo 图片圆形化 */
-    /* border: 2px solid #e0e0e0; */
-    /* padding: 5px; */
+.app-logo img,
+.default-logo {
+  border-radius: 50%; /* 使图片和默认 Logo 都是圆形 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 确保图片内容适应圆形区域 */
 }
-
+.default-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #de7622;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
 .app-info {
-    flex: 1 1 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-left: 10px;
+  flex: 1 1 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 10px;
 }
 
 .app-title {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #000;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #000;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3; /* 行高可根据需求调整 */
+  max-height: 1.3em; /* 2 行的最大高度 = 2 x 行高 */
 }
 
 .app-category {
-    margin-top: 5px;
-    font-size: 0.6rem;
-    color: #666;
-    width: fit-content;
-    width: 100%;
+  margin-top: 5px;
+  font-size: 0.6rem;
+  color: #666;
+  width: fit-content;
+  width: 100%;
 }
 .app-description {
     /* margin-top: 5px; */
@@ -452,7 +482,12 @@ export default {
     .app-card {
         flex-direction: row;
     }
-
+    .app-logo {
+      max-width: 80%; /* 适当放大 Logo */
+      margin-left: auto;
+      margin-right: auto;
+      height: 29px;
+    }
     .app-info {
         justify-content: flex-start;
     }
@@ -476,10 +511,10 @@ export default {
     }
 
     .app-logo {
-        margin-bottom: 10px;
-        max-width: 50%; /* 适当放大 Logo */
-        margin-left: auto;
-        margin-right: auto;
+      margin-bottom: 10px;
+      max-width: 40%; /* 适当放大 Logo */
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .app-title {

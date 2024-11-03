@@ -86,4 +86,7 @@
     <select id="getCategoryById" resultType="com.dawn.gonav.model.po.Category">
         select * from category where id = #{id}
     </select>
+    <select id="getNowUserCategoryList" resultType="com.dawn.gonav.model.po.Category">
+        select * from category where create_user = #{userId}
+    </select>
 </mapper>

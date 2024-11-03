@@ -19,4 +19,6 @@ public interface CategoryMapper {
     void updateCategory(Category category);
 
     Category getCategoryById(Long id);
+
+    List<Category> getNowUserCategoryList(Long userId);
 }

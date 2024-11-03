@@ -28,9 +28,18 @@
           </div>
           <div class="modal-body">
             <form @submit.prevent="submitCategory">
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label for="parentId" class="form-label">父分类ID</label>
                 <input v-model="categoryDTO.parentId" type="number" class="form-control" id="parentId" placeholder="输入父分类ID">
+              </div> -->
+              <div class="mb-3">
+                <label for="parentId" class="form-label">父分类</label>
+                <select v-model="categoryDTO.parentId" class="form-select" id="parentId">
+                    <option value="" disabled>请选择父分类</option>
+                    <option v-for="category in categoryNowList" :key="category.id" :value="category.id">
+                        {{ category.name }} <!-- 假设每个分类对象都有 id 和 name 属性 -->
+                    </option>
+                </select>
               </div>
               <div class="mb-3">
                 <label for="name" class="form-label">分类名称</label>
@@ -94,10 +103,20 @@
                       </div>
                       <div class="modal-body">
                         <form @submit.prevent="submitUpdateCategory">
-                          <div class="mb-3">
+                          <!-- <div class="mb-3">
                             <label for="parentId" class="form-label">父分类ID</label>
                             <input v-model="categoryDTO.parentId" type="number" class="form-control" id="parentId" placeholder="输入父分类ID">
+                          </div> -->
+                          <div class="mb-3">
+                              <label for="parentId" class="form-label">父分类</label>
+                              <select v-model="categoryDTO.parentId" class="form-select" id="parentId">
+                                  <option value="" disabled>请选择父分类</option>
+                                  <option v-for="category in categoryNowList" :key="category.id" :value="category.id">
+                                      {{ category.name }} <!-- 假设每个分类对象都有 id 和 name 属性 -->
+                                  </option>
+                              </select>
                           </div>
+
                           <div class="mb-3">
                             <label for="name" class="form-label">分类名称</label>
                             <input v-model="categoryDTO.name" type="text" class="form-control" id="name" placeholder="输入分类名称">
@@ -133,8 +152,9 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                      确定删除分类 {{ categoryDTO.name }}？
                       <form @submit.prevent="submitDeleteCategory">
-                        <button type="submit" class="btn btn-primary">确认删除</button>
+                        <button type="submit" class="btn btn-primary" style="float: inline-end;">确认删除</button>
                       </form>
                     </div>
                   </div>
@@ -163,7 +183,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import categoryApi from '@/api/category.js';
 import { Modal } from 'bootstrap';
 import alertUtil from "@/utils/alert";
@@ -180,6 +200,7 @@ export default {
       status: 1,
     });
     const categoryList = ref([]);
+    const categoryNowList = ref([]);
     // 保存模态框实例
     let modal = null;
     const totalPages = ref(1); // 总页数
@@ -213,6 +234,7 @@ export default {
           resetForm();  // 清空表单
           modal.hide(); // 关闭模态框
           getCategoryPageList()
+          getCategoryList()
         } else {
           alertUtil.message('添加分类失败，请重试', 'danger');
         }
@@ -229,6 +251,7 @@ export default {
           resetForm();  // 清空表单
           modal.hide(); // 关闭模态框
           getCategoryPageList()
+          getCategoryList()
         } else {
           alertUtil.message('删除分类失败，请重试', 'danger');
         }
@@ -245,6 +268,7 @@ export default {
           resetForm();  // 清空表单
           modal.hide(); // 关闭模态框
           getCategoryPageList()
+          getCategoryList()
         } else {
           alertUtil.message('修改分类失败，请重试', 'danger');
         }
@@ -260,12 +284,22 @@ export default {
         console.log(res);
         categoryList.value = res.data.items;
         console.log(categoryList.value);
-        totalPages.value = parseInt(res.data.total / getCategoryPageListData.value.pageSize) + 1;
+        totalPages.value = parseInt(res.data.total / getCategoryPageListData.value.pageSize)+1;
       } catch (error) {
         console.error(error);
       }
     };
     getCategoryPageList()
+    // 获取分类不分页列表
+    const getCategoryList = async () => {
+      try {
+        const res = await categoryApi.getCategoryList();
+        console.log(res);
+        categoryNowList.value = res.data;
+      } catch (error) {
+        console.error(error);
+      }
+    };
     // 重置表单
     const resetForm = () => {
       categoryDTO.value = {
@@ -277,6 +311,10 @@ export default {
         status: 1,
       };
     };
+
+    onMounted(() => {
+      getCategoryList();
+    });
 
     // 返回模板使用的变量和方法
     return {
@@ -292,6 +330,8 @@ export default {
       changePage,
       totalPages,
       changePageSize,
+      getCategoryList,
+      categoryNowList
     };
   }
 };

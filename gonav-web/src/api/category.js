@@ -21,6 +21,9 @@ const categoryApi = {
       }
     });
   },
+  getCategoryList: () => {
+    return request.get('/user/category/now');
+  },
   deleteCategory: (id) => {
     return request.delete('/user/category', {params:{"id":id}})
   },

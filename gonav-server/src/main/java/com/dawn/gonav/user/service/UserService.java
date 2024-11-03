@@ -1,6 +1,7 @@
 package com.dawn.gonav.user.service;
 
 import com.dawn.gonav.model.dto.RegisterDTO;
+import com.dawn.gonav.model.dto.UserInfoDTO;
 import com.dawn.gonav.model.po.User;
 
 public interface UserService {
@@ -19,4 +20,6 @@ public interface UserService {
     User getUserByOpenId(String openId, String platform);
 
     void createUserWithOpenId(User user, String openId, String platform);
+
+    void updateUser(UserInfoDTO userInfoDTO);
 }

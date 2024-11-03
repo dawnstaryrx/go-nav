@@ -21,13 +21,13 @@
         </router-link>
       </li>
       <li>
-        <router-link to="/manage/user" :class="currentRoute.path === '/manage/user' ? 'nav-link active' : 'nav-link link-dark'">
+        <router-link to="/manage/my" :class="currentRoute.path === '/manage/my' ? 'nav-link active' : 'nav-link link-dark'">
           <i class="bi bi-person"></i>
           个人中心
         </router-link>
       </li>
       <!-- 超级管理菜单 -->
-      <li class="nav-item">
+      <li v-if="nowUser.role && nowUser.role === 2" class="nav-item">
         <a :class="currentRoute.path.startsWith('/manage/admin') ? 'nav-link active' : 'nav-link link-dark'" 
           data-bs-toggle="collapse" 
           href="#collapseExample" 
@@ -79,10 +79,9 @@
         <strong>用户</strong>
       </a>
       <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-        <li><a class="dropdown-item" href="#">设置</a></li>
-        <li><a class="dropdown-item" href="#">个人资料</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#">退出登录</a></li>
+        <li><a class="dropdown-item" href="/manage/my">个人资料</a></li>
+        <!-- <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#">退出登录</a></li> -->
       </ul>
     </div>
   </div>
@@ -90,13 +89,25 @@
 
 <script>
 import { useRoute } from 'vue-router';
+import { useUserInfoStore } from "@/stores/userInfo.js";
+import { onMounted, ref } from 'vue';
 
 export default {
   setup() {
     const currentRoute = useRoute(); // 获取当前路由对象
     console.log(currentRoute.path);
+    const nowUser = ref({});
+    const userInfoStore = useUserInfoStore();
+    const getNowUser = () => {
+      nowUser.value = userInfoStore.info;
+      console.log("now", nowUser.value);
+    }
+    onMounted(() => {
+      getNowUser();
+    })
     return {
-      currentRoute
+      currentRoute,
+      nowUser
     };
   }
 }

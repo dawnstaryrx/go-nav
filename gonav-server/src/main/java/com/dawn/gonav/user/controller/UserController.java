@@ -1,5 +1,6 @@
 package com.dawn.gonav.user.controller;
 
+import com.dawn.gonav.model.dto.UserInfoDTO;
 import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.user.service.UserService;
 import com.dawn.gonav.model.dto.RegisterDTO;
@@ -44,6 +45,12 @@ public class UserController {
     @PostMapping("/public/user/resetPwd")
     public Result resetPwd(@RequestBody RegisterDTO registerDTO){
         userService.resetPwd(registerDTO);
+        return Result.success();
+    }
+
+    @PostMapping("/user/user")
+    public Result updateUser(@RequestBody UserInfoDTO userInfoDTO){
+        userService.updateUser(userInfoDTO);
         return Result.success();
     }
 

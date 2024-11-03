@@ -1,5 +1,6 @@
 package com.dawn.gonav.user.controller;
 
+import com.dawn.gonav.model.po.Category;
 import com.dawn.gonav.user.service.CategoryService;
 import com.dawn.gonav.model.dto.CategoryDTO;
 import com.dawn.gonav.model.po.Result;
@@ -39,6 +40,12 @@ public class CategoryController {
     ){
         PageBeanVO<CategoryPageVO> categoryPageList = categoryService.getCategoryPageList(pageNum, pageSize);
         return Result.success(categoryPageList);
+    }
+
+    @GetMapping("/user/category/now")
+    public Result<List<Category>> getCategoryList(){
+        List<Category> categoryList = categoryService.getCategoryList();
+        return Result.success(categoryList);
     }
 
     @PutMapping("/user/category")
