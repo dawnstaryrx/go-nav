@@ -74,11 +74,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public PageBeanVO<CategoryPageVO> getCategoryPageList(Integer pageNum, Integer pageSize) {
+    public PageBeanVO<CategoryPageVO> getCategoryPageList(Integer pageNum, Integer pageSize, String searchContent, String orderBy) {
         PageBeanVO<CategoryPageVO> pageBeanVO = new PageBeanVO<>();
         PageHelper.startPage(pageNum, pageSize);
         UserLoginDTO userLoginDTO = CurrentUserUtil.getCurrentUser();
         assert userLoginDTO != null;
+//        List<CategoryPageVO> categoryPageVOS = categoryMapper.findAllPageVOByUserIdAndSearchContent(userLoginDTO.getId(), searchContent, orderBy);
         List<CategoryPageVO> categoryPageVOS = findAllPageVOByUserId(userLoginDTO.getId());
         Page<CategoryPageVO> page = (Page<CategoryPageVO>) categoryPageVOS;
         pageBeanVO.setTotal(page.getTotal());

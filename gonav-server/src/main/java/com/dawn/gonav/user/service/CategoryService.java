@@ -13,7 +13,7 @@ public interface CategoryService {
 
     List<Category> findAll(Long userId);
 
-    PageBeanVO<CategoryPageVO> getCategoryPageList(Integer pageNum, Integer pageSize);
+    PageBeanVO<CategoryPageVO> getCategoryPageList(Integer pageNum, Integer pageSize, String searchContent, String orderBy);
 
     void addCategory(CategoryDTO categoryDTO);
 

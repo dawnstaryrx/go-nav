@@ -69,8 +69,8 @@
                   <td>{{ item.weight }}</td>
                   <td>{{ item.createTime }}</td>
                   <td>
-                    <!-- <button class="btn" @click="editMenu(item)">编辑</button>
-                    <button class="btn" @click="deleteMenu(item.id)">删除</button> -->
+                    <!-- <button class="btn" @click="editMenu(item)">编辑</button> -->
+                    <button class="btn btn-danger" @click="deleteMenu(item.id)">删除</button>
                   </td>
                 </tr>
               </tbody>
@@ -105,8 +105,8 @@
                   <td>{{ item.weight }}</td>
                   <td>{{ item.createTime }}</td>
                   <td>
-                    <!-- <button class="btn" @click="editMenu(item)">编辑</button>
-                    <button class="btn" @click="deleteMenu(item.id)">删除</button> -->
+                    <!-- <button class="btn" @click="editMenu(item)">编辑</button> -->
+                    <button class="btn btn-danger" @click="deleteMenu(item.id)">删除</button>
                   </td>
                 </tr>
               </tbody>
@@ -150,6 +150,8 @@ export default {
           alertUtil.message('菜单添加成功');
           resetForm();  // 清空表单
           modal.hide(); // 关闭模态框
+          getTopMenu()
+          getBottomMenu()
           // getAppPageList()
         } else {
           alertUtil.message('添加菜单失败，请重试', 'danger');
@@ -158,6 +160,21 @@ export default {
         console.error(error);
       }
     };
+    // 删除菜单
+    const deleteMenu = async (id) => {
+      try {
+        const res = await menuApi.deleteMenu(id);
+        if (res.code === 0) {
+          alertUtil.message('菜单删除成功');
+          getTopMenu()
+          getBottomMenu()
+        } else {
+          alertUtil.message('删除菜单失败，请重试', 'danger');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
     // 重置表单
     const resetForm = () => {
       menuDTO.value = {
@@ -195,7 +212,8 @@ export default {
       submitMenu,
       openModal,
       menuTopList,
-      menuBottomList
+      menuBottomList,
+      deleteMenu
     }
   }
 }

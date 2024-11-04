@@ -1,13 +1,26 @@
 <template>
   <div class="container mt-4" style="margin: 0px;">
     <div class="row">
+      <UploadXlsx></UploadXlsx>
       <!-- 添加分类按钮 -->
       <div class="col">
         <button class="btn btn-primary" @click="openModal('addAppModal')">添加应用</button>
+        <!-- <button class="btn btn-success" @click="openModal('addAppModal')" style="margin-left: 20px;">上传应用</button>
+        <button class="btn" style="margin-left: 20px;">下载Excel模板</button>
+        <button class="btn" style="margin-left: 20px;">下载本人数据</button> -->
+        
       </div>
       
       <!-- 每页条数选择 -->
       <div class="mb-3 d-flex justify-content-end col">
+        <label for="pageSizeSelect" class="me-2"  style="line-height: 38px;">选择分类:</label>
+        <select id="pageSizeSelect" class="form-select w-auto" v-model="getAppPageListData.categoryId" @change="changePageSize">
+          <option value='' disabled>请选择分类</option>
+          <option value=''>全部分类</option>
+          <option v-for="category in categoryNowList" :key="category.id" :value="category.id">
+              {{ category.name }} <!-- 假设每个分类对象都有 id 和 name 属性 -->
+          </option>
+        </select>
         <label for="pageSizeSelect" class="me-2"  style="line-height: 38px;">每页显示:</label>
         <select id="pageSizeSelect" class="form-select w-auto" v-model="getAppPageListData.pageSize" @change="changePageSize">
           <option value="10">10</option>
@@ -163,7 +176,7 @@
                           </div>
                           <div class="mb-3">
                             <label for="weight" class="form-label">点击数</label>
-                            <input v-model="appDTO.clickCount" type="number" class="form-control" id="clickCount" placeholder="输入点击数">
+                            <input v-model="appDTO.clickCount" type="number" class="form-control" id="clickCount" placeholder="输入点击数" readonly>
                           </div>
                           <div class="mb-3">
                             <label for="status" class="form-label">状态</label>
@@ -226,8 +239,12 @@ import appApi from '@/api/app.js';
 import { Modal } from 'bootstrap';
 import alertUtil from "@/utils/alert";
 import categoryApi from '@/api/category.js';
+import UploadXlsx from '@/components/manage/UploadXlsx.vue';
 
 export default {
+  components: {
+    UploadXlsx
+  },
   setup() {
     // 定义APP数据
     const appDTO = ref({

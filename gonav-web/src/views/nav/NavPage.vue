@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      userId: null, // 定义一个变量存储路由参数
+      username: null, // 定义一个变量存储路由参数 userId
     };
   },
   created() {

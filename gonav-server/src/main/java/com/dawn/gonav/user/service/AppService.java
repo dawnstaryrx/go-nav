@@ -22,4 +22,6 @@ public interface AppService {
     List<AppVO> getHotApps(String username);
 
     List<AppVO> searchApps(String searchContent, String username);
+
+    void addAppXlsx(List<AppDTO> dataList);
 }

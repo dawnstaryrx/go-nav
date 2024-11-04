@@ -210,4 +210,11 @@ public class AppServiceImpl implements AppService {
         app.setClickCount(app.getClickCount() + 1);
         appMapper.updateApp(app);
     }
+
+    @Override
+    public void addAppXlsx(List<AppDTO> dataList) {
+        for (AppDTO appDTO : dataList){
+            addApp(appDTO);
+        }
+    }
 }

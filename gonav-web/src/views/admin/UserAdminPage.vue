@@ -40,7 +40,7 @@
             </span> 
           </td>
           <td >
-            {{ item.username }}
+            <a :href="'/nav/' + item.username" target="_blank">{{ item.username }}</a>
           </td>
           <td>{{ item.email }}</td>
           <td>{{ item.githubOpenid }}</td>

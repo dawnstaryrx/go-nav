@@ -67,10 +67,21 @@ instance.interceptors.response.use(
       }
       }
       else if (err.response.status == 401) {
-          alertUtil.message("请先登陆", "danger")
-          router.push("/login")
-      } else {
-          alertUtil.message("服务异常", "danger")
+        const tokenStore = useTokenStore();
+        tokenStore.removeToken();
+        alertUtil.message("请先登陆", "danger")
+        router.push("/login")
+      }
+      // else if (err.response.status == 400) {
+      //   const tokenStore = useTokenStore();
+      //   tokenStore.removeToken();
+      //   alertUtil.message("系统异常", "danger")
+      //   router.push("/login")
+      // } 
+      else {
+        // const tokenStore = useTokenStore();
+        // tokenStore.removeToken();
+        alertUtil.message("服务异常", "danger")
       }
 
       return Promise.reject(err);//异步的状态转化成失败的状态

@@ -33,6 +33,12 @@
     <label class="form-check-label" for="flexSwitchCheckChecked">LinuxDo登录</label>
   </div>
   <button class="btn btn-primary" @click="updateLoginSetting()">保存</button>
+  <h3 style="margin-top: 50px;">展示设置</h3>
+  <div class="form-check form-switch">
+    <input v-model="githubLogo.valueVarchar" class="form-check-input" type="checkbox" role="switch" id="githubLogoCheck">
+    <label class="form-check-label" for="githubLogoCheck">GitHub Logo</label>
+  </div>
+  <button class="btn btn-primary" @click="updateGithubLogoSetting(githubLogo)">保存</button>
 </template>
 <script>
 import { onMounted, ref } from 'vue'
@@ -75,6 +81,11 @@ export default {
       valueVarchar: '',
       valueText: ''
     })
+    const githubLogo = ref({
+      key: 'github_logo',
+      valueVarchar: '',
+      valueText: ''
+    })
     const getBottomSetting = async () => {
       const res = await settingApi.getBottomSetting()
       companyName.value.valueVarchar = res.data.companyName
@@ -92,6 +103,10 @@ export default {
       const res2 = await settingApi.getSetting('login_linuxdo')
       loginLinuxdo.value.valueVarchar = res2.data.valueVarchar
     }
+    const getGitHubLogoSetting = async () => {
+      const res = await settingApi.getSetting('github_logo')
+      githubLogo.value.valueVarchar = res.data.valueVarchar
+    }
     const updateSetting = async (data) => {
       await settingApi.updateSetting(data)
     }
@@ -104,10 +119,14 @@ export default {
       updateSetting(loginGithub.value)
       updateSetting(loginLinuxdo.value)
     }
+    const updateGithubLogoSetting = () => {
+      updateSetting(githubLogo.value)
+    }
     onMounted(() => {
       getBottomSetting(),
       getSiteSetting(),
-      getLoginSetting()
+      getLoginSetting(),
+      getGitHubLogoSetting()
     })
     return {
       companyName,
@@ -118,7 +137,9 @@ export default {
       siteLogo,
       loginGithub,
       loginLinuxdo,
-      updateLoginSetting
+      updateLoginSetting,
+      githubLogo,
+      updateGithubLogoSetting
     }
   }
 }

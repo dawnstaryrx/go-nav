@@ -95,6 +95,7 @@ import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import RecursiveCategory from './RecursiveCategory.vue'; // 引入递归组件
 import categoryApi from '@/api/category';
 import appApi from '@/api/app';
+import { useTokenStore } from '@/stores/token';
 
 export default {
   name: 'SearchCenter',
@@ -104,6 +105,7 @@ export default {
   setup() {
     // 引用搜索输入框
     const searchInput = ref(null);
+    const tokenStore = useTokenStore();
     // APP
     const appList = ref([]);
     const appListDTO = ref({
@@ -225,9 +227,15 @@ export default {
     const getAppList = async () => {
       try {
         // TODO 区分登录和未登录的情况
-        const res = await appApi.getAppByUsernameAndCategoryIdPublic(appListDTO.value.username, appListDTO.value.categoryId);
-        console.log("获取APP",res);
-        appList.value = res.data;
+        if(tokenStore.token.token && tokenStore.token.token !== ''){
+          const res = await appApi.getAppByUsernameAndCategoryIdUser(appListDTO.value.username, appListDTO.value.categoryId);
+          console.log("获取APP",res);
+          appList.value = res.data;
+        } else {
+          const res = await appApi.getAppByUsernameAndCategoryIdPublic(appListDTO.value.username, appListDTO.value.categoryId);
+          console.log("获取APP",res);
+          appList.value = res.data;
+        }
       } catch (error) {
         console.error(error);
       }
@@ -487,6 +495,12 @@ export default {
   .app-info {
     justify-content: flex-start;
   }
+  .app-logo {
+      max-width: 80%; /* 适当放大 Logo */
+      margin-left: auto;
+      margin-right: auto;
+      height: 29px;
+    }
 
   .app-description {
     display: none; /* 隐藏描述 */

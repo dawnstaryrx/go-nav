@@ -34,7 +34,8 @@ public class SettingController {
     public Result<SiteVO> getSettingSiteByKey() {
         SiteVO siteVO = new SiteVO(
                 settingService.getByKey(SqlConstant.SITE_NAME).getValueVarchar(),
-                settingService.getByKey(SqlConstant.SITE_LOGO).getValueVarchar()
+                settingService.getByKey(SqlConstant.SITE_LOGO).getValueVarchar(),
+                settingService.getByKey(SqlConstant.SITE_GITHUB_LOGO).getValueVarchar()
         );
         return Result.success(siteVO);
     }

@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
         // 验证refreshToken的有效性
         UserLoginDTO userLoginDTO = jwtService.verifyJwt(refreshToken, UserLoginDTO.class);
         if (userLoginDTO == null){
-            ExceptionTool.throwException("refreshToken无效");
+            ExceptionTool.throwException("refreshToken无效", 401);
         }
         assert userLoginDTO != null;
         String redisKey = USER_REFRESH_TOKEN_PREFIX + userLoginDTO.getEmail();
@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
         // 判断refreshToken是否一致
         String redisRefreshToken = operations.get(redisKey);
         if (!refreshToken.equals(redisRefreshToken)){
-            ExceptionTool.throwException("refreshToken无效");
+            ExceptionTool.throwException("refreshToken无效", 401);
         }
         // 刷新token
         System.out.println("刷新token------------------");

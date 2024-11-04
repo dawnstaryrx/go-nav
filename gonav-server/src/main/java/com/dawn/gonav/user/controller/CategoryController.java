@@ -36,9 +36,11 @@ public class CategoryController {
     @GetMapping("/user/category")
     public Result<PageBeanVO<CategoryPageVO>> getCategoryPageList(
         @RequestParam Integer pageNum,
-        @RequestParam Integer pageSize
+        @RequestParam Integer pageSize,
+        @RequestParam(required = false) String searchContent,
+        @RequestParam(required = false) String orderBy
     ){
-        PageBeanVO<CategoryPageVO> categoryPageList = categoryService.getCategoryPageList(pageNum, pageSize);
+        PageBeanVO<CategoryPageVO> categoryPageList = categoryService.getCategoryPageList(pageNum, pageSize, searchContent, orderBy);
         return Result.success(categoryPageList);
     }
 

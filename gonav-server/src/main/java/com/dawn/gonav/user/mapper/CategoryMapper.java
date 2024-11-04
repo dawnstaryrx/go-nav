@@ -21,4 +21,6 @@ public interface CategoryMapper {
     Category getCategoryById(Long id);
 
     List<Category> getNowUserCategoryList(Long userId);
+
+    List<CategoryPageVO> findAllPageVOByUserIdAndSearchContent(Long id, String searchContent, String orderBy);
 }

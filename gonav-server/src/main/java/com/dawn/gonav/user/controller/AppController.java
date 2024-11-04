@@ -9,12 +9,22 @@ import com.dawn.gonav.model.po.Result;
 import com.dawn.gonav.model.vo.AppVO;
 import com.dawn.gonav.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class AppController {
     private final AppService appService;
     private final UserService userService;
@@ -25,9 +35,23 @@ public class AppController {
     }
 
     // TODO Excel批量导入
-    @PutMapping("/user/apps")
-    public Result addApps(){
-        return Result.success();
+    @PutMapping("/user/apps/upload/xlsx")
+    public Result addApps(@RequestParam("file") MultipartFile file){
+        try {
+            if (file.isEmpty()) {
+                ExceptionTool.throwException("上传文件为空！");
+            }
+            // 处理文件
+            List<AppDTO> dataList = readXlsx(file);
+            log.info("数据存储中" + dataList);
+            // TODO 存储数据到数据库
+            appService.addAppXlsx(dataList);
+            return Result.success();
+        } catch (Exception e) {
+            log.error("上传失败！", e);
+            ExceptionTool.throwException("上传失败！"+e);
+            return Result.error("上传失败！");
+        }
     }
 
     @DeleteMapping("/user/app")
@@ -95,5 +119,45 @@ public class AppController {
     public Result clickApp(@RequestParam Long id){
         appService.clickApp(id);
         return Result.success();
+    }
+
+    private List<AppDTO> readXlsx(MultipartFile file) throws IOException {
+        List<AppDTO> appXlsxDTOS = new ArrayList<>();
+        // 使用 Apache POI 读取
+        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+        XSSFSheet sheet = workbook.getSheetAt(0); // 获取第一个sheet
+        for (Row row : sheet) {
+            if (row.getRowNum() == 0) {
+                continue; // 跳过表头
+            }
+            // 创建实体对象
+            AppDTO appDTO = new AppDTO();
+            // 设置数据
+//
+            if (row.getCell(0) != null){
+                appDTO.setName(row.getCell(0).getStringCellValue());
+            }
+            if (row.getCell(1) != null){
+                appDTO.setUrl(row.getCell(1).getStringCellValue());
+            }
+            if (row.getCell(2) != null){
+                appDTO.setIconUrl(row.getCell(2).getStringCellValue());
+            }
+            appDTO.setCategoryId((long) row.getCell(3).getNumericCellValue());
+            if (row.getCell(4) != null){
+                appDTO.setDescription(row.getCell(4).getStringCellValue());
+            }
+            if (row.getCell(5) != null){
+                appDTO.setWeight((int) row.getCell(5).getNumericCellValue());
+            }
+            if (row.getCell(6) != null){
+                appDTO.setStatus((int) row.getCell(6).getNumericCellValue());
+            }
+            if (appDTO.getUrl() != null && !appDTO.getUrl().isEmpty()){
+                appXlsxDTOS.add(appDTO);
+            }
+        }
+        workbook.close();
+        return appXlsxDTOS;
     }
 }
