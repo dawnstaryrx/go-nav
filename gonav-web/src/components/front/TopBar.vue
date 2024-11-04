@@ -12,15 +12,15 @@
           <router-link v-if="site.name !== ''" class="navbar-brand ms-2 noto-serif-sc-brand"  to="/">{{ site.name }}</router-link>
         </div> -->
         <!-- 不带有默认Logo和网站标题 -->
-        <div class="d-flex align-items-center">
+        <!-- <div class="d-flex align-items-center">
           <img v-if="site.logo !== ''" class="img-navbar-brand" :src="site.logo" alt="导航站" width="36" height="36" />
           <router-link v-if="site.name !== ''" class="navbar-brand ms-2 noto-serif-sc-brand"  to="/">{{ site.name }}</router-link>
-        </div>
+        </div> -->
         <!-- 只使用默认Logo和网站标题 -->
-        <!-- <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center">
           <img class="img-navbar-brand" src="@/assets/logo.png" alt="导航站" width="36" height="36" />
           <router-link class="navbar-brand ms-2 noto-serif-sc-brand"  to="/">Go导航</router-link>
-        </div> -->
+        </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>

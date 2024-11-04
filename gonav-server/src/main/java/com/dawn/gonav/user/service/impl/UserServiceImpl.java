@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
         ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
         operations.set(key,  code, EMAIL_CODE_TIME_SECOND, TimeUnit.SECONDS);
         // TODO 模拟发送邮件
-//        emailService.sendMsg(emailDTO);
+        emailService.sendMsg(emailDTO);
         log.info("发送邮件成功" + emailDTO.getContent());
     }
 

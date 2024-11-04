@@ -17,7 +17,7 @@ public class GenSecretKeyTest {
     @Test
     public void genSecretKey() throws Exception{
         //自定义 随机密码,  请修改这里
-        String password = "dawnstar";
+        String password = "dawnstargonavp";
 
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         SecureRandom secureRandom = new SecureRandom(password.getBytes());
