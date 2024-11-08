@@ -39,6 +39,13 @@ https://gooodh.com
 
 
 
+## 待完成
+
+- [ ] 选中父分类，展示本分类及所有子分类的全部应用
+- [ ] 
+
+
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=dawnstaryrx/go-nav&type=Date)](https://star-history.com/#dawnstaryrx/go-nav&Date)

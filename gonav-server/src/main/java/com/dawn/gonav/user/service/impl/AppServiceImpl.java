@@ -37,13 +37,16 @@ public class AppServiceImpl implements AppService {
     private final UserService userService;
     @Override
     public void addApp(AppDTO appDTO) {
+        if (appDTO.getCategoryId() == null){
+            throw new RuntimeException("分类不能为空");
+        }
         App app = CopyUtil.copy(appDTO, App.class);
         if (app.getUrl() == null || app.getUrl().trim().isEmpty()){
-            ExceptionTool.throwException("应用地址不能为空");
+            throw new RuntimeException("应用地址不能为空");
         }
         UserLoginDTO nowUser = CurrentUserUtil.getCurrentUser();
         if (nowUser == null){
-            ExceptionTool.throwException("用户未登录");
+            throw new RuntimeException("用户未登录");
         }
         String url = app.getUrl();
         ExecutorService executor = Executors.newFixedThreadPool(3);
@@ -72,7 +75,7 @@ public class AppServiceImpl implements AppService {
             }
 
             // 处理相对路径
-            if (!favImage.equals("Not Found") && !favImage.startsWith("http")) {
+            if (!favImage.equals("") && !favImage.startsWith("http")) {
                 favImage = url + favImage; // 将相对路径转换为绝对路径
             }
 
@@ -107,7 +110,7 @@ public class AppServiceImpl implements AppService {
                 public String call() throws Exception {
                     Document document = Jsoup.connect(url).get();
                     Element descriptionElement = document.select("meta[name=description], meta[property=og:description]").first();
-                    return descriptionElement != null ? descriptionElement.attr("content") : "Not Found";
+                    return descriptionElement != null ? descriptionElement.attr("content") : "";
                 }
             });
             try {

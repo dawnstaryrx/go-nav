@@ -97,6 +97,8 @@
             </if>
             <if test="categoryId != null">
                 and app.category_id = #{categoryId}
+                or app.category_id in
+                (select id from category where (parent_id = #{categoryId} or id = #{categoryId}))
             </if>
             <!-- 新增 category 的状态条件 -->
             and category.status = 1

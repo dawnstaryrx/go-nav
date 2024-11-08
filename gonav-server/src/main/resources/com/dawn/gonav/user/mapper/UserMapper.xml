@@ -70,7 +70,7 @@
         </set>
         where id = #{id}
     </update>
-    <select id="getUserVOs">
+    <select id="getUserVOs" resultType="com.dawn.gonav.model.vo.UserVO">
         select
             id,
             username,
