@@ -26,6 +26,13 @@ instance.interceptors.request.use(
 //添加响应拦截器
 instance.interceptors.response.use(
   result => {
+    // 检查响应类型是否为 blob，表示文件下载
+    const contentType = result.headers['content-type'] || '';
+    if (contentType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') || contentType.includes('application/pdf')) {
+      // 如果是文件类型（例如 Excel 文件），直接返回 blob 数据
+      return result; // 直接返回文件数据
+    }
+    // 处理 JSON 响应数据（例如正常的接口返回）
     if (result.data.code == 0) {
       return result.data;
     }

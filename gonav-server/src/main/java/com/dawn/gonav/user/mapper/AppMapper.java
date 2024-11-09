@@ -2,6 +2,7 @@ package com.dawn.gonav.user.mapper;
 
 import com.dawn.gonav.model.po.App;
 import com.dawn.gonav.model.vo.AppVO;
+import com.dawn.gonav.model.vo.AppXlsxVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface AppMapper {
     List<AppVO> getHotAppVOs(Long userId);
 
     List<AppVO> searchAppVOs(String searchContent, Long userId);
+
+    List<AppXlsxVO> downLoadAppXlsx(Long userId);
 }

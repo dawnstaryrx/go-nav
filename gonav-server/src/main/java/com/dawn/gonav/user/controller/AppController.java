@@ -1,21 +1,31 @@
 package com.dawn.gonav.user.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.dawn.gonav.exception.ExceptionTool;
+import com.dawn.gonav.model.dto.UserLoginDTO;
 import com.dawn.gonav.model.po.User;
+import com.dawn.gonav.model.vo.AppXlsxVO;
 import com.dawn.gonav.model.vo.PageBeanVO;
 import com.dawn.gonav.user.service.AppService;
 import com.dawn.gonav.model.dto.AppDTO;
 import com.dawn.gonav.model.po.Result;
 import com.dawn.gonav.model.vo.AppVO;
 import com.dawn.gonav.user.service.UserService;
+import com.dawn.gonav.util.CurrentUserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -159,5 +169,39 @@ public class AppController {
         }
         workbook.close();
         return appXlsxDTOS;
+    }
+
+    @PostMapping("/user/app/download")
+    public ResponseEntity<InputStreamResource> downLoadAppsXlsx(){
+        UserLoginDTO nowUser = CurrentUserUtil.getCurrentUser();
+        List<AppXlsxVO> appXlsxVOS = appService.downLoadAppsXlsx(nowUser.getId());
+        // 创建临时文件用于存储 Excel 内容
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        // 使用 EasyExcel 写入数据到输出流
+        EasyExcel.write(outputStream, AppXlsxVO.class)
+                .sheet("卡片数据")
+                .doWrite(appXlsxVOS);
+        // 将数据写入本地文件
+//        try (FileOutputStream fileOutputStream = new FileOutputStream("apps.xlsx")) {
+//            outputStream.writeTo(fileOutputStream);
+//        } catch (IOException e) {
+//            log.error("保存 Excel 文件到本地失败", e);
+//        }
+
+        // 构建 HTTP 响应返回 Excel 文件
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(outputStream.toByteArray()));
+
+        // 设置下载文件的响应头
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=apps.xlsx");
+        headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"); // 确保正确的 Content-Type
+        log.info("Excel 文件下载成功");
+        log.info("Excel 文件大小为: " + outputStream.size());
+        log.info(appXlsxVOS.toString());
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(outputStream.size())
+                .body(resource);
     }
 }

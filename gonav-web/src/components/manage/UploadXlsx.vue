@@ -28,6 +28,15 @@
         下载模板
       </button>
     </div>
+    <div class="col-auto">
+      <button 
+        class="btn btn-outline-secondary" 
+        @click="downloadMyData"
+        :disabled="loading"
+      >
+        下载本人数据
+      </button>
+    </div>
 
     <!-- 加载时展示转圈 -->
     <div v-if="loading" class="overlay">
@@ -42,6 +51,7 @@
 import alertUtil from '@/utils/alert.js';
 import request from '@/utils/request.js';
 import { useTokenStore } from "@/stores/token.js";
+import appApi from '@/api/app';
 
 const tokenStore = useTokenStore();
 
@@ -107,6 +117,42 @@ export default {
       a.href = fileUrl;
       a.download = 'GoNavModel.xlsx';
       a.click();
+    },
+    async downloadMyData() {
+      // 下载数据
+      try {
+        this.loading = true;  // 开启加载状态
+
+        // 发起下载请求
+        const res = await appApi.downLoadApps({ responseType: 'blob' });
+        console.log('下载文件响应：', res);
+        const contentType = res.headers['content-type'];
+
+        // 检查返回的数据类型
+        if (!contentType || contentType !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+          alertUtil.showAlert('服务器返回的不是有效的 Excel 文件。');
+          return;
+        }
+        // 下载文件
+        this.downloadMyFile(res.data);
+
+      } catch (error) {
+        console.error('文件下载出错：', error);
+        alertUtil.showAlert('下载文件时发生错误，请稍后重试。');
+      } finally {
+        this.loading = false;  // 关闭加载状态
+      }
+    },
+
+    // 下载文件函数
+    downloadMyFile(data) {
+      const blob = data instanceof Blob ? data : new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'apps.xlsx';  // 设置下载文件名
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   }
 };

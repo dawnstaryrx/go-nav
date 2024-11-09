@@ -2,6 +2,7 @@ package com.dawn.gonav.user.service;
 
 import com.dawn.gonav.model.dto.AppDTO;
 import com.dawn.gonav.model.vo.AppVO;
+import com.dawn.gonav.model.vo.AppXlsxVO;
 import com.dawn.gonav.model.vo.PageBeanVO;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface AppService {
     List<AppVO> searchApps(String searchContent, String username);
 
     void addAppXlsx(List<AppDTO> dataList);
+
+    List<AppXlsxVO> downLoadAppsXlsx(Long userId);
 }

@@ -105,6 +105,22 @@
         </where>
         order by app.weight desc
     </select>
+    <select id="downLoadAppXlsx" resultType="com.dawn.gonav.model.vo.AppXlsxVO">
+        select
+            app.name,
+            app.url,
+            app.icon_url,
+            app.category_id,
+            app.description,
+            app.weight,
+            app.status,
+            category.name as category_name
+        from app
+        left join category on app.category_id = category.id
+        <where>
+            app.create_user = #{userId}
+        </where>
+    </select>
     <select id="getHotAppVOs" resultType="com.dawn.gonav.model.vo.AppVO">
         select
         app.id,

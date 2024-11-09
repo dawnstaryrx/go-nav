@@ -1,6 +1,7 @@
 package com.dawn.gonav.user.service.impl;
 
 import com.dawn.gonav.model.po.User;
+import com.dawn.gonav.model.vo.AppXlsxVO;
 import com.dawn.gonav.model.vo.PageBeanVO;
 import com.dawn.gonav.user.mapper.AppMapper;
 import com.dawn.gonav.user.mapper.UserMapper;
@@ -37,9 +38,11 @@ public class AppServiceImpl implements AppService {
     private final UserService userService;
     @Override
     public void addApp(AppDTO appDTO) {
-        if (appDTO.getCategoryId() == null){
-            throw new RuntimeException("分类不能为空");
-        }
+        // 不需要添加分类名称
+//        if (appDTO.getCategoryId() == null){
+//            throw new RuntimeException("分类不能为空");
+//        }
+        // TODO 检查 分类需要是本人的分类
         App app = CopyUtil.copy(appDTO, App.class);
         if (app.getUrl() == null || app.getUrl().trim().isEmpty()){
             throw new RuntimeException("应用地址不能为空");
@@ -176,6 +179,11 @@ public class AppServiceImpl implements AppService {
         User user = userService.getUserByUsername(username);
         List<AppVO> appVOS = appMapper.getAppVOsByUserId(user.getId(), status, categoryId);
         return appVOS;
+    }
+
+    @Override
+    public List<AppXlsxVO> downLoadAppsXlsx(Long userId) {
+        return appMapper.downLoadAppXlsx(userId);
     }
 
     @Override

@@ -36,6 +36,11 @@ const appApi = {
   },
   
   // --------------------------------- 用户 ----------------------------------
+  downLoadApps: () => {
+    return request.post('/user/app/download', null, {
+      responseType: 'blob', // 设置返回类型为 Blob
+    })
+  },
   getAppByUsernameAndCategoryIdUser: (username, categoryId) => {
     return request.get('/user/app', {
       params: {
