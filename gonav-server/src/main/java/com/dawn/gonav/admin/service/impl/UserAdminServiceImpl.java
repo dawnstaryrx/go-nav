@@ -33,6 +33,9 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     public void delUser(Long id) {
         User user = userMapper.findUserById(id);
+        if (Objects.equals(user.getUsername(), "admin")){
+            throw new RuntimeException("你还想删除本大王？");
+        }
         user.setRole(UserTypeEnum.BLOCK.getCode());
         userMapper.update(user);
     }
@@ -47,6 +50,9 @@ public class UserAdminServiceImpl implements UserAdminService {
             ExceptionTool.throwException("角色不存在");
         }
         User user = userMapper.findUserById(userId);
+        if (Objects.equals(user.getUsername(), "admin")){
+            throw new RuntimeException("你还想改本大王的角色？");
+        }
         user.setRole(role);
         userMapper.update(user);
     }

@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql:3306/gonav?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: root
+  mail:
+    host: smtp.126.com
+    username: ruanzhutool@126.com
+    password: TJBYKZIDQIIFGSNP
+    default-encoding: UTF-8
+login:
+  jwt:
+    private-key: "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCf46ED2imxOo5106kGan74Qmxb2M8HwFIbNgDeTsAoP0EEOGeVpO5AT+Zna/CpgjsJGmBjg0Xnw2r5qnybntxcUCPDvqr0tcsLbuIC0dfO2Bx+xWcfkEacCFR30LM+ABT1BrW17ToCtyQovTW3MNIySAv35cWtvHDan1WnKvQ+bWFLyrtYq9L3hSaoe61tsqcwP3Ox7dRgRrS+IPSJ+cPQ7S2qAo1iH+aTwOOohx99BK5a45BfhD1D4TN2GR45sFecyc/eusXGPZ3WvRHiNCaxp0pymv9zcyMuEblgCwz0oi1L2BApv14MVQwVMI8MHR5rFK/eNNpDYJp9dBLzdb4nAgMBAAECggEAL6NsWY/6ZR5LzOp8DXfUjdaIn5MJGEeijw33k0UGdtdl4UKHBmymOg40WXMtOOwe99beijfWL7gnWu0DhICAKpcMGOnp2NCDh0wJ1go80RnN362kTKC5kQrgU/SgOyReGiVeJa7hXma/xM2fQA4xSp7xxfI1hE7FlzXrGMwxCpomG5VX4llUNvghm+5JEiraQurJ9DXVH52qAd86E5gglUTZ1FaGhRtIres7M7BBJdDYNo8rIbtuOQ0MN6uft4bOSiI0uG8rBAnL85u3158IideoEH6XlrT8Ox6IieZOb/mHl20kHeF6lv509tUnQYxLDQD4tI82deCZi8HsP8kXVQKBgQC1JiASjfwe/asWKQavFXuhy33E0QRn4MZAUMXWROVFL5iIxcnJ59/x/eaZGXXrIKJCvHN9hqubljEr/Xo4j9c/MXS/cEvBjZLSVqio488ipJLmJ0YRspcXe6pmMVYumcLEpYt5Mur0DoX8fyvw8rzFNMop2+tzIqmMNjlsMYMVVQKBgQDh9KdynfokmnnLOMYTIAtiUrJEWaDmOos+Nxohdu38s3hAKXJM5h49ASY37heE8xNK0WZAXhzMs1CibTJzEEd5Ym4t1g2WWNevXd2udGVyRZHcAoIPZbIMIM8tQvN0AaF2GfgWDKhD4u6SfvmY3Y2STCBMeT0FEvLH+cRMGmSFiwKBgQCJeJhoXFYUEr/ufk3zOuNrAqm8Xj7wsjThhCrPE9PGMHuaeDdNwWlDFUMVtqu1NzvMV4VxomzDEzTXxHInUImyDE8kJQ1ooo7kjx1JpjCAgtJ0VSOotJZTHOdQzGoxzUBwyYzR+mExu3/VAZGQNjYplolBQQMqigiPPmtPfzeSTQKBgA13iWtZYwk/c7bbAWMua79Gcn2EYgSWxKnGmvYXooOHJsmcLsXKiU7VfLOkqx4vZpz08gUwFsNUhJ/JplIZTEk9xpdQxKqLTP+UtpupMEqpPtJADARi6UOzyOVHsj7dwgPJ9HFL+9Nf+RweGT41JjTr+JjWOP7ObE3i4wIuKIOVAoGAdqgt8E2r89u+iC1JB3tJrWnyAuerpoaVCdCZ3+rjvJCCvND0DT/Qr+wONnB80HOdaZAUajP2iZ2L4nbWVDo9iBvxeo90pvzVz4ZjW39uHTkmKwcOf92bJ0Eub1+zVAz36/W0vmzIp5Pq18FYK0lJqekNQrhJvmZnOJ33nAAIWTg="
+    public-key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn+OhA9opsTqOddOpBmp++EJsW9jPB8BSGzYA3k7AKD9BBDhnlaTuQE/mZ2vwqYI7CRpgY4NF58Nq+ap8m57cXFAjw76q9LXLC27iAtHXztgcfsVnH5BGnAhUd9CzPgAU9Qa1te06ArckKL01tzDSMkgL9+XFrbxw2p9Vpyr0Pm1hS8q7WKvS94UmqHutbbKnMD9zse3UYEa0viD0ifnD0O0tqgKNYh/mk8DjqIcffQSuWuOQX4Q9Q+EzdhkeObBXnMnP3rrFxj2d1r0R4jQmsadKcpr/c3MjLhG5YAsM9KItS9gQKb9eDFUMFTCPDB0eaxSv3jTaQ2CafXQS83W+JwIDAQAB"
+  LinuxDo:
+    clientId: 1Yr9VGywAcdNrdORgCVn2BavUbvdAcEx
+    clientSecret: 2u8t7pB9Vfoz8FIfgKK6rd1c3cZwaINE
+    redirectUri: http://127.0.0.1/auth/linux-do/callback
+  GitHub:
+    clientId: Ov23li7XYGfwUUzkXGza
+    clientSecret: a443d825325c00e63e5afc1181cf9347f839268e
+    redirectUri: http://127.0.0.1/auth/github/callback
+admin:
+  email:
+    - rongxingyang@outlook.com

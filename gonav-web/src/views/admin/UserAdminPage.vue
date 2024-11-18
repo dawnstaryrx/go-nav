@@ -69,8 +69,8 @@
                       <div class="mb-3">
                         <label for="role" class="form-label">角色</label>
                         <select v-model="updateRoleData.role" class="form-select" id="role">
-                          <option value="false">用户</option>
-                          <option value="true">管理员</option>
+                          <option value=1>用户</option>
+                          <option value=2>管理员</option>
                         </select>
                       </div>
                       <button @click="updateUserRole(updateRoleData.role, updateRoleData.userId)" class="btn btn-primary">确认修改</button>
