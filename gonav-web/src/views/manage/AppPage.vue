@@ -305,7 +305,7 @@ export default {
       try {
         const res = await appApi.addApp(appDTO.value);
         if (res.code === 0) {
-          alertUtil.message('分类添加成功');
+          alertUtil.message('应用添加成功');
           resetForm();  // 清空表单
           modal.hide(); // 关闭模态框
           getAppPageList()
@@ -321,7 +321,7 @@ export default {
       try {
         const res = await appApi.deleteApp(appDTO.value.id);
         if (res.code === 0) {
-          alertUtil.message('分类删除成功');
+          alertUtil.message('应用删除成功');
           resetForm();  // 清空表单
           modal.hide(); // 关闭模态框
           getAppPageList()
@@ -337,7 +337,7 @@ export default {
       try {
         const res = await appApi.updateApp(appDTO.value);
         if (res.code === 0) {
-          alertUtil.message('分类修改成功');
+          alertUtil.message('应用修改成功');
           resetForm();  // 清空表单
           modal.hide(); // 关闭模态框
           getAppPageList()
