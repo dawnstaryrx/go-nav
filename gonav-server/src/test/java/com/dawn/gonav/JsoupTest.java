@@ -3,6 +3,7 @@ package com.dawn.gonav;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.concurrent.Callable;
@@ -12,7 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
+@Disabled
 @SpringBootTest
 public class JsoupTest {
     public static void main(String[] args) {

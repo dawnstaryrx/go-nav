@@ -1,0 +1,1 @@
+import{_ as o,l as t}from"./index-DNkYr-Dp.js";const l={};function n(s,e){return e[0]||(e[0]=t(' Hello World! <select class="form-select" aria-label="Default select example"><option selected>Open this select menu</option><option value="1">One</option><option value="2">Two</option><option value="3">Three</option></select>',2))}const a=o(l,[["render",n]]);export{a as H};

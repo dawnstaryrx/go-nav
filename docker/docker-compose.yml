@@ -1,0 +1,53 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"  # 将 Nginx 监听 80 端口
+    container_name: gonav-nginx
+    depends_on:
+      - gonav-server
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # 挂载配置文件
+      - ./nginx/html:/usr/share/nginx/html
+    privileged: true
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gonav
+    volumes:
+      - ./gonav.sql:/docker-entrypoint-initdb.d/gonav.sql
+    container_name: mysql
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    container_name: redis
+
+  gonav-server:
+    image: gonav-server:latest
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MAIL_HOST: smtp.126.com
+      MAIL_USERNAME: xxx@126.com
+      MAIL_PASSWORD: xxx
+      ADMIN_EMAIL: admin@example.com
+      GITHUB_CLIENT_ID: your_id
+      GITHUB_CLIENT_SECRET: your_secret
+      LINUXDO_CLIENT_ID: your_id
+      LINUXDO_CLIENT_SECRET: your_secret
+    container_name: gonav-server

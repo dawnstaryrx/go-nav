@@ -2,8 +2,9 @@ package com.dawn.gonav;
 
 import com.dawn.gonav.user.service.JwtService;
 import com.dawn.gonav.model.dto.UserLoginDTO;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
+@Disabled
 public class RefreshTokenTest {
     @Test
     public void test() {

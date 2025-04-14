@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- 主机:                           127.0.0.1
--- 服务器版本:                        8.0.36 - MySQL Community Server - GPL
--- 服务器操作系统:                      Win64
+-- 主机:                           154.219.99.65
+-- 服务器版本:                        8.0.41 - MySQL Community Server - GPL
+-- 服务器操作系统:                      Linux
 -- HeidiSQL 版本:                  12.8.0.6908
 -- --------------------------------------------------------
 
@@ -16,7 +16,7 @@
 
 
 -- 导出 gonav 的数据库结构
-CREATE DATABASE IF NOT EXISTS `gonav` /*!40100 DEFAULT CHARACTER SET armscii8 COLLATE armscii8_bin */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `gonav` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `gonav`;
 
 -- 导出  表 gonav.app 结构
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `app` (
   `name` varchar(30) DEFAULT NULL COMMENT '应用名',
   `url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '应用地址，唯一',
   `icon_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '图标路径',
-  `category_id` bigint unsigned NOT NULL COMMENT '分类ID，逻辑外键',
+  `category_id` bigint unsigned DEFAULT NULL COMMENT '分类ID，逻辑外键',
   `description` varchar(255) DEFAULT NULL COMMENT '应用描述',
   `weight` int NOT NULL DEFAULT '0' COMMENT '应用权重，范围0-100，默认0',
   `click_count` int NOT NULL DEFAULT '0' COMMENT '点击量，默认0',
@@ -37,7 +37,13 @@ CREATE TABLE IF NOT EXISTS `app` (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `url_create_user` (`url`,`create_user`),
   KEY `app_category_idx` (`category_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='应用表';
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='应用表';
+
+-- 正在导出表  gonav.app 的数据：~3 rows (大约)
+INSERT INTO `app` (`id`, `name`, `url`, `icon_url`, `category_id`, `description`, `weight`, `click_count`, `status`, `create_user`, `create_time`, `update_user`, `update_time`) VALUES
+	(24, '百度', 'https://www.baidu.com/', 'https://www.baidu.com/favicon.ico', 22, '全球领先的中文搜索引擎、致力于让网民更便捷地获取信息，找到所求。百度超过千亿的中文网页数据库，可以瞬间找到相关的搜索结果。', 1, 0, 1, 1, '2024-11-09 10:48:08', 7, '2024-11-09 10:48:08'),
+	(25, '知乎', 'https://www.zhihu.com/', 'https://static.zhihu.com/heifetz/assets/apple-touch-icon-152.81060cab.png', 22, '知乎，中文互联网高质量的问答社区和创作者聚集的原创内容平台，于 2011 年 1 月正式上线，以「让人们更好的分享知识、经验和见解，找到自己的解答」为品牌使命。知乎凭借认真、专业、友善的社区氛围、独特的产品机制以及结构化和易获得的优质内容，聚集了中文互联网科技、商业、影视、时尚、文化等领域最具创造力的人群，已成为综合性、全品类、在诸多领域具有关键影响力的知识分享社区和创作者聚集的原创内容平台，建立起了以社区驱动的内容变现商业模式。', 1, 0, 1, 1, '2024-11-09 10:48:09', 7, '2024-11-09 10:48:09'),
+	(26, '图标库', 'https://www.iconfont.cn/', 'https://img.alicdn.com/imgextra/i4/O1CN01Z5paLz1O0zuCC7osS_!!6000000001644-55-tps-83-82.svg', 22, 'iconfont-国内功能很强大且图标内容很丰富的矢量图标库，提供矢量图标下载、在线存储、格式转换等功能。阿里巴巴体验团队倾力打造，设计和前端开发的便捷工具', 1, 0, 1, 1, '2024-11-09 10:48:09', 7, '2024-11-09 10:48:09');
 
 -- 导出  表 gonav.category 结构
 CREATE TABLE IF NOT EXISTS `category` (
@@ -53,7 +59,11 @@ CREATE TABLE IF NOT EXISTS `category` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `category_parent_idx` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='分类表';
+
+-- 正在导出表  gonav.category 的数据：~1 rows (大约)
+INSERT INTO `category` (`id`, `parent_id`, `name`, `description`, `weight`, `status`, `create_user`, `create_time`, `update_user`, `update_time`) VALUES
+	(22, NULL, '分类1', '', 1, 1, 1, '2024-10-19 20:25:36', 1, '2024-10-19 20:25:36');
 
 -- 导出  表 gonav.menu 结构
 CREATE TABLE IF NOT EXISTS `menu` (
@@ -66,6 +76,11 @@ CREATE TABLE IF NOT EXISTS `menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='菜单-顶部导航菜单项，底部友情链接';
 
+-- 正在导出表  gonav.menu 的数据：~3 rows (大约)
+INSERT INTO `menu` (`id`, `title`, `url`, `type`, `weight`, `create_time`) VALUES
+	(1, 'AI导航站', 'https://gooodh.com/', 1, 1, '2024-10-28 16:01:15'),
+	(2, 'AI导航站', 'https://gooodh.com/', 0, 1, '2024-10-28 16:04:26'),
+	(4, 'AI导航站', 'https://gooodh.com/', 0, 0, '2024-10-28 16:44:39');
 
 -- 导出  表 gonav.setting 结构
 CREATE TABLE IF NOT EXISTS `setting` (
@@ -78,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `setting` (
 
 -- 正在导出表  gonav.setting 的数据：~9 rows (大约)
 INSERT INTO `setting` (`id`, `key`, `value_varchar`, `value_text`) VALUES
-	(1, 'announce', NULL, ''),
+	(1, 'announce', '声明/公告', ''),
 	(2, 'bottom_company_name', '111222', ''),
 	(3, 'bottom_icp', '222333', ''),
 	(4, 'bottom_police', '333666', ''),
@@ -101,6 +116,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `linuxdo_openid` varchar(50) DEFAULT NULL COMMENT 'LinuxDoId',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
+  `last_login_time` datetime DEFAULT NULL COMMENT '上次登录时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `email` (`email`) USING BTREE,
   UNIQUE KEY `username` (`username`) USING BTREE,
@@ -109,6 +125,10 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `linuxdo_openid` (`linuxdo_openid`),
   CONSTRAINT `user_chk_1` CHECK ((`role` in (0,1,2)))
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
+
+-- 正在导出表  gonav.user 的数据：~1 rows (大约)
+INSERT INTO `user` (`id`, `username`, `email`, `phone`, `password`, `nickname`, `role`, `github_openid`, `linuxdo_openid`, `create_time`, `update_time`, `last_login_time`) VALUES
+	(1, 'admin', 'admin@email.com', NULL, '$2a$10$nBxy.321L2qMSE/5MwpPueAHhdgxkJmWsfroybdn08xF.LMMTidiu', '管理员', 2, NULL, NULL, '2024-10-10 11:16:43', '2024-11-04 10:07:01', NULL);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

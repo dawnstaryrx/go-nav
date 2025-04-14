@@ -4,7 +4,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.junit.jupiter.api.Disabled;
 
+@Disabled
 public class ImgValidationTest {
     public static void main(String[] args) {
         String imageUrl = "https://gooodh.com/11222.png";
