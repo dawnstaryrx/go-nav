@@ -36,28 +36,33 @@ https://gooodh.com
 
 ### 后端
 
-![springboot](https://img.shields.io/badge/SpringBoot-3.1.5-blue)![Static Badge](https://img.shields.io/badge/SpringSecurity-3.3.4-blue)
+![springboot](https://img.shields.io/badge/SpringBoot-3.1.5-blue)&nbsp;&nbsp;![Static Badge](https://img.shields.io/badge/SpringSecurity-3.3.4-blue) 
 
 ### 前端
 
-![Vue3](https://img.shields.io/badge/Vue-3.4-blue)![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.3-blue)
+![Vue3](https://img.shields.io/badge/Vue-3.4-blue)&nbsp;&nbsp;![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.3-blue)
 
 ### 环境
 
-![JDK](https://img.shields.io/badge/JDK-17-green)![JDK](https://img.shields.io/badge/Maven-3.9.7-green)![Node](https://img.shields.io/badge/Node-20.11.1-green)![NPM](https://img.shields.io/badge/npm-10.2.4-green)![MySQL](https://img.shields.io/badge/MySQL-8.0-green)![Redis](https://img.shields.io/badge/Redis-3.2+-green)
+![JDK](https://img.shields.io/badge/JDK-17-green)&nbsp;&nbsp;![JDK](https://img.shields.io/badge/Maven-3.9.7-green)&nbsp;&nbsp;![Node](https://img.shields.io/badge/Node-20.11.1-green)&nbsp;&nbsp;![NPM](https://img.shields.io/badge/npm-10.2.4-green)&nbsp;&nbsp;![MySQL](https://img.shields.io/badge/MySQL-8.0-green)&nbsp;&nbsp;![Redis](https://img.shields.io/badge/Redis-3.2+-green)
 
 
 
 ## 👨🏼‍💻部署文档
 
 - 直接部署：[直接部署文档](./docs/部署文档-直接部署.md)
-- Docker部署：待更新
+- Docker部署：
+```
+cd docker
+docker compose up -d
+```
 
 
 
 ## ☑️待完成
 
 - [x] 应用导出成excel
+- [x] 支持docker一键部署
 - [ ] 选中父分类，展示本分类及所有子分类的全部应用
 - [ ] 鼠标右键，将喜欢的应用添加到自己的页面
 - [ ] 超级管理-对所有用户的应用管理
