@@ -55,6 +55,8 @@ https://gooodh.com
 ```
 cd docker
 docker compose up -d
+vim nginx/nginx.conf
+// 修改ip地址
 ```
 
 
