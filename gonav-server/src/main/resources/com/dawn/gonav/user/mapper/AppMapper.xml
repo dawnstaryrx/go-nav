@@ -85,7 +85,8 @@
             category.name as category_name,
             app.description,
             app.weight,
-            app.click_count
+            app.click_count,
+            app.status
         from app
         left join category on app.category_id = category.id
         <where>
@@ -96,9 +97,13 @@
                 and app.status &lt;= #{status}
             </if>
             <if test="categoryId != null">
-                and app.category_id = #{categoryId}
-                or app.category_id in
-                (select id from category where (parent_id = #{categoryId} or id = #{categoryId}))
+                and (
+                    app.category_id = #{categoryId}
+                    or app.category_id in (
+                        select id from category
+                        where parent_id = #{categoryId} or id = #{categoryId}
+                    )
+                )
             </if>
             <!-- 新增 category 的状态条件 -->
             and category.status = 1

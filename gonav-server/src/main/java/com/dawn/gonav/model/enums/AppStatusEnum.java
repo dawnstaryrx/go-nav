@@ -5,12 +5,12 @@ import lombok.Setter;
 
 @Getter
 public enum AppStatusEnum {
-    // 1 启用：所有用户可见
+    // 1 公开：所有用户可见
     // 2 隐藏：登录后用户可见
     // 3 私有：当前用户可见
     // 4 禁用：所有用户不可见
     DISABLE(4, "禁用"),
-    ENABLE(1, "启用"),
+    ENABLE(1, "公开"),
     HIDE(2, "隐藏"),
     PRIVATE(3, "私有");
 

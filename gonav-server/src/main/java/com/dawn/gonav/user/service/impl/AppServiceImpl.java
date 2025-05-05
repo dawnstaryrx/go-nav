@@ -176,6 +176,10 @@ public class AppServiceImpl implements AppService {
             log.info("----------------status 私有");
             status = AppStatusEnum.PRIVATE.getCode();
         }
+        if (nowUser == null){
+            log.info("----------------status 公开");
+            status = AppStatusEnum.ENABLE.getCode();
+        }
         User user = userService.getUserByUsername(username);
         List<AppVO> appVOS = appMapper.getAppVOsByUserId(user.getId(), status, categoryId);
         return appVOS;

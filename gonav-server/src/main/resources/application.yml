@@ -3,7 +3,7 @@ server:
   port: 8080
 spring:
   profiles:
-    active: docker # TODO 默认使用 dev 配置
+    active: dev # TODO 默认使用 dev 配置
   application:
     name: gonav-server
   error:
@@ -14,7 +14,7 @@ spring:
   data:
     redis:
       port: 6379
-      host: redis
+      host: localhost
   servlet:
     multipart:
       enabled: true

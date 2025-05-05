@@ -14,14 +14,14 @@
         CopyRight {{`© ${year} ${author} ` }}
       </span>
       
-      <a v-if="record !== ''" href="http://beian.miit.gov.cn/" target="_blank">
+      <!-- <a v-if="record !== ''" href="http://beian.miit.gov.cn/" target="_blank">
         {{ record }}
       </a>&nbsp;
 
       <a v-if="police !== ''" href="https://beian.mps.gov.cn/#/query/webSearch" target="_blank">
         <img src="@/assets/RecordIcon.png" alt="备案号" />
         {{ police }}
-      </a>
+      </a> -->
     </div>
   </div>
 </template>
