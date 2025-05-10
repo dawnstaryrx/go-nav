@@ -106,7 +106,7 @@
                 )
             </if>
             <!-- 新增 category 的状态条件 -->
-            and category.status = 1
+            and (category.status = 1 or category.status is null)
         </where>
         order by app.weight desc
     </select>
@@ -143,7 +143,7 @@
             <if test="userId != null">
                 app.create_user = #{userId}
             </if>
-            and category.status = 1
+            and (category.status = 1 or category.status is null)
             and app.status = 1
         </where>
         order by app.click_count desc

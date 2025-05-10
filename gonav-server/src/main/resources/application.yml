@@ -11,10 +11,6 @@ spring:
       enabled: false
     include-message: never
     include-binding-errors: never
-  data:
-    redis:
-      port: 6379
-      host: localhost
   servlet:
     multipart:
       enabled: true

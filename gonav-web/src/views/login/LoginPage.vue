@@ -229,7 +229,12 @@ export default {
         const nowUser = await getNowUser()
         const userInfoStore = useUserInfoStore()
         userInfoStore.setInfo(nowUser)
-        router.push("/")
+        if(nowUser.username == null || nowUser.username == ''){
+          router.push("/")
+        } else {
+          router.push("/nav/"+nowUser.username)
+        }
+        
       }
     };
     
@@ -243,7 +248,11 @@ export default {
         const nowUser = await getNowUser()
         const userInfoStore = useUserInfoStore()
         userInfoStore.setInfo(nowUser)
-        router.push("/")
+        if(nowUser.username == null || nowUser.username == ''){
+          router.push("/")
+        } else {
+          router.push("/nav/"+nowUser.username)
+        }
       }
     };
     const changeLoginType = (val) => {
